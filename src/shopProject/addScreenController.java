@@ -1,15 +1,17 @@
 package shopProject;
 
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
 
 public class addScreenController {
 
@@ -51,7 +53,50 @@ public class addScreenController {
        colorBox.setItems(colors);
        materialBox.setItems(materials);
 
+
    }
+
+   public void addRoom() throws IOException, SQLException, ClassNotFoundException {
+
+       openElementScreen("Dodawanie nowego pomieszczenia", "IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", rooms.size(), "Wpisz nowe pomieszczenie");
+
+   }
+
+   public void addCategory() throws IOException, SQLException, ClassNotFoundException {
+
+       openElementScreen("Dodawanie nowej kategorii", "IDKategorii", "NazwaKategorii", "kategoria",  categories.size(), "Wpisz nowa kategorie" );
+   }
+
+   public void addSubcategory() throws IOException {
+
+
+   }
+
+   public void addColor() throws IOException, SQLException, ClassNotFoundException {
+
+       openElementScreen("Dodawanie nowego koloru" ,"IDKoloru", "NazwaKoloru", "kolor", colors.size(), "Wpisz nowy kolor");
+   }
+
+   public void addMaterial() throws IOException, SQLException, ClassNotFoundException {
+
+       openElementScreen("Dodawanie nowego materialu" , "IDMaterialu", "NazwaMaterialu", "material", materials.size(), "Wpisz nowy material");
+   }
+
+   public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTabel, int lastIDofArray, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
+
+       Stage addElement =  new Stage();
+       addElement.setTitle(nameOfStage);
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addElementScreen.fxml"));
+       Parent root = loader.load();
+       addElement.setScene(new Scene(root));
+
+       addElementScreenController newController = loader.getController();
+       newController.setOptionOfScreen(nameOfFirstColumn,nameOfSecondColumn, nameOfTabel, lastIDofArray, textOfLabel);
+
+       addElement.show();
+
+   }
+
 
     public void getChosenDataFromDB(String nameOfColumn, String nameOfTable, ObservableList<String> litsOfData) throws ClassNotFoundException, SQLException {
 

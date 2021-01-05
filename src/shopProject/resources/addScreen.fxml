@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <AnchorPane prefHeight="689.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.addScreenController">
    <children>
       <GridPane layoutX="72.0" layoutY="104.0" prefHeight="470.0" prefWidth="578.0">
@@ -62,31 +61,31 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <children>
                   <ComboBox id="roomBox" fx:id="roomBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="roomButton" fx:id="roomButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe" />
+                  <Button id="roomButton" fx:id="roomButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addRoom" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="138.0" layoutY="160.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <children>
                   <ComboBox id="categoryBox" fx:id="categoryBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="categoryButton" fx:id="categoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
+                  <Button id="categoryButton" fx:id="categoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="138.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <children>
                   <ComboBox id="subcategoryBox" fx:id="subcategoryBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="subcategoryButton" fx:id="subcategoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
+                  <Button id="subcategoryButton" fx:id="subcategoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addSubcategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
                <children>
                   <ComboBox id="colorBox" fx:id="colorBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="colorButton" fx:id="colorButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowy" />
+                  <Button id="colorButton" fx:id="colorButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addColor" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowy" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
                <children>
                   <ComboBox id="materialBoxs" fx:id="materialBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="materialButton" fx:id="materialButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowy" />
+                  <Button id="materialButton" fx:id="materialButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addMaterial" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowy" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
