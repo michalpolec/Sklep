@@ -36,8 +36,8 @@
             <Label id="price" text="Cena:" GridPane.rowIndex="1" />
             <Label id="description" prefHeight="22.0" prefWidth="27.0" text="Opis:" GridPane.rowIndex="3" />
             <Label id="room" prefHeight="17.0" prefWidth="80.0" text="Pomieszczenie:" GridPane.rowIndex="4" />
-            <Label id="subcategory" text="Podkategoria:" GridPane.rowIndex="6" />
-            <Label id="category" text="Kategoria:" GridPane.rowIndex="5" />
+            <Label id="subcategory" text="Podkategoria:" GridPane.rowIndex="5" />
+            <Label id="category" text="Kategoria:" GridPane.rowIndex="6" />
             <Label id="color" text="Kolor:" GridPane.rowIndex="7" />
             <Label id="material" text="Materiał:" GridPane.rowIndex="8" />
             <Label id="dimensions" text="Wymiary:" GridPane.rowIndex="9" />
@@ -66,14 +66,14 @@
             </AnchorPane>
             <AnchorPane layoutX="138.0" layoutY="160.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <children>
-                  <ComboBox id="categoryBox" fx:id="categoryBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="categoryButton" fx:id="categoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
+                  <ComboBox id="subcategoryBox" fx:id="subcategoryBox" layoutY="8.0" onAction="#chosenSubcategory" prefHeight="25.0" prefWidth="256.0" />
+                  <Button id="subcategoryButton" fx:id="subcategoryButton" layoutX="308.0" layoutY="8.0" mnemonicParsing="false" onAction="#addSubcategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="138.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <children>
-                  <ComboBox id="subcategoryBox" fx:id="subcategoryBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="subcategoryButton" fx:id="subcategoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addSubcategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
+                  <ComboBox id="categoryBox" fx:id="categoryBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
+                  <Button id="categoryButton" fx:id="categoryButton" layoutX="309.0" layoutY="8.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
