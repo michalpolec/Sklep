@@ -3,12 +3,14 @@ package shopProject;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.sql.*;
@@ -41,18 +43,7 @@ public class addScreenController {
 
    public void initialize() throws SQLException, ClassNotFoundException {
 
-       getChosenDataFromDB("NazwaPomieszczenia", "pomieszczenie", rooms);
-       getChosenDataFromDB("NazwaKategorii", "kategoria", categories);
-       getChosenDataFromDB("NazwaPodkategorii", "podkategoria", subcategories);
-       getChosenDataFromDB("NazwaKoloru", "kolor", colors);
-       getChosenDataFromDB("NazwaMaterialu", "material", materials);
-
-       roomBox.setItems(rooms);
-       categoryBox.setItems(categories);
-       subcategoryBox.setItems(subcategories);
-       colorBox.setItems(colors);
-       materialBox.setItems(materials);
-
+       getDataToArrays();
 
    }
 
@@ -64,7 +55,7 @@ public class addScreenController {
 
    public void addCategory() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowej kategorii", "IDKategorii", "NazwaKategorii", "kategoria",  categories.size(), "Wpisz nowa kategorie" );
+       openElementScreen("Dodawanie nowej kategorii", "IDKategorii", "NazwaKategorii", "kategoria",  categories.size(), "Wpisz nową kategorie" );
    }
 
    public void addSubcategory() throws IOException {
@@ -79,7 +70,7 @@ public class addScreenController {
 
    public void addMaterial() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowego materialu" , "IDMaterialu", "NazwaMaterialu", "material", materials.size(), "Wpisz nowy material");
+       openElementScreen("Dodawanie nowego materiału" , "IDMaterialu", "NazwaMaterialu", "material", materials.size(), "Wpisz nowy materiał");
    }
 
    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTabel, int lastIDofArray, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
@@ -94,9 +85,43 @@ public class addScreenController {
        newController.setOptionOfScreen(nameOfFirstColumn,nameOfSecondColumn, nameOfTabel, lastIDofArray, textOfLabel);
 
        addElement.show();
+       addElement.setOnCloseRequest(new EventHandler<WindowEvent>() {
+           public void handle(WindowEvent we) {
+               try {
+                   getDataToArrays();
+               } catch (SQLException throwables) {
+                   throwables.printStackTrace();
+               } catch (ClassNotFoundException e) {
+                   e.printStackTrace();
+               }
+           }
+       });
+
 
    }
 
+
+
+   public void getDataToArrays() throws SQLException, ClassNotFoundException {
+
+       rooms.clear();
+       categories.clear();
+       subcategories.clear();
+       colors.clear();
+       materials.clear();
+
+       getChosenDataFromDB("NazwaPomieszczenia", "pomieszczenie", rooms);
+       getChosenDataFromDB("NazwaKategorii", "kategoria", categories);
+       getChosenDataFromDB("NazwaPodkategorii", "podkategoria", subcategories);
+       getChosenDataFromDB("NazwaKoloru", "kolor", colors);
+       getChosenDataFromDB("NazwaMaterialu", "material", materials);
+
+       roomBox.setItems(rooms);
+       categoryBox.setItems(categories);
+       subcategoryBox.setItems(subcategories);
+       colorBox.setItems(colors);
+       materialBox.setItems(materials);
+   }
 
     public void getChosenDataFromDB(String nameOfColumn, String nameOfTable, ObservableList<String> litsOfData) throws ClassNotFoundException, SQLException {
 
