@@ -51,13 +51,13 @@ public class addElementScreenController {
         }
         else {
             String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn + ")"
-                    + " VALUES ('" + (lastIDofArray + 1) + "', '" + contentOfFiled + "')";
-            try {
+                    + " VALUES ('" + (lastIDofArray+1)+ "', '" + contentOfFiled + "')";
+           try {
                 statement.executeUpdate(sql);
 
-            }
-            catch (Exception e){
-                Alert();
+           }
+           catch (Exception e){
+               Alert();
             }
             Stage closeLoginStage = (Stage) addButton.getScene().getWindow();
             closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -66,10 +66,6 @@ public class addElementScreenController {
         }
         statement.close();
         connection.close();
-
-
-
-
 
     }
 
