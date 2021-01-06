@@ -90,12 +90,8 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
                <children>
-                  <Label id="length" layoutX="315.0" layoutY="13.0" text="Długość:" />
-                  <Label layoutX="158.0" layoutY="13.0" text="Wysokość:" />
-                  <Label id="width" layoutY="12.0" text="Szerokość:" />
-                  <TextField id="widthField" fx:id="widthField" layoutX="64.0" layoutY="9.0" prefHeight="25.0" prefWidth="80.0" />
-                  <TextField id="lengthField" fx:id="lengthField" layoutX="370.0" layoutY="8.0" prefHeight="25.0" prefWidth="80.0" />
-                  <TextField id="heigthField" fx:id="heigthField" layoutX="225.0" layoutY="9.0" prefHeight="25.0" prefWidth="80.0" />
+                  <ComboBox fx:id="dimensionsBox" layoutY="7.0" prefHeight="26.0" prefWidth="256.0" />
+                  <Button fx:id="dimensionsButton" layoutX="309.0" layoutY="8.0" mnemonicParsing="false" onAction="#addDimensions" prefHeight="26.0" prefWidth="90.0" text="Dodaj nowe" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="10">

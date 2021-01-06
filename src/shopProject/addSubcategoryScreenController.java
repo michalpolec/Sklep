@@ -24,10 +24,10 @@ public class addSubcategoryScreenController {
 
     int lastIDofArray;
 
-    ObservableList<twoColumnsTable>  categories;
+    ObservableList<twoColumnTable>  categories;
 
 
-    public void setOptionOfSubcategoryScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn, String nameOfTable, int lastIDofArray, ObservableList<twoColumnsTable> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfSubcategoryScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn, String nameOfTable, int lastIDofArray, ObservableList<twoColumnTable> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
         this.nameOfSecondColumn = nameOfSecondColumn;
@@ -54,7 +54,7 @@ public class addSubcategoryScreenController {
 
         int idOfCategory = 0;
 
-        for(twoColumnsTable cat : categories){
+        for(twoColumnTable cat : categories){
             if(cat.getName().contains(categoryBox.getValue().toString())){
                 idOfCategory = cat.ID;
             }

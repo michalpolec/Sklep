@@ -3,6 +3,7 @@ package shopProject;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,12 +19,13 @@ import java.sql.*;
 public class addScreenController {
 
 
-    ObservableList<twoColumnsTable> room =  FXCollections.observableArrayList();
-    ObservableList<twoColumnsTable>  categories = FXCollections.observableArrayList();
-    ObservableList<twoColumnsTable>  category = FXCollections.observableArrayList();
+    ObservableList<twoColumnTable> room =  FXCollections.observableArrayList();
+    ObservableList<twoColumnTable>  categories = FXCollections.observableArrayList();
+    ObservableList<twoColumnTable>  category = FXCollections.observableArrayList();
     ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
-    ObservableList<twoColumnsTable> colors =  FXCollections.observableArrayList();
-    ObservableList<twoColumnsTable> materials =  FXCollections.observableArrayList();
+    ObservableList<twoColumnTable> colors =  FXCollections.observableArrayList();
+    ObservableList<twoColumnTable> materials =  FXCollections.observableArrayList();
+    ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
 
 
     public ComboBox roomBox;
@@ -41,6 +43,9 @@ public class addScreenController {
     public ComboBox materialBox;
     public Button materialButton;
 
+    public ComboBox dimensionsBox;
+    public Button dimensionsButton;
+
 
    public void initialize() throws SQLException, ClassNotFoundException {
 
@@ -50,19 +55,7 @@ public class addScreenController {
 
    }
 
-   public void chosenSubcategory() {
 
-       category.clear();
-       categoryBox.setDisable(false);
-
-       for(Subcategory sub : subcategories){
-           if(sub.getSubcategoryName().equals(subcategoryBox.getValue().toString())){
-
-               category.add(categories.get(sub.getCategoryID()-1));
-           }
-       }
-
-   }
 
    public void addRoom() throws IOException, SQLException, ClassNotFoundException {
 
@@ -80,6 +73,20 @@ public class addScreenController {
         openSubcategoryScreen();
    }
 
+    public void chosenSubcategory() {
+
+        category.clear();
+        categoryBox.setDisable(false);
+
+        for(Subcategory sub : subcategories){
+            if(sub.getSubcategoryName().equals(subcategoryBox.getValue().toString())){
+
+                category.add(categories.get(sub.getCategoryID()-1));
+            }
+        }
+
+    }
+
    public void addColor() throws IOException, SQLException, ClassNotFoundException {
 
        openElementScreen("Dodawanie nowego koloru" ,"IDKoloru", "NazwaKoloru", "kolor", setLastIDofElement(colors), "Wpisz nowy kolor");
@@ -89,6 +96,10 @@ public class addScreenController {
 
        openElementScreen("Dodawanie nowego materiału" , "IDMaterialu", "NazwaMaterialu", "material", setLastIDofElement(materials), "Wpisz nowy materiał");
    }
+
+    public void addDimensions(ActionEvent actionEvent) {
+    }
+
 
    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTabel, int lastIDofArray, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
 
@@ -142,6 +153,7 @@ public class addScreenController {
            }
        });
    }
+
    public void getDataToArrays() throws SQLException, ClassNotFoundException {
 
        room.clear();
@@ -149,18 +161,21 @@ public class addScreenController {
        subcategories.clear();
        colors.clear();
        materials.clear();
+       dimensions.clear();
 
        getChosenDataFromDB("IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", room);
        getChosenDataFromDB("IDKategorii","NazwaKategorii", "kategoria", categories);
        getSubcategoryData();
        getChosenDataFromDB("IDKoloru", "NazwaKoloru", "kolor", colors);
        getChosenDataFromDB("IDMaterialu","NazwaMaterialu", "material", materials);
+       getDimensionData();
 
        roomBox.setItems(room);
        categoryBox.setItems(category);
        subcategoryBox.setItems(subcategories);
        colorBox.setItems(colors);
        materialBox.setItems(materials);
+       dimensionsBox.setItems(dimensions);
    }
 
    public void getSubcategoryData() throws ClassNotFoundException, SQLException {
@@ -181,7 +196,7 @@ public class addScreenController {
        connection.close();
    }
 
-    public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<twoColumnsTable> litsOfData) throws ClassNotFoundException, SQLException {
+    public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<twoColumnTable> litsOfData) throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
@@ -191,7 +206,7 @@ public class addScreenController {
         ResultSet resultSet = statement.executeQuery(sql);
 
         while(resultSet.next()) {
-            twoColumnsTable table = new twoColumnsTable(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
+            twoColumnTable table = new twoColumnTable(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
                     resultSet.getString(nameOfSecondColumn));
             litsOfData.add(table);
         }
@@ -202,8 +217,37 @@ public class addScreenController {
 
     }
 
-    public int setLastIDofElementForSubcategory(ObservableList<Subcategory> elements)
-    {
+    public void getDimensionData() throws ClassNotFoundException, SQLException {
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM sklep.wymiary";
+        ResultSet resultSet = statement.executeQuery(sql);
+
+
+        int width;
+        int height;
+        int length;
+
+        while(resultSet.next()) {
+
+            width = (int) Double.parseDouble(resultSet.getString("Szerokosc"));
+            height = (int) Double.parseDouble(resultSet.getString("Wysokosc"));
+            length = (int) Double.parseDouble(resultSet.getString("Dlugosc"));
+
+
+            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("IDWymiarow")), width, height, length);
+            dimensions.add(dimension);
+        }
+
+        statement.close();
+        connection.close();
+    }
+
+
+    public int setLastIDofElementForSubcategory(ObservableList<Subcategory> elements) {
         int i = 0;
         int maxID = 0;
         for(Subcategory sub: elements){
@@ -216,11 +260,11 @@ public class addScreenController {
         return maxID;
     }
 
-    public int setLastIDofElement(ObservableList<twoColumnsTable> elements){
+    public int setLastIDofElement(ObservableList<twoColumnTable> elements){
 
        int i = 0;
        int maxID = 0;
-       for(twoColumnsTable table: elements){
+       for(twoColumnTable table: elements){
            if(table.getID() > i)
            {
                maxID = table.getID();
@@ -229,6 +273,7 @@ public class addScreenController {
        }
        return maxID;
     }
+
 
 
 }

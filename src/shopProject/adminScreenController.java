@@ -26,7 +26,9 @@ public class adminScreenController {
 
         Stage addNewElementStage = new Stage();
         addNewElementStage.setTitle("Dodawanie nowego elementu");
-        addNewElementStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("resources/addScreen.fxml"))));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addNewScreen.fxml"));
+        Parent root = loader.load();
+        addNewElementStage.setScene(new Scene(root));
         addNewElementStage.show();
 
     }
