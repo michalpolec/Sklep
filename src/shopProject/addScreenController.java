@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -61,20 +62,41 @@ public class addScreenController {
 
    }
 
-   public void addProductToDB(){
+   public void addProductToDB() throws ClassNotFoundException, SQLException {
 
-       nameField.getText();
-       priceField.getText();
-       descriptionField.getText();
+       int productID = (getMaxIDofProducts() + 1);
 
-       getIDofElement(roomBox.getValue().toString(), room);
-       getIDofElement(colorBox.getValue().toString(), colors);
-       getIDofElement(materialBox.getValue().toString(), materials);
-       getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategories);
-       getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
-       getIDofElementForPosition(positionBox.getValue().toString() , positions);
+       int positionID = getIDofElementForPosition(positionBox.getValue().toString() , positions);
+       int dimensionID = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
+       int materialID = getIDofElement(materialBox.getValue().toString(), materials);
+       int colorID = getIDofElement(colorBox.getValue().toString(), colors);
 
-       stockField.getText();
+       String productName = nameField.getText();
+       double productPrice = Double.parseDouble(priceField.getText());
+       String descriptionName = descriptionField.getText();
+       int roomID = getIDofElement(roomBox.getValue().toString(), room);
+       int subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategories);
+       int productStock = Integer.parseInt(stockField.getText());
+
+
+       Class.forName("com.mysql.cj.jdbc.Driver");
+       Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
+       Statement statement = connection.createStatement();
+
+       String sql =  "INSERT INTO szczegoly (IDProduktu, IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + productID + "', '" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
+       statement.executeUpdate(sql);
+       sql = "INSERT INTO produkty (IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productID+ "', '" + productName + "', '" + productPrice + "', '" + descriptionName + "', '" + roomID + "', '" + subcategoryID + "','" +  productStock + "');";
+       statement.executeUpdate(sql);
+
+
+       statement.close();
+       connection.close();
+
+       Info();
+
+
+
+
 
    }
 
@@ -455,5 +477,38 @@ public class addScreenController {
         return ID;
     }
 
+    public int getMaxIDofProducts() throws ClassNotFoundException, SQLException {
 
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM sklep.produkty";
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        int index = 0;
+        int ID = 0;
+
+        while(resultSet.next()) {
+
+            int currentID = Integer.parseInt(resultSet.getString("IDProduktu"));
+            if(currentID > index)
+            {
+                ID =  currentID;
+            }
+        }
+        statement.close();
+        connection.close();
+
+        return ID;
+    }
+
+    public void Info(){
+        javafx.scene.control.Alert nullData = new Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        nullData.setTitle("Wpisano nowy produkt do bazy");
+        nullData.setHeaderText(null);
+        nullData.setContentText("Dodano nowy produkt!");
+
+        nullData.showAndWait();
+    }
 }
