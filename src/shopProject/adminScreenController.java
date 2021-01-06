@@ -24,9 +24,10 @@ public class adminScreenController {
 
     public void addNewElementAction() throws IOException {
 
+
         Stage addNewElementStage = new Stage();
         addNewElementStage.setTitle("Dodawanie nowego elementu");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addNewScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addScreen.fxml"));
         Parent root = loader.load();
         addNewElementStage.setScene(new Scene(root));
         addNewElementStage.show();

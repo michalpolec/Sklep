@@ -96,10 +96,8 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
                <children>
-                  <Label id="regal" layoutX="176.0" layoutY="14.0" text="Regał:" />
-                  <Label id="shelf" layoutY="14.0" text="Półka:" />
-                  <TextField id="shelfField" fx:id="shelfField" layoutX="43.0" layoutY="8.0" prefHeight="25.0" prefWidth="119.0" />
-                  <TextField id="regalField" fx:id="regalField" layoutX="225.0" layoutY="8.0" prefHeight="25.0" prefWidth="119.0" />
+                  <ComboBox fx:id="positionBox" layoutY="7.0" prefHeight="26.0" prefWidth="256.0" />
+                  <Button fx:id="positionButton" layoutX="310.0" layoutY="8.0" mnemonicParsing="false" onAction="#addPosition" prefHeight="26.0" prefWidth="90.0" text="Dodaj nową" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="11">
@@ -110,6 +108,6 @@
          </children>
       </GridPane>
       <Label id="title" layoutX="272.0" layoutY="45.0" text="Dodawanie nowego elementu" />
-      <Button id="addButton" layoutX="334.0" layoutY="603.0" mnemonicParsing="false" text="Dodaj" />
+      <Button id="addButton" fx:id="addProductToDB" layoutX="334.0" layoutY="603.0" mnemonicParsing="false" onAction="#addProductToDB" text="Dodaj" />
    </children>
 </AnchorPane>

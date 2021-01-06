@@ -1,6 +1,6 @@
 package shopProject;
 
-public class Dimension {
+public class Dimension extends Object {
 
     int dimensionID;
     double width;
