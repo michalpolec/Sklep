@@ -1,11 +1,11 @@
 package shopProject;
 
-public class twoColumnTable extends Object{
+public class restOfElements extends Object{
 
     int ID;
     String name;
 
-    public twoColumnTable(int roomID, String name) {
+    public restOfElements(int roomID, String name) {
         this.ID = roomID;
         this.name = name;
     }

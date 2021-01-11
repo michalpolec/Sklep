@@ -25,18 +25,14 @@ public class addPositionScreenController {
     String nameOfTable;
     String nameOfFirstColumn;
     String nameOfSecondColumn;
-    String nameOfThirdColumn;
-
-    int lastIDofArray;
 
 
-    public void setOptionOfPositionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn, String nameOfTable, int lastIDofArray,  String textOfLabel) throws ClassNotFoundException, SQLException {
+
+    public void setOptionOfPositionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
         this.nameOfSecondColumn = nameOfSecondColumn;
-        this.nameOfThirdColumn = nameOfThirdColumn;
         this.nameOfTable = nameOfTable;
-        this.lastIDofArray = lastIDofArray;
 
     }
 
@@ -55,8 +51,8 @@ public class addPositionScreenController {
             Alert();
         }
         else {
-            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn +  ", " + nameOfThirdColumn +")"
-                    + " VALUES ('" + (lastIDofArray + 1) + "', '" + Integer.parseInt(shelf) + "', '" + Integer.parseInt(regal)  + "')";
+            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn + ")"
+                    + " VALUES ('" + Integer.parseInt(shelf) + "', '" + Integer.parseInt(regal)  + "')";
             try {
                 statement.executeUpdate(sql);
 

@@ -21,17 +21,11 @@ public class addElementScreenController {
 
     String nameOfTable;
     String nameOfFirstColumn;
-    String nameOfSecondColumn;
 
-    int lastIDofArray;
-
-
-    public void setOptionOfScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, int lastIDofArray, String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfScreen(String nameOfFirstColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
-        this.nameOfSecondColumn = nameOfSecondColumn;
         this.nameOfTable = nameOfTable;
-        this.lastIDofArray = lastIDofArray;
         this.labelOfElement.setText(textOfLabel);
 
     }
@@ -50,8 +44,8 @@ public class addElementScreenController {
             Alert();
         }
         else {
-            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn + ")"
-                    + " VALUES ('" + (lastIDofArray+1)+ "', '" + contentOfFiled + "')";
+            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ")"
+                    + " VALUES ('" + contentOfFiled + "')";
            try {
                 statement.executeUpdate(sql);
 

@@ -21,12 +21,12 @@ import java.sql.*;
 public class addScreenController {
 
 
-    ObservableList<twoColumnTable> room =  FXCollections.observableArrayList();
-    ObservableList<twoColumnTable>  categories = FXCollections.observableArrayList();
-    ObservableList<twoColumnTable>  category = FXCollections.observableArrayList();
+    ObservableList<restOfElements> room =  FXCollections.observableArrayList();
+    ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
+    ObservableList<restOfElements>  category = FXCollections.observableArrayList();
     ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
-    ObservableList<twoColumnTable> colors =  FXCollections.observableArrayList();
-    ObservableList<twoColumnTable> materials =  FXCollections.observableArrayList();
+    ObservableList<restOfElements> colors =  FXCollections.observableArrayList();
+    ObservableList<restOfElements> materials =  FXCollections.observableArrayList();
     ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
     ObservableList<Position> positions = FXCollections.observableArrayList();
 
@@ -56,7 +56,6 @@ public class addScreenController {
 
    public void initialize() throws SQLException, ClassNotFoundException {
 
-
        categoryBox.setDisable(true);
        getDataToArrays();
 
@@ -64,7 +63,6 @@ public class addScreenController {
 
    public void addProductToDB() throws ClassNotFoundException, SQLException {
 
-       int productID = (getMaxIDofProducts() + 1);
 
        int positionID = getIDofElementForPosition(positionBox.getValue().toString() , positions);
        int dimensionID = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
@@ -79,36 +77,28 @@ public class addScreenController {
        int productStock = Integer.parseInt(stockField.getText());
 
 
-       Class.forName("com.mysql.cj.jdbc.Driver");
-       Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
-       Statement statement = connection.createStatement();
+       Statement statement = createConnectionAndStatement();
 
-       String sql =  "INSERT INTO szczegoly (IDProduktu, IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + productID + "', '" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
-       statement.executeUpdate(sql);
-       sql = "INSERT INTO produkty (IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productID+ "', '" + productName + "', '" + productPrice + "', '" + descriptionName + "', '" + roomID + "', '" + subcategoryID + "','" +  productStock + "');";
-       statement.executeUpdate(sql);
+       String sql =  "INSERT INTO szczegoly (IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
+       createConnectionAndStatement().executeUpdate(sql);
+       sql = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productName + "', '" + productPrice + "', '" + descriptionName + "', '" + roomID + "', '" + subcategoryID + "','" +  productStock + "');";
+       createConnectionAndStatement().executeUpdate(sql);
 
-
-       statement.close();
-       connection.close();
+       closeStatementAndConnection(statement);
 
        Info();
-
-
-
-
 
    }
 
    public void addRoom() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowego pomieszczenia", "IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", setLastIDofElement(room), "Wpisz nowe pomieszczenie");
+       openElementScreen("Dodawanie nowego pomieszczenia", "NazwaPomieszczenia", "pomieszczenie",  "Wpisz nowe pomieszczenie");
 
    }
 
    public void addCategory() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowej kategorii", "IDKategorii", "NazwaKategorii", "kategoria",  setLastIDofElement(categories), "Wpisz nową kategorie" );
+       openElementScreen("Dodawanie nowej kategorii", "NazwaKategorii", "kategoria",  "Wpisz nową kategorie" );
    }
 
    public void addSubcategory() throws IOException, SQLException, ClassNotFoundException {
@@ -132,12 +122,12 @@ public class addScreenController {
 
    public void addColor() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowego koloru" ,"IDKoloru", "NazwaKoloru", "kolor", setLastIDofElement(colors), "Wpisz nowy kolor");
+       openElementScreen("Dodawanie nowego koloru" , "NazwaKoloru", "kolor",  "Wpisz nowy kolor");
    }
 
    public void addMaterial() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowego materiału" , "IDMaterialu", "NazwaMaterialu", "material", setLastIDofElement(materials), "Wpisz nowy materiał");
+       openElementScreen("Dodawanie nowego materiału" ,  "NazwaMaterialu", "material", "Wpisz nowy materiał");
    }
 
     public void addDimensions(ActionEvent actionEvent) throws SQLException, IOException, ClassNotFoundException {
@@ -151,7 +141,7 @@ public class addScreenController {
     }
 
 
-   public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTabel, int lastIDofArray, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
+   public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
 
        Stage addElement =  new Stage();
        addElement.setTitle(nameOfStage);
@@ -160,7 +150,7 @@ public class addScreenController {
        addElement.setScene(new Scene(root));
 
        addElementScreenController newController = loader.getController();
-       newController.setOptionOfScreen(nameOfFirstColumn,nameOfSecondColumn, nameOfTabel, lastIDofArray, textOfLabel);
+       newController.setOptionOfScreen(nameOfFirstColumn, nameOfTabel,  textOfLabel);
 
        addElement.show();
        addElement.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -187,7 +177,7 @@ public class addScreenController {
        addSubcategory.setScene(new Scene(root));
 
        addSubcategoryScreenController newController = loader.getController();
-       newController.setOptionOfSubcategoryScreen("IDPodkategorii","NazwaPodkategorii", "IDKategorii", "podkategoria", setLastIDofElementForSubcategory(subcategories), categories, "Wybierz kategorie oraz wpisz nową podkategorie");
+       newController.setOptionOfSubcategoryScreen("NazwaPodkategorii", "IDKategorii", "podkategoria",  categories, "Wybierz kategorie oraz wpisz nową podkategorie");
        newController.setCategoriesInComboBox();
 
        addSubcategory.show();
@@ -213,7 +203,7 @@ public class addScreenController {
        addDimension.setScene(new Scene(root));
 
        addDimensionScreenController newController = loader.getController();
-       newController.setOptionOfDimensionScreen("IDWymiarow","Szerokosc", "Wysokosc","Dlugosc", "wymiary", setLastIDofElementForDimension(dimensions),  "Wpisz szerokość, długość oraz wysokość produktu");
+       newController.setOptionOfDimensionScreen("Szerokosc", "Wysokosc","Dlugosc", "wymiary",  "Wpisz szerokość, długość oraz wysokość produktu");
 
 
        addDimension.show();
@@ -239,7 +229,7 @@ public class addScreenController {
        addPosition.setScene(new Scene(root));
 
        addPositionScreenController newController = loader.getController();
-       newController.setOptionOfPositionScreen("IDPozycji", "Polka", "Regal", "pozycja",setLastIDofElementForPosition(positions), "Wpisz półkę oraz regał");
+       newController.setOptionOfPositionScreen( "Polka", "Regal", "pozycja", "Wpisz półkę oraz regał");
 
 
        addPosition.show();
@@ -287,80 +277,55 @@ public class addScreenController {
 
    public void getSubcategoryData() throws ClassNotFoundException, SQLException {
 
-       Class.forName("com.mysql.cj.jdbc.Driver");
-       Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
-       Statement statement = connection.createStatement();
-
        String sql = "SELECT * FROM sklep.podkategoria";
-       ResultSet resultSet = statement.executeQuery(sql);
+       ResultSet resultSet = createConnectionAndStatement().executeQuery(sql);
 
        while(resultSet.next()) {
             Subcategory subcategory = new Subcategory(Integer.parseInt(resultSet.getString("IDPodkategorii")),resultSet.getString("NazwaPodkategorii"),Integer.parseInt(resultSet.getString("IDKategorii")));
             subcategories.add(subcategory);
        }
 
-       statement.close();
-       connection.close();
+       closeStatementAndConnection(resultSet.getStatement());
    }
 
-    public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<twoColumnTable> litsOfData) throws ClassNotFoundException, SQLException {
+    public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> litsOfData) throws ClassNotFoundException, SQLException {
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
-        Statement statement = connection.createStatement();
 
         String sql = "SELECT * FROM sklep." + nameOfTable;
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = createConnectionAndStatement().executeQuery(sql);
 
         while(resultSet.next()) {
-            twoColumnTable table = new twoColumnTable(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
+            restOfElements table = new restOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
                     resultSet.getString(nameOfSecondColumn));
             litsOfData.add(table);
         }
 
-        statement.close();
-        connection.close();
-
+        closeStatementAndConnection(resultSet.getStatement());
 
     }
 
     public void getDimensionData() throws ClassNotFoundException, SQLException {
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
-        Statement statement = connection.createStatement();
 
         String sql = "SELECT * FROM sklep.wymiary";
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = createConnectionAndStatement().executeQuery(sql);
 
-
-        int width;
-        int height;
-        int length;
 
         while(resultSet.next()) {
 
-            width = (int) Double.parseDouble(resultSet.getString("Szerokosc"));
-            height = (int) Double.parseDouble(resultSet.getString("Wysokosc"));
-            length = (int) Double.parseDouble(resultSet.getString("Dlugosc"));
-
-
-            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("IDWymiarow")), width, height, length);
+            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("IDWymiarow")), (int) Double.parseDouble(resultSet.getString("Szerokosc")), (int) Double.parseDouble(resultSet.getString("Wysokosc")), (int) Double.parseDouble(resultSet.getString("Dlugosc")));
             dimensions.add(dimension);
         }
 
-        statement.close();
-        connection.close();
+        closeStatementAndConnection(resultSet.getStatement());
     }
 
     public void getPositionData() throws ClassNotFoundException, SQLException {
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
-        Statement statement = connection.createStatement();
+
 
         String sql = "SELECT * FROM sklep.pozycja";
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = createConnectionAndStatement().executeQuery(sql);
 
         while(resultSet.next()) {
 
@@ -368,61 +333,8 @@ public class addScreenController {
             positions.add(position);
         }
 
-        statement.close();
-        connection.close();
-    }
+        closeStatementAndConnection(resultSet.getStatement());
 
-    public int setLastIDofElementForSubcategory(ObservableList<Subcategory> elements) {
-        int i = 0;
-        int maxID = 0;
-        for(Subcategory sub: elements){
-            if(sub.getSubcategoryID() > i)
-            {
-                maxID = sub.getSubcategoryID();
-            }
-            i++;
-        }
-        return maxID;
-    }
-
-    public int setLastIDofElement(ObservableList<twoColumnTable> elements){
-
-       int i = 0;
-       int maxID = 0;
-       for(twoColumnTable table: elements){
-           if(table.getID() > i)
-           {
-               maxID = table.getID();
-           }
-           i++;
-       }
-       return maxID;
-    }
-
-    public int setLastIDofElementForDimension(ObservableList<Dimension> dimensions){
-        int i = 0;
-        int maxID = 0;
-        for(Dimension dim: dimensions){
-            if(dim.getDimensionID() > i)
-            {
-                maxID = dim.getDimensionID();
-            }
-            i++;
-        }
-        return maxID;
-    }
-
-    public int setLastIDofElementForPosition(ObservableList<Position> positions){
-        int i = 0;
-        int maxID = 0;
-        for(Position pos: positions){
-            if(pos.getPositionID() > i)
-            {
-                maxID = pos.getPositionID();
-            }
-            i++;
-        }
-        return maxID;
     }
 
     public int getIDofElementForSubcategory(String nameOfElement, ObservableList<Subcategory> listsOfElements) {
@@ -438,10 +350,10 @@ public class addScreenController {
        return ID;
     }
 
-    public int getIDofElement(String nameOfElement, ObservableList<twoColumnTable> listsOfElements) {
+    public int getIDofElement(String nameOfElement, ObservableList<restOfElements> listsOfElements) {
 
         int ID = 0;
-        for(twoColumnTable element : listsOfElements)
+        for(restOfElements element : listsOfElements)
         {
             if(element.getName().equals(nameOfElement))
             {
@@ -477,32 +389,6 @@ public class addScreenController {
         return ID;
     }
 
-    public int getMaxIDofProducts() throws ClassNotFoundException, SQLException {
-
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM sklep.produkty";
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        int index = 0;
-        int ID = 0;
-
-        while(resultSet.next()) {
-
-            int currentID = Integer.parseInt(resultSet.getString("IDProduktu"));
-            if(currentID > index)
-            {
-                ID =  currentID;
-            }
-        }
-        statement.close();
-        connection.close();
-
-        return ID;
-    }
-
     public void Info(){
         javafx.scene.control.Alert nullData = new Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         nullData.setTitle("Wpisano nowy produkt do bazy");
@@ -511,4 +397,21 @@ public class addScreenController {
 
         nullData.showAndWait();
     }
+
+    public Statement createConnectionAndStatement() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
+        Statement statement = connection.createStatement();
+
+        return statement;
+    }
+
+    public void closeStatementAndConnection(Statement statement) throws SQLException {
+
+           Connection connection = statement.getConnection();
+           statement.close();
+           connection.close();
+
+    }
+
 }

@@ -20,20 +20,16 @@ public class addSubcategoryScreenController {
     String nameOfTable;
     String nameOfFirstColumn;
     String nameOfSecondColumn;
-    String nameOfThirdColumn;
-
-    int lastIDofArray;
-
-    ObservableList<twoColumnTable>  categories;
 
 
-    public void setOptionOfSubcategoryScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn, String nameOfTable, int lastIDofArray, ObservableList<twoColumnTable> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
+    ObservableList<restOfElements>  categories;
+
+
+    public void setOptionOfSubcategoryScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
         this.nameOfSecondColumn = nameOfSecondColumn;
-        this.nameOfThirdColumn = nameOfThirdColumn;
         this.nameOfTable = nameOfTable;
-        this.lastIDofArray = lastIDofArray;
         this.titleLabel.setText(textOfLabel);
         this.categories = categories;
 
@@ -54,7 +50,7 @@ public class addSubcategoryScreenController {
 
         int idOfCategory = 0;
 
-        for(twoColumnTable cat : categories){
+        for(restOfElements cat : categories){
             if(cat.getName().contains(categoryBox.getValue().toString())){
                 idOfCategory = cat.ID;
             }
@@ -67,8 +63,8 @@ public class addSubcategoryScreenController {
             Alert();
         }
         else {
-            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn +  ", " + nameOfThirdColumn +")"
-                    + " VALUES ('" + (lastIDofArray + 1) + "', '" + contentOfFiled + "', '" + (idOfCategory+1) + "')";
+            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn  +")"
+                    + " VALUES ('"  + contentOfFiled + "', '" + idOfCategory + "')";
             try {
                 statement.executeUpdate(sql);
 

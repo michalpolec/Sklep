@@ -26,18 +26,13 @@ public class addDimensionScreenController {
     String nameOfFirstColumn;
     String nameOfSecondColumn;
     String nameOfThirdColumn;
-    String nameOfFourthColumn;
 
-    int lastIDofArray;
-
-    public void setOptionOfDimensionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn,String nameOfFourthColumn, String nameOfTable, int lastIDofArray, String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfDimensionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
         this.nameOfSecondColumn = nameOfSecondColumn;
         this.nameOfThirdColumn = nameOfThirdColumn;
-        this.nameOfFourthColumn = nameOfFourthColumn;
         this.nameOfTable = nameOfTable;
-        this.lastIDofArray = lastIDofArray;
         this.titleOfScreen.setText(textOfLabel);
 
     }
@@ -60,8 +55,8 @@ public class addDimensionScreenController {
             Alert();
         }
         else {
-            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn +  ", " + nameOfThirdColumn + ", " + nameOfFourthColumn +")"
-                    + " VALUES ('" + (lastIDofArray + 1) + "', '" + Double.parseDouble(width) + "', '" + Double.parseDouble(height)  + "', '" + Double.parseDouble(lenght) +"')";
+            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn +  ", " + nameOfThirdColumn + ")"
+                    + " VALUES ('" + Double.parseDouble(width) + "', '" + Double.parseDouble(height)  + "', '" + Double.parseDouble(lenght) +"')";
             try {
                 statement.executeUpdate(sql);
 
