@@ -138,11 +138,20 @@ public class editScreenController {
             statement.close();
             connection.close();
 
-
-
-
         }
     }
+
+    @FXML
+    private void onAddButtonPressed() throws IOException {
+
+        Stage addNewElementStage = new Stage();
+        addNewElementStage.setTitle("Dodawanie nowego elementu");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addScreen.fxml"));
+        Parent root = loader.load();
+        addNewElementStage.setScene(new Scene(root));
+        addNewElementStage.show();
+    }
+
 
     void changeProductInTable(Product product){
         int IDproduktu = product.getProductID();
