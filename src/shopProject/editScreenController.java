@@ -131,7 +131,8 @@ public class editScreenController {
             Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
             Statement statement = connection.createStatement();
             String sql = "DELETE FROM `sklep`.`produkty` WHERE (`IDProduktu` = '"+ selectedProduct.getProductID() +"')";
-
+            statement.executeUpdate(sql);
+            sql = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '"+ selectedProduct.getProductID() +"')";
             statement.executeUpdate(sql);
 
             statement.close();
