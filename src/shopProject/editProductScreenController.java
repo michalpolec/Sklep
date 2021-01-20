@@ -93,14 +93,26 @@ public class editProductScreenController {
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
-        String sql = "UPDATE sklep.szczegoly SET IDpozycji = " + getIDofElementForPosition((String) positionCB.getValue(), positions) + ", IDwymiarow = " +  getIDofElementForDimension((String) dimensionCB.getValue(), dimensions)+ ", IDmaterialu = " + getIDofElement((String) materialCB.getValue(), materials) + ", IDkoloru = " + getIDofElement((String) colorCB.getValue(), colors) +
-                " WHERE IDproduktu = " + IDTF.getText() + ";";
+        String name = NameTF.getText();
+        String price = PriceTF.getText();
+        String description = DescriptionTF.getText();
+        String room = roomCB.getValue().toString();
+        String category = categoryCB.getValue().toString();
+        String subcategory = subcategoryCB.getValue().toString();
+        String color = colorCB.getValue().toString();
+        String material = materialCB.getValue().toString();
+        String dimension = dimensionCB.getValue().toString();
+        String position = positionCB.getValue().toString();
+        String stock = StockTF.getText();
+
+        /*String sql = "UPDATE sklep.szczegoly SET IDPozycji = " + getIDofElementForPosition((String) positionCB.getValue(), positions) + ", IDWymiarow = " +  getIDofElementForDimension((String) dimensionCB.getValue(), dimensions)+ ", IDMaterialu = " + getIDofElement((String) materialCB.getValue(), materials) + ", IDKoloru = " + getIDofElement((String) colorCB.getValue(), colors) +
+                " WHERE IDproduktu = " + Integer.parseInt(IDTF.getText()) + ";";
         try {
             statement.executeUpdate(sql);
         }
         catch (Exception e){
             Alert();
-        }
+        }*/
 
         Stage stage = (Stage) OKbutton.getScene().getWindow();
         stage.getOnCloseRequest().handle(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
