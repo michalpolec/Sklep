@@ -101,13 +101,12 @@ public class editProductScreenController {
         String price = PriceTF.getText();
         String description = DescriptionTF.getText();
         int IDroom = getIDofElement(roomCB.getValue().toString(), room);
-        int IDcategory = getIDofElement(categoryCB.getValue().toString(), categories);
         int IDsubcategory = getIDofElementForSubcategory(subcategoryCB.getValue().toString(), subcategory);
         int IDcolor = getIDofElement(colorCB.getValue().toString(), colors);
         int IDmaterial = getIDofElement(materialCB.getValue().toString(), materials);
         int IDdimension = getIDofElementForDimension(dimensionCB.getValue().toString(), dimensions);
         int IDposition = getIDofElementForPosition(positionCB.getValue().toString(), positions);
-        String stock = StockTF.getText();
+        int stock = Integer.parseInt(StockTF.getText());
 
         String sql = "UPDATE `sklep`.`szczegoly` SET `IDPozycji` = '"+ IDposition +"', `IDWymiarow` = '"+ IDdimension +"', `IDMaterialu` = '"+ IDmaterial +"', `IDKoloru` = '"+ IDcolor +"' WHERE (`IDProduktu` = '"+ IDProduct +"');";
         try {
@@ -117,9 +116,16 @@ public class editProductScreenController {
             Alert();
         }
 
-        /*Stage stage = (Stage) OKbutton.getScene().getWindow();
-        stage.getOnCloseRequest().handle(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-        stage.close();*/
+        String sql_products = "UPDATE `sklep'.`produkty` SET `NazwaProduktu` = '" + name + "', `CenaProduktu` = '" + price + "', `OpisProduktu` = '" + description + "', `IDPomieszczenia` = '" + IDroom + "', `IDPodkategorii` = '" + IDsubcategory + "', `StanMagazynowy` = '" + stock + "' WHERE (`IDProduktu` = '" + IDProduct + "');";
+        try{
+            statement.executeUpdate(sql_products);
+        } catch (Exception e){
+            Alert();
+        }
+
+
+        Stage stage = (Stage) OKbutton.getScene().getWindow();
+        stage.close();
 
         statement.close();
         connection.close();
