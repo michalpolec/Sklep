@@ -19,7 +19,6 @@ public class Main extends Application {
         loginStage.setTitle("Baza danych sklepu");
         loginStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("resources/mainScreen.fxml"))));
         loginStage.show();
-        System.out.println("cos");
 
     }
 
