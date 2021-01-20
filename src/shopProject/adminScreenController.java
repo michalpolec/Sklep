@@ -1,5 +1,7 @@
 package shopProject;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,7 +17,7 @@ public class adminScreenController {
     public Button addNewElement;
     public Button editDatabase;
 
-    ArrayList<Product> products = new ArrayList<Product>();
+    ObservableList<Product> products =  FXCollections.observableArrayList();
 
     public void initialize(){
 
@@ -43,6 +45,7 @@ public class adminScreenController {
         editDatabaseStage.setScene(new Scene(root));
 
         editScreenController newController = loader.getController();
+        newController.getAllData(products);
         editDatabaseStage.show();
 
 
