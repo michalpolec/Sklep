@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class editScreenController {
+public class adminScreenController {
     ObservableList<Product> productObservableList =  FXCollections.observableArrayList();
     public Button editionButton;
     public TableView<Product> tableOfDB;
@@ -75,6 +75,22 @@ public class editScreenController {
     }
 
     @FXML
+    private void onAddButtonPressed() throws IOException {
+
+        Stage addNewElementStage = new Stage();
+        addNewElementStage.setTitle("Dodawanie nowego elementu");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/modifyProductScreen.fxml"));
+        Parent root = loader.load();
+
+        modifyProductScreenController newController = loader.getController();
+        newController.setAddOrEdit(true);
+
+        addNewElementStage.setScene(new Scene(root));
+        addNewElementStage.show();
+
+    }
+
+    @FXML
     private void onEditionButtonPressed() throws IOException, SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
         if(selectedProduct == null){
@@ -87,17 +103,21 @@ public class editScreenController {
         }
         else{
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/editProductScreen.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/modifyProductScreen.fxml"));
                 Parent root = loader.load();
 
-                editProductScreenController newController = loader.getController();
+                modifyProductScreenController newController = loader.getController();
+                newController.setAddOrEdit(false);
                 newController.getSelectedProduct(selectedProduct);
+                newController.addProductToDB.setText("Edytuj");
 
 
             Stage editProductbaseStage = new Stage();
             editProductbaseStage.setScene(new Scene(root));
             editProductbaseStage.setTitle("Edycja produktu o ID:" + selectedProduct.getProductID());
             editProductbaseStage.show();
+
+
             /*editProductbaseStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {
                     try {
@@ -141,16 +161,7 @@ public class editScreenController {
         }
     }
 
-    @FXML
-    private void onAddButtonPressed() throws IOException {
 
-        Stage addNewElementStage = new Stage();
-        addNewElementStage.setTitle("Dodawanie nowego elementu");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addScreen.fxml"));
-        Parent root = loader.load();
-        addNewElementStage.setScene(new Scene(root));
-        addNewElementStage.show();
-    }
 
 
     void changeProductInTable(Product product){

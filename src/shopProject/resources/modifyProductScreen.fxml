@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="689.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.addScreenController">
+<AnchorPane prefHeight="689.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.modifyProductScreenController">
    <children>
       <GridPane layoutX="72.0" layoutY="104.0" prefHeight="470.0" prefWidth="578.0">
         <columnConstraints>
@@ -109,5 +109,6 @@
       </GridPane>
       <Label id="title" layoutX="272.0" layoutY="45.0" text="Dodawanie nowego elementu" />
       <Button id="addButton" fx:id="addProductToDB" layoutX="334.0" layoutY="603.0" mnemonicParsing="false" onAction="#addProductToDB" text="Dodaj" />
+      <Button fx:id="cancelButton" layoutX="431.0" layoutY="603.0" mnemonicParsing="false" onAction="#onCancelAction" text="Anuluj" />
    </children>
 </AnchorPane>

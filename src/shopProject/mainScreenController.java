@@ -34,12 +34,12 @@ public class mainScreenController {
         if(checkCorrectionOfLoginAndPassword(loginField.getText(), passwordField.getText())) {
 
             Stage editDatabaseStage = new Stage();
-            editDatabaseStage.setTitle("Edycja bazy danych");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/editScreen.fxml"));
+            editDatabaseStage.setTitle("Administracja");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/adminScreen.fxml"));
             Parent root = loader.load();
             editDatabaseStage.setScene(new Scene(root));
 
-            editScreenController newController = loader.getController();
+            adminScreenController newController = loader.getController();
             newController.getAllData(products);
             editDatabaseStage.show();
 
