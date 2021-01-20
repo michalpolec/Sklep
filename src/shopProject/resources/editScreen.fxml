@@ -30,5 +30,6 @@
             </columnResizePolicy>
         </TableView>
         <Button fx:id="editionButton" layoutX="547.0" layoutY="516.0" mnemonicParsing="false" onAction="#onEditionButtonPressed" prefHeight="56.0" prefWidth="95.0" text="Edytuj" />
+      <Button fx:id="deleteButton" layoutX="365.0" layoutY="516.0" mnemonicParsing="false" onAction="#onDeleteButtonPressed" prefHeight="56.0" prefWidth="95.0" text="Usuń" />
     </children>
 </AnchorPane>

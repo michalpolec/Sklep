@@ -14,7 +14,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class editScreenController {
@@ -106,6 +109,35 @@ public class editScreenController {
                     }
                 }
             });*/
+
+
+        }
+    }
+
+    @FXML
+    private void onDeleteButtonPressed() throws IOException, SQLException, ClassNotFoundException {
+        selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
+        if(selectedProduct == null){
+            Alert badClick = new Alert(Alert.AlertType.ERROR);
+            badClick.setTitle("BĹ‚Ä…d");
+            badClick.setHeaderText(null);
+            badClick.setContentText("BĹ‚Ä…d! NaleĹĽy zaznaczyÄ‡ odpowiedni wiersz do edycji");
+
+            badClick.showAndWait();
+        }
+        else{
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+            Statement statement = connection.createStatement();
+            String sql = "DELETE FROM `sklep`.`produkty` WHERE (`IDProduktu` = '"+ selectedProduct.getProductID() +"')";
+
+            statement.executeUpdate(sql);
+
+            statement.close();
+            connection.close();
+
+
 
 
         }
