@@ -23,7 +23,7 @@ import java.sql.Statement;
 
 
 public class adminScreenController {
-    ObservableList<Product> productObservableList =  FXCollections.observableArrayList();
+    ObservableList<Product> products =  FXCollections.observableArrayList();
     public Button editionButton;
     public TableView<Product> tableOfDB;
     public TableColumn<Product, Integer> IDproduct;
@@ -45,14 +45,12 @@ public class adminScreenController {
     Product selectedProduct;
 
 
-    public void getAllData(ObservableList<Product> products)
-    {
-        productObservableList.setAll(products);
+    public void getAllData(ObservableList<Product> products) {
+        this.products.setAll(products);
     }
 
-    void initializeTable()
-    {
-        tableOfDB.setItems(productObservableList);
+    void initializeTable() {
+        tableOfDB.setItems(products);
     }
 
     public void initialize() {
@@ -90,7 +88,7 @@ public class adminScreenController {
         addNewElementStage.show();
         addNewElementStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                productObservableList.add(newController.getSelectedProduct());
+                products.add(newController.getSelectedProduct());
                 tableOfDB.refresh();
             }
         });
@@ -101,12 +99,7 @@ public class adminScreenController {
     private void onEditionButtonPressed() throws IOException, SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
         if(selectedProduct == null){
-            Alert badClick = new Alert(Alert.AlertType.ERROR);
-            badClick.setTitle("BĹ‚Ä…d");
-            badClick.setHeaderText(null);
-            badClick.setContentText("BĹ‚Ä…d! NaleĹĽy zaznaczyÄ‡ odpowiedni wiersz do edycji");
-
-            badClick.showAndWait();
+            Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do edycji." );
         }
         else{
 
@@ -139,12 +132,7 @@ public class adminScreenController {
     private void onDeleteButtonPressed() throws IOException, SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
         if(selectedProduct == null){
-            Alert badClick = new Alert(Alert.AlertType.ERROR);
-            badClick.setTitle("BĹ‚Ä…d");
-            badClick.setHeaderText(null);
-            badClick.setContentText("BĹ‚Ä…d! NaleĹĽy zaznaczyÄ‡ odpowiedni wiersz do edycji");
-
-            badClick.showAndWait();
+            Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do usuniecia." );
         }
         else{
 
@@ -157,10 +145,10 @@ public class adminScreenController {
             statement.executeUpdate(sql);
 
 
-            for(Product pro: productObservableList){
+            for(Product pro: products){
                 if(pro.getProductID() == selectedProduct.getProductID())
                 {
-                    productObservableList.remove(pro);
+                    products.remove(pro);
                     break;
                 }
             }
@@ -176,27 +164,36 @@ public class adminScreenController {
     void changeProductInTable(Product product){
         int IDproduktu = product.getProductID();
 
-        for(int i = 0; i < productObservableList.size(); i++)
+        for(int i = 0; i < products.size(); i++)
         {
-            if(IDproduktu == productObservableList.get(i).getProductID()){
-                productObservableList.get(i).setNameOfProduct(product.getNameOfProduct());
-                productObservableList.get(i).setPrice(product.getPrice());
-                productObservableList.get(i).setDescription(product.getDescription());
-                productObservableList.get(i).setRoom(product.getRoom());
-                productObservableList.get(i).setCategory(product.getCategory());
-                productObservableList.get(i).setSubcategory(product.getSubcategory());
-                productObservableList.get(i).setColor(product.getColor());
-                productObservableList.get(i).setMaterial(product.getMaterial());
-                productObservableList.get(i).setWidth(product.getWidth());
-                productObservableList.get(i).setHeight(product.getHeight());
-                productObservableList.get(i).setLength(product.getLength());
-                productObservableList.get(i).setShelf(product.getShelf());
-                productObservableList.get(i).setRegal(product.getRegal());
-                productObservableList.get(i).setStock(product.getStock());
+            if(IDproduktu == products.get(i).getProductID()){
+                products.get(i).setNameOfProduct(product.getNameOfProduct());
+                products.get(i).setPrice(product.getPrice());
+                products.get(i).setDescription(product.getDescription());
+                products.get(i).setRoom(product.getRoom());
+                products.get(i).setCategory(product.getCategory());
+                products.get(i).setSubcategory(product.getSubcategory());
+                products.get(i).setColor(product.getColor());
+                products.get(i).setMaterial(product.getMaterial());
+                products.get(i).setWidth(product.getWidth());
+                products.get(i).setHeight(product.getHeight());
+                products.get(i).setLength(product.getLength());
+                products.get(i).setShelf(product.getShelf());
+                products.get(i).setRegal(product.getRegal());
+                products.get(i).setStock(product.getStock());
                 break;
             }
         }
 
 
+    }
+
+    void Alert(String setTitle, String setContents) {
+        Alert badClick = new Alert(Alert.AlertType.ERROR);
+        badClick.setTitle(setTitle);
+        badClick.setHeaderText(null);
+        badClick.setContentText(setContents);
+
+        badClick.showAndWait();
     }
 }
