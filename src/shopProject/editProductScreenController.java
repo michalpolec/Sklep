@@ -116,7 +116,7 @@ public class editProductScreenController {
             Alert();
         }
 
-        String sql_products = "UPDATE `sklep'.`produkty` SET `NazwaProduktu` = '" + name + "', `CenaProduktu` = '" + price + "', `OpisProduktu` = '" + description + "', `IDPomieszczenia` = '" + IDroom + "', `IDPodkategorii` = '" + IDsubcategory + "', `StanMagazynowy` = '" + stock + "' WHERE (`IDProduktu` = '" + IDProduct + "');";
+        String sql_products = "UPDATE `sklep`.`produkty` SET `NazwaProduktu` = '" + name + "', `CenaProduktu` = '" + price + "', `OpisProduktu` = '" + description + "', `IDPomieszczenia` = '" + IDroom + "', `IDPodkategorii` = '" + IDsubcategory + "', `StanMagazynowy` = '" + stock + "' WHERE (`IDProduktu` = '" + IDProduct + "');";
         try{
             statement.executeUpdate(sql_products);
         } catch (Exception e){
