@@ -72,9 +72,12 @@ public class modifyProductScreenController {
 
     }
 
-    public void getSelectedProduct(Product product) throws SQLException, ClassNotFoundException {
-        this.selectedProduct = product;
+    public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
+        this.selectedProduct = selectedProduct;
         initializeData();
+    }
+    public Product getSelectedProduct(){
+        return selectedProduct;
     }
 
     public void onCancelAction(){
@@ -105,10 +108,48 @@ public class modifyProductScreenController {
            createConnectionAndStatement().executeUpdate(sql_details);
            String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productName + "', '" + productPrice + "', '" + descriptionName + "', '" + roomID + "', '" + subcategoryID + "','" + productStock + "');";
            createConnectionAndStatement().executeUpdate(sql_products);
+           String sql_getID = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
+                   "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
+                   " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
+                   "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
+                   "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
+                   "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
+                   "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
+                   "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
+                   "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
+                   "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
+                   "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji) WHERE produkty.IDProduktu = (SELECT MAX(produkty.IDProduktu) FROM produkty);";
+
+           ResultSet resultSet = statement.executeQuery(sql_getID);
+
+
+               while(resultSet.next()) {
+
+                   selectedProduct = new Product(Integer.parseInt(resultSet.getString("IDProduktu")),
+                           resultSet.getString("NazwaProduktu"),
+                           Double.parseDouble(resultSet.getString("CenaProduktu")),
+                           resultSet.getString("OpisProduktu"),
+                           resultSet.getString("NazwaPomieszczenia"),
+                           resultSet.getString("NazwaKategorii"),
+                           resultSet.getString("NazwaPodkategorii"),
+                           resultSet.getString("NazwaKoloru"),
+                           resultSet.getString("NazwaMaterialu"),
+                           Double.parseDouble(resultSet.getString("Szerokosc")),
+                           Double.parseDouble(resultSet.getString("Wysokosc")),
+                           Double.parseDouble(resultSet.getString("Dlugosc")),
+                           Integer.parseInt(resultSet.getString("Polka")),
+                           Integer.parseInt(resultSet.getString("Regal")),
+                           Integer.parseInt(resultSet.getString("StanMagazynowy")));
+               }
+
 
            closeStatementAndConnection(statement);
 
            Info();
+
+           Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
+           closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+           closeLoginStage.close();
        }
        else {
 
@@ -134,12 +175,47 @@ public class modifyProductScreenController {
            String sql_products = "UPDATE `sklep`.`produkty` SET `NazwaProduktu` = '" + name + "', `CenaProduktu` = '" + price + "', `OpisProduktu` = '" + description + "', `IDPomieszczenia` = '" + IDroom + "', `IDPodkategorii` = '" + IDsubcategory + "', `StanMagazynowy` = '" + stock + "' WHERE (`IDProduktu` = '" + IDProduct + "');";
            statement.executeUpdate(sql_products);
 
+           String sql_getID = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
+                   "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
+                   " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
+                   "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
+                   "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
+                   "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
+                   "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
+                   "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
+                   "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
+                   "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
+                   "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji) WHERE produkty.IDProduktu = " + IDProduct + ";";
+
+           ResultSet resultSet = statement.executeQuery(sql_getID);
 
 
-          // Stage stage = (Stage) OKbutton.getScene().getWindow();
-          // stage.close();
+           while(resultSet.next()) {
+
+               selectedProduct = new Product(Integer.parseInt(resultSet.getString("IDProduktu")),
+                       resultSet.getString("NazwaProduktu"),
+                       Double.parseDouble(resultSet.getString("CenaProduktu")),
+                       resultSet.getString("OpisProduktu"),
+                       resultSet.getString("NazwaPomieszczenia"),
+                       resultSet.getString("NazwaKategorii"),
+                       resultSet.getString("NazwaPodkategorii"),
+                       resultSet.getString("NazwaKoloru"),
+                       resultSet.getString("NazwaMaterialu"),
+                       Double.parseDouble(resultSet.getString("Szerokosc")),
+                       Double.parseDouble(resultSet.getString("Wysokosc")),
+                       Double.parseDouble(resultSet.getString("Dlugosc")),
+                       Integer.parseInt(resultSet.getString("Polka")),
+                       Integer.parseInt(resultSet.getString("Regal")),
+                       Integer.parseInt(resultSet.getString("StanMagazynowy")));
+           }
 
            closeStatementAndConnection(statement);
+
+           Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
+           closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+           closeLoginStage.close();
+
+
        }
 
 

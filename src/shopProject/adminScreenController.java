@@ -2,6 +2,7 @@ package shopProject;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -45,7 +47,6 @@ public class adminScreenController {
 
     public void getAllData(ObservableList<Product> products)
     {
-        //setAll i addAll to samo
         productObservableList.setAll(products);
     }
 
@@ -87,6 +88,12 @@ public class adminScreenController {
 
         addNewElementStage.setScene(new Scene(root));
         addNewElementStage.show();
+        addNewElementStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                productObservableList.add(newController.getSelectedProduct());
+                tableOfDB.refresh();
+            }
+        });
 
     }
 
@@ -108,7 +115,7 @@ public class adminScreenController {
 
                 modifyProductScreenController newController = loader.getController();
                 newController.setAddOrEdit(false);
-                newController.getSelectedProduct(selectedProduct);
+                newController.setSelectedProduct(selectedProduct);
                 newController.addProductToDB.setText("Edytuj");
 
 
@@ -116,19 +123,13 @@ public class adminScreenController {
             editProductbaseStage.setScene(new Scene(root));
             editProductbaseStage.setTitle("Edycja produktu o ID:" + selectedProduct.getProductID());
             editProductbaseStage.show();
-
-
-            /*editProductbaseStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            editProductbaseStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {
-                    try {
-                        //changeProductInTable();
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    changeProductInTable(newController.getSelectedProduct());
+                    tableOfDB.refresh();
                 }
-            });*/
+            });
+
 
 
         }
@@ -155,14 +156,22 @@ public class adminScreenController {
             sql = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '"+ selectedProduct.getProductID() +"')";
             statement.executeUpdate(sql);
 
+
+            for(Product pro: productObservableList){
+                if(pro.getProductID() == selectedProduct.getProductID())
+                {
+                    productObservableList.remove(pro);
+                    break;
+                }
+            }
+
+            tableOfDB.refresh();
+
             statement.close();
             connection.close();
 
         }
     }
-
-
-
 
     void changeProductInTable(Product product){
         int IDproduktu = product.getProductID();
@@ -170,7 +179,6 @@ public class adminScreenController {
         for(int i = 0; i < productObservableList.size(); i++)
         {
             if(IDproduktu == productObservableList.get(i).getProductID()){
-                productObservableList.get(i).setProductID(product.getProductID());
                 productObservableList.get(i).setNameOfProduct(product.getNameOfProduct());
                 productObservableList.get(i).setPrice(product.getPrice());
                 productObservableList.get(i).setDescription(product.getDescription());
@@ -179,6 +187,9 @@ public class adminScreenController {
                 productObservableList.get(i).setSubcategory(product.getSubcategory());
                 productObservableList.get(i).setColor(product.getColor());
                 productObservableList.get(i).setMaterial(product.getMaterial());
+                productObservableList.get(i).setWidth(product.getWidth());
+                productObservableList.get(i).setHeight(product.getHeight());
+                productObservableList.get(i).setLength(product.getLength());
                 productObservableList.get(i).setShelf(product.getShelf());
                 productObservableList.get(i).setRegal(product.getRegal());
                 productObservableList.get(i).setStock(product.getStock());
@@ -186,7 +197,6 @@ public class adminScreenController {
             }
         }
 
-        tableOfDB.refresh();
 
     }
 }
