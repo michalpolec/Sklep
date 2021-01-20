@@ -27,8 +27,8 @@
         <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="155.0" text="Stan Magazynowy" />
         <TextField fx:id="StockTF" layoutX="138.0" layoutY="151.0" />
         <ComboBox fx:id="roomCB" layoutX="138.0" layoutY="186.0" prefWidth="150.0" />
-        <ComboBox fx:id="categoryCB" layoutX="138.0" layoutY="215.0" prefWidth="150.0" />
-        <ComboBox fx:id="subcategoryCB" layoutX="138.0" layoutY="250.0" onAction="#chosenSubcategory" prefWidth="150.0" />
+        <ComboBox fx:id="categoryCB" layoutX="138.0" layoutY="215.0" onAction="#chosenCategory" prefWidth="150.0" />
+        <ComboBox fx:id="subcategoryCB" layoutX="138.0" layoutY="250.0" prefWidth="150.0" />
         <ComboBox fx:id="colorCB" layoutX="138.0" layoutY="282.0" prefWidth="150.0" />
         <ComboBox fx:id="materialCB" layoutX="138.0" layoutY="313.0" prefWidth="150.0" />
         <ComboBox fx:id="positionCB" layoutX="138.0" layoutY="345.0" prefWidth="150.0" />

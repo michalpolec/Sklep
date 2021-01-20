@@ -21,8 +21,8 @@ public class editProductScreenController {
 
     ObservableList<restOfElements> room =  FXCollections.observableArrayList();
     ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
-    ObservableList<restOfElements>  category = FXCollections.observableArrayList();
     ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
+    ObservableList<Subcategory>  subcategory = FXCollections.observableArrayList();
     ObservableList<restOfElements> colors =  FXCollections.observableArrayList();
     ObservableList<restOfElements> materials =  FXCollections.observableArrayList();
     ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
@@ -53,7 +53,7 @@ public class editProductScreenController {
     }
 
     public void initializeData() throws SQLException, ClassNotFoundException {
-        categoryCB.setDisable(true);
+        subcategoryCB.setDisable(true);
         IDTF.setText(String.valueOf(selectedProduct.getProductID()));
         NameTF.setText(selectedProduct.getNameOfProduct());
         PriceTF.setText(String.valueOf(selectedProduct.getPrice()));
@@ -67,17 +67,19 @@ public class editProductScreenController {
         initializeData(); //to musi byÄ‡!!!!
     }
 
-    public void chosenSubcategory() {
+    public void chosenCategory() {
 
-        category.clear();
-        categoryCB.setDisable(false);
+        subcategory.clear();
+        int IDofCategory = getIDofElement(categoryCB.getValue().toString(), categories);
+
 
         for(Subcategory sub : subcategories){
-            if(sub.getSubcategoryName().equals(subcategoryCB.getValue().toString())){
+            if(sub.getCategoryID() == IDofCategory){
 
-                category.add(categories.get(sub.getCategoryID()-1));
+                subcategory.add(sub);
             }
         }
+        subcategoryCB.setDisable(false);
 
     }
 
@@ -93,30 +95,31 @@ public class editProductScreenController {
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
+        int IDProduct = selectedProduct.getProductID();
+
         String name = NameTF.getText();
         String price = PriceTF.getText();
         String description = DescriptionTF.getText();
-        String room = roomCB.getValue().toString();
-        String category = categoryCB.getValue().toString();
-        String subcategory = subcategoryCB.getValue().toString();
-        String color = colorCB.getValue().toString();
-        String material = materialCB.getValue().toString();
-        String dimension = dimensionCB.getValue().toString();
-        String position = positionCB.getValue().toString();
+        int IDroom = getIDofElement(roomCB.getValue().toString(), room);
+        int IDcategory = getIDofElement(categoryCB.getValue().toString(), categories);
+        int IDsubcategory = getIDofElementForSubcategory(subcategoryCB.getValue().toString(), subcategory);
+        int IDcolor = getIDofElement(colorCB.getValue().toString(), colors);
+        int IDmaterial = getIDofElement(materialCB.getValue().toString(), materials);
+        int IDdimension = getIDofElementForDimension(dimensionCB.getValue().toString(), dimensions);
+        int IDposition = getIDofElementForPosition(positionCB.getValue().toString(), positions);
         String stock = StockTF.getText();
 
-        /*String sql = "UPDATE sklep.szczegoly SET IDPozycji = " + getIDofElementForPosition((String) positionCB.getValue(), positions) + ", IDWymiarow = " +  getIDofElementForDimension((String) dimensionCB.getValue(), dimensions)+ ", IDMaterialu = " + getIDofElement((String) materialCB.getValue(), materials) + ", IDKoloru = " + getIDofElement((String) colorCB.getValue(), colors) +
-                " WHERE IDproduktu = " + Integer.parseInt(IDTF.getText()) + ";";
+        String sql = "UPDATE `sklep`.`szczegoly` SET `IDPozycji` = '"+ IDposition +"', `IDWymiarow` = '"+ IDdimension +"', `IDMaterialu` = '"+ IDmaterial +"', `IDKoloru` = '"+ IDcolor +"' WHERE (`IDProduktu` = '"+ IDProduct +"');";
         try {
             statement.executeUpdate(sql);
         }
         catch (Exception e){
             Alert();
-        }*/
+        }
 
-        Stage stage = (Stage) OKbutton.getScene().getWindow();
+        /*Stage stage = (Stage) OKbutton.getScene().getWindow();
         stage.getOnCloseRequest().handle(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-        stage.close();
+        stage.close();*/
 
         statement.close();
         connection.close();
@@ -142,8 +145,8 @@ public class editProductScreenController {
         getPositionData();
 
         roomCB.setItems(room);
-        categoryCB.setItems(category);
-        subcategoryCB.setItems(subcategories);
+        categoryCB.setItems(categories);
+        subcategoryCB.setItems(subcategory);
         colorCB.setItems(colors);
         materialCB.setItems(materials);
         dimensionCB.setItems(dimensions);
