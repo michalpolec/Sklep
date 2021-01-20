@@ -5,8 +5,8 @@ public class restOfElements extends Object{
     int ID;
     String name;
 
-    public restOfElements(int roomID, String name) {
-        this.ID = roomID;
+    public restOfElements(int ID, String name) {
+        this.ID = ID;
         this.name = name;
     }
 
@@ -14,8 +14,8 @@ public class restOfElements extends Object{
         return ID;
     }
 
-    public void setID(int roomID) {
-        this.ID = roomID;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getName() {
