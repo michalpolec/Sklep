@@ -23,8 +23,8 @@ public class addScreenController {
 
     ObservableList<restOfElements> room =  FXCollections.observableArrayList();
     ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
-    ObservableList<restOfElements>  category = FXCollections.observableArrayList();
     ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
+    ObservableList<Subcategory>  subcategory = FXCollections.observableArrayList();
     ObservableList<restOfElements> colors =  FXCollections.observableArrayList();
     ObservableList<restOfElements> materials =  FXCollections.observableArrayList();
     ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
@@ -56,7 +56,7 @@ public class addScreenController {
 
    public void initialize() throws SQLException, ClassNotFoundException {
 
-       categoryBox.setDisable(true);
+       subcategoryBox.setDisable(true);
        getDataToArrays();
 
    }
@@ -106,17 +106,19 @@ public class addScreenController {
         openSubcategoryScreen();
    }
 
-    public void chosenSubcategory() {
+    public void chosenCategory() {
 
-        category.clear();
-        categoryBox.setDisable(false);
+        subcategory.clear();
+        int IDofCategory = getIDofElement(categoryBox.getValue().toString(), categories);
+
 
         for(Subcategory sub : subcategories){
-            if(sub.getSubcategoryName().equals(subcategoryBox.getValue().toString())){
+            if(sub.getCategoryID() == IDofCategory){
 
-                category.add(categories.get(sub.getCategoryID()-1));
+                subcategory.add(sub);
             }
         }
+        subcategoryBox.setDisable(false);
 
     }
 
@@ -266,8 +268,8 @@ public class addScreenController {
        getPositionData();
 
        roomBox.setItems(room);
-       categoryBox.setItems(category);
-       subcategoryBox.setItems(subcategories);
+       categoryBox.setItems(categories);
+       subcategoryBox.setItems(subcategory);
        colorBox.setItems(colors);
        materialBox.setItems(materials);
        dimensionsBox.setItems(dimensions);
