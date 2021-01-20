@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -20,6 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 
 
 public class adminScreenController {
@@ -103,13 +101,15 @@ public class adminScreenController {
         }
         else{
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/modifyProductScreen.fxml"));
-                Parent root = loader.load();
 
-                modifyProductScreenController newController = loader.getController();
-                newController.setAddOrEdit(false);
-                newController.setSelectedProduct(selectedProduct);
-                newController.addProductToDB.setText("Edytuj");
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/modifyProductScreen.fxml"));
+            Parent root = loader.load();
+
+            modifyProductScreenController newController = loader.getController();
+            newController.setAddOrEdit(false);
+            newController.setSelectedProduct(selectedProduct);
+            newController.addProductToDB.setText("Edytuj");
 
 
             Stage editProductbaseStage = new Stage();
@@ -122,41 +122,50 @@ public class adminScreenController {
                     tableOfDB.refresh();
                 }
             });
-
-
-
         }
+
+
+
+
     }
 
     @FXML
     private void onDeleteButtonPressed() throws IOException, SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
         if(selectedProduct == null){
-            Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do usuniecia." );
+            Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do usunięcia." );
         }
         else{
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
-            Statement statement = connection.createStatement();
-            String sql = "DELETE FROM `sklep`.`produkty` WHERE (`IDProduktu` = '"+ selectedProduct.getProductID() +"')";
-            statement.executeUpdate(sql);
-            sql = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '"+ selectedProduct.getProductID() +"')";
-            statement.executeUpdate(sql);
+            Alert deleteClick = new Alert(Alert.AlertType.CONFIRMATION);
+            deleteClick.setTitle("Usuwanie elementu");
+            deleteClick.setHeaderText(null);
+            deleteClick.setContentText("Czy na pewno usunąć element?");
+            Optional<ButtonType> action = deleteClick.showAndWait();
+            if(action.get() == ButtonType.OK) {
 
 
-            for(Product pro: products){
-                if(pro.getProductID() == selectedProduct.getProductID())
-                {
-                    products.remove(pro);
-                    break;
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+                Statement statement = connection.createStatement();
+                String sql = "DELETE FROM `sklep`.`produkty` WHERE (`IDProduktu` = '" + selectedProduct.getProductID() + "')";
+                statement.executeUpdate(sql);
+                sql = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '" + selectedProduct.getProductID() + "')";
+                statement.executeUpdate(sql);
+
+
+                for (Product pro : products) {
+                    if (pro.getProductID() == selectedProduct.getProductID()) {
+                        products.remove(pro);
+                        break;
+                    }
                 }
+
+                tableOfDB.refresh();
+
+                statement.close();
+                connection.close();
             }
-
-            tableOfDB.refresh();
-
-            statement.close();
-            connection.close();
 
         }
     }
@@ -196,4 +205,5 @@ public class adminScreenController {
 
         badClick.showAndWait();
     }
+
 }
