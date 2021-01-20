@@ -16,7 +16,7 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.sql.*;
 
-public class editProductScreen {
+public class editProductScreenController {
     private Product selectedProduct;
 
     ObservableList<restOfElements> room =  FXCollections.observableArrayList();
@@ -53,6 +53,7 @@ public class editProductScreen {
     }
 
     public void initializeData() throws SQLException, ClassNotFoundException {
+        categoryCB.setDisable(true);
         IDTF.setText(String.valueOf(selectedProduct.getProductID()));
         NameTF.setText(selectedProduct.getNameOfProduct());
         PriceTF.setText(String.valueOf(selectedProduct.getPrice()));
@@ -64,6 +65,20 @@ public class editProductScreen {
     public void getSelectedProduct(Product product) throws SQLException, ClassNotFoundException {
         this.selectedProduct = product;
         initializeData(); //to musi byÄ‡!!!!
+    }
+
+    public void chosenSubcategory() {
+
+        category.clear();
+        categoryCB.setDisable(false);
+
+        for(Subcategory sub : subcategories){
+            if(sub.getSubcategoryName().equals(subcategoryCB.getValue().toString())){
+
+                category.add(categories.get(sub.getCategoryID()-1));
+            }
+        }
+
     }
 
 

@@ -2,7 +2,6 @@ package shopProject;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +12,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -89,7 +87,7 @@ public class editScreenController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/editProductScreen.fxml"));
                 Parent root = loader.load();
 
-                editProductScreen newController = loader.getController();
+                editProductScreenController newController = loader.getController();
                 newController.getSelectedProduct(selectedProduct);
 
 
