@@ -45,12 +45,7 @@ public class mainScreenController {
 
         }
         else {
-            Alert wrongLoginData = new Alert(Alert.AlertType.ERROR);
-            wrongLoginData.setTitle("Błąd podczas logowania");
-            wrongLoginData.setHeaderText(null);
-            wrongLoginData.setContentText("Wpisano niepoprawny login lub hasło.");
-
-            wrongLoginData.showAndWait();
+            Alert("Błąd podczas logowania", "Wpisano niepoprawny login lub hasło.");
         }
         loginField.setText("");
         passwordField.setText("");
@@ -136,6 +131,15 @@ public class mainScreenController {
             return false;
         }
 
+    }
+
+    void Alert(String setTitle, String setContents) {
+        Alert badClick = new Alert(Alert.AlertType.ERROR);
+        badClick.setTitle(setTitle);
+        badClick.setHeaderText(null);
+        badClick.setContentText(setContents);
+
+        badClick.showAndWait();
     }
 
 }

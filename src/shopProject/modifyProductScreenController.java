@@ -1,6 +1,8 @@
 package shopProject;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -61,14 +63,35 @@ public class modifyProductScreenController {
        subcategoryBox.setDisable(true);
        getDataToArrays();
 
+
+
+       priceField.textProperty().addListener(new ChangeListener<String>() {
+           @Override
+           public void changed(ObservableValue<? extends String> observable, String oldValue,
+                               String newValue) {
+               if (!newValue.matches("\\d*")) {
+                   priceField.setText(newValue.replaceAll("[^\\d]", ""));
+               }
+           }
+       });
+
    }
 
     public void initializeData() throws SQLException, ClassNotFoundException {
+
 
        nameField.setText(selectedProduct.getNameOfProduct());
        priceField.setText(String.valueOf(selectedProduct.getPrice()));
        descriptionField.setText(selectedProduct.getDescription());
        stockField.setText(String.valueOf(selectedProduct.getStock()));
+       roomBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getRoom(),getStringArray(room)));
+       categoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getCategory(), getStringArray(categories)));
+        setCorrectSubcategories();
+        subcategoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getSubcategory(), getStringArray(subcategory)));
+       colorBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getColor(), getStringArray(colors)));
+       materialBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getMaterial(), getStringArray(materials)));
+       dimensionsBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getWidth() + "cm x " + selectedProduct.getHeight() + "cm x " + selectedProduct.getLength() + "cm",getStringArray(dimensions)));
+       positionBox.getSelectionModel().select(getIndexToComboBox("Półka: " + selectedProduct.getShelf() + ", Regał: " + selectedProduct.getRegal(), getStringArray(positions)));
 
     }
 
@@ -108,50 +131,19 @@ public class modifyProductScreenController {
            createConnectionAndStatement().executeUpdate(sql_details);
            String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productName + "', '" + productPrice + "', '" + descriptionName + "', '" + roomID + "', '" + subcategoryID + "','" + productStock + "');";
            createConnectionAndStatement().executeUpdate(sql_products);
-           String sql_getID = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
-                   "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
-                   " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
-                   "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
-                   "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
-                   "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
-                   "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
-                   "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
-                   "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
-                   "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
-                   "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji) WHERE produkty.IDProduktu = (SELECT MAX(produkty.IDProduktu) FROM produkty);";
 
-           ResultSet resultSet = statement.executeQuery(sql_getID);
-
-
-               while(resultSet.next()) {
-
-                   selectedProduct = new Product(Integer.parseInt(resultSet.getString("IDProduktu")),
-                           resultSet.getString("NazwaProduktu"),
-                           Double.parseDouble(resultSet.getString("CenaProduktu")),
-                           resultSet.getString("OpisProduktu"),
-                           resultSet.getString("NazwaPomieszczenia"),
-                           resultSet.getString("NazwaKategorii"),
-                           resultSet.getString("NazwaPodkategorii"),
-                           resultSet.getString("NazwaKoloru"),
-                           resultSet.getString("NazwaMaterialu"),
-                           Double.parseDouble(resultSet.getString("Szerokosc")),
-                           Double.parseDouble(resultSet.getString("Wysokosc")),
-                           Double.parseDouble(resultSet.getString("Dlugosc")),
-                           Integer.parseInt(resultSet.getString("Polka")),
-                           Integer.parseInt(resultSet.getString("Regal")),
-                           Integer.parseInt(resultSet.getString("StanMagazynowy")));
-               }
-
+           setSelectedProductFromDB(0);
 
            closeStatementAndConnection(statement);
 
-           Info();
+           Info("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.");
 
            Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
            closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
            closeLoginStage.close();
        }
        else {
+
 
            int IDProduct = selectedProduct.getProductID();
 
@@ -175,41 +167,11 @@ public class modifyProductScreenController {
            String sql_products = "UPDATE `sklep`.`produkty` SET `NazwaProduktu` = '" + name + "', `CenaProduktu` = '" + price + "', `OpisProduktu` = '" + description + "', `IDPomieszczenia` = '" + IDroom + "', `IDPodkategorii` = '" + IDsubcategory + "', `StanMagazynowy` = '" + stock + "' WHERE (`IDProduktu` = '" + IDProduct + "');";
            statement.executeUpdate(sql_products);
 
-           String sql_getID = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
-                   "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
-                   " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
-                   "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
-                   "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
-                   "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
-                   "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
-                   "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
-                   "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
-                   "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
-                   "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji) WHERE produkty.IDProduktu = " + IDProduct + ";";
-
-           ResultSet resultSet = statement.executeQuery(sql_getID);
-
-
-           while(resultSet.next()) {
-
-               selectedProduct = new Product(Integer.parseInt(resultSet.getString("IDProduktu")),
-                       resultSet.getString("NazwaProduktu"),
-                       Double.parseDouble(resultSet.getString("CenaProduktu")),
-                       resultSet.getString("OpisProduktu"),
-                       resultSet.getString("NazwaPomieszczenia"),
-                       resultSet.getString("NazwaKategorii"),
-                       resultSet.getString("NazwaPodkategorii"),
-                       resultSet.getString("NazwaKoloru"),
-                       resultSet.getString("NazwaMaterialu"),
-                       Double.parseDouble(resultSet.getString("Szerokosc")),
-                       Double.parseDouble(resultSet.getString("Wysokosc")),
-                       Double.parseDouble(resultSet.getString("Dlugosc")),
-                       Integer.parseInt(resultSet.getString("Polka")),
-                       Integer.parseInt(resultSet.getString("Regal")),
-                       Integer.parseInt(resultSet.getString("StanMagazynowy")));
-           }
+           setSelectedProductFromDB(IDProduct);
 
            closeStatementAndConnection(statement);
+
+           Info("Edytowano nowy produkt do bazy", "Poprawnie edytowno element.");
 
            Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
            closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -240,17 +202,7 @@ public class modifyProductScreenController {
 
     public void chosenCategory() {
 
-        subcategory.clear();
-        int IDofCategory = getIDofElement(categoryBox.getValue().toString(), categories);
-
-
-        for(Subcategory sub : subcategories){
-            if(sub.getCategoryID() == IDofCategory){
-
-                subcategory.add(sub);
-            }
-        }
-        subcategoryBox.setDisable(false);
+        setCorrectSubcategories();
 
     }
 
@@ -523,11 +475,11 @@ public class modifyProductScreenController {
         return ID;
     }
 
-    public void Info(){
+    public void Info(String titleOfInfo, String contentOfInfo){
         javafx.scene.control.Alert nullData = new Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-        nullData.setTitle("Wpisano nowy produkt do bazy");
+        nullData.setTitle(titleOfInfo);
         nullData.setHeaderText(null);
-        nullData.setContentText("Dodano nowy produkt!");
+        nullData.setContentText(contentOfInfo);
 
         nullData.showAndWait();
     }
@@ -552,5 +504,104 @@ public class modifyProductScreenController {
        this.AddOrEdit = AddOrEdit;
     }
 
+    public ObservableList<String> getStringArray(ObservableList objects) {
 
+        ObservableList<String> stringArray = FXCollections.observableArrayList();;
+        for(Object testObject: objects)
+        {
+
+            stringArray.add(testObject.toString());
+
+        }
+
+        return stringArray;
+
+    }
+
+    public int getIndexToComboBox(String object, ObservableList<String> objects)
+    {
+        int i = 0;
+        for(String testObject: objects)
+        {
+            if(object.equals(testObject))
+            {
+                break;
+            }
+            i++;
+        }
+        return i;
+    }
+
+    public void setCorrectSubcategories(){
+
+        subcategory.clear();
+        int IDofCategory = getIDofElement(categoryBox.getValue().toString(), categories);
+
+        for(Subcategory sub : subcategories){
+            if(sub.getCategoryID() == IDofCategory){
+
+                subcategory.add(sub);
+            }
+        }
+        subcategoryBox.setDisable(false);
+    }
+
+    public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException {
+
+        Statement statement = createConnectionAndStatement();
+        String sql_getID = "";
+        if(AddOrEdit) {
+
+            sql_getID   = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
+                    "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
+                    " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
+                    "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
+                    "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
+                    "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
+                    "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
+                    "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
+                    "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
+                    "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
+                    "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji) WHERE produkty.IDProduktu = (SELECT MAX(produkty.IDProduktu) FROM produkty);";
+
+        }
+        else {
+
+            sql_getID = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
+                    "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
+                    " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
+                    "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
+                    "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
+                    "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
+                    "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
+                    "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
+                    "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
+                    "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
+                    "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji) WHERE produkty.IDProduktu = " + IDofProduct + ";";
+        }
+
+        ResultSet resultSet = statement.executeQuery(sql_getID);
+
+
+        while(resultSet.next()) {
+
+            selectedProduct = new Product(Integer.parseInt(resultSet.getString("IDProduktu")),
+                    resultSet.getString("NazwaProduktu"),
+                    Double.parseDouble(resultSet.getString("CenaProduktu")),
+                    resultSet.getString("OpisProduktu"),
+                    resultSet.getString("NazwaPomieszczenia"),
+                    resultSet.getString("NazwaKategorii"),
+                    resultSet.getString("NazwaPodkategorii"),
+                    resultSet.getString("NazwaKoloru"),
+                    resultSet.getString("NazwaMaterialu"),
+                    Double.parseDouble(resultSet.getString("Szerokosc")),
+                    Double.parseDouble(resultSet.getString("Wysokosc")),
+                    Double.parseDouble(resultSet.getString("Dlugosc")),
+                    Integer.parseInt(resultSet.getString("Polka")),
+                    Integer.parseInt(resultSet.getString("Regal")),
+                    Integer.parseInt(resultSet.getString("StanMagazynowy")));
+        }
+
+        closeStatementAndConnection(statement);
+    }
 }
