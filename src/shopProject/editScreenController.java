@@ -74,7 +74,7 @@ public class editScreenController {
     }
 
     @FXML
-    private void onEditionButtonPressed() throws IOException {
+    private void onEditionButtonPressed() throws IOException, SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
         if(selectedProduct == null){
             Alert badClick = new Alert(Alert.AlertType.ERROR);
