@@ -20,7 +20,6 @@ import java.sql.*;
 
 public class addScreenController {
 
-
     ObservableList<restOfElements> room =  FXCollections.observableArrayList();
     ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
     ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();

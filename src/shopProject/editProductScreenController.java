@@ -93,16 +93,14 @@ public class editProductScreenController {
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
-
-        /*String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn + ")"
-                + " VALUES ('" + Integer.parseInt(shelf) + "', '" + Integer.parseInt(regal)  + "')";
+        String sql = "UPDATE sklep.szczegoly SET IDpozycji = " + getIDofElementForPosition((String) positionCB.getValue(), positions) + ", IDwymiarow = " +  getIDofElementForDimension((String) dimensionCB.getValue(), dimensions)+ ", IDmaterialu = " + getIDofElement((String) materialCB.getValue(), materials) + ", IDkoloru = " + getIDofElement((String) colorCB.getValue(), colors) +
+                " WHERE IDproduktu = " + IDTF.getText() + ";";
         try {
             statement.executeUpdate(sql);
-
         }
         catch (Exception e){
             Alert();
-        }*/
+        }
 
         Stage stage = (Stage) OKbutton.getScene().getWindow();
         stage.getOnCloseRequest().handle(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -223,10 +221,62 @@ public class editProductScreenController {
 
     public Statement createConnectionAndStatement() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "niemamsil");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
         return statement;
+    }
+
+    public int getIDofElementForSubcategory(String nameOfElement, ObservableList<Subcategory> listsOfElements) {
+
+        int ID = 0;
+        for(Subcategory element : listsOfElements)
+        {
+            if(element.getSubcategoryName().equals(nameOfElement))
+            {
+                ID =  element.getSubcategoryID();
+            }
+        }
+        return ID;
+    }
+
+    public int getIDofElement(String nameOfElement, ObservableList<restOfElements> listsOfElements) {
+
+        int ID = 0;
+        for(restOfElements element : listsOfElements)
+        {
+            if(element.getName().equals(nameOfElement))
+            {
+                ID =  element.getID();
+            }
+        }
+        return ID;
+    }
+
+    public int getIDofElementForDimension(String nameOfElement, ObservableList<Dimension> listsOfElements) {
+
+        int ID = 0;
+        for(Dimension element : listsOfElements)
+        {
+            if((element.getWidth()  + "cm x " + element.getHeight()  + "cm x " + element.getLenght()  + "cm").equals(nameOfElement))
+            {
+                ID =  element.getDimensionID();
+            }
+        }
+        return ID;
+    }
+
+    public int getIDofElementForPosition(String nameOfElement, ObservableList<Position> listsOfElements) {
+
+        int ID = 0;
+        for(Position position : listsOfElements)
+        {
+            if(("Półka: " + position.getShelf() + ", Regał: " + position.getRegal()).equals(nameOfElement))
+            {
+                ID =  position.getPositionID();
+            }
+        }
+        return ID;
     }
 
     public void closeStatementAndConnection(Statement statement) throws SQLException {
