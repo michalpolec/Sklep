@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class mainScreenController {
             editDatabaseStage.setTitle("Administracja");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/adminScreen.fxml"));
             Parent root = loader.load();
+            root.getStylesheets().add("Stylesheets/style.css");
             editDatabaseStage.setScene(new Scene(root));
 
             adminScreenController newController = loader.getController();

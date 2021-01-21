@@ -11,7 +11,9 @@ public class Main extends Application {
     public void start(Stage loginStage) throws Exception{
 
         loginStage.setTitle("Baza danych sklepu");
-        loginStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("resources/mainScreen.fxml"))));
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("resources/mainScreen.fxml")));
+        scene.getStylesheets().add("Stylesheets/style.css");
+        loginStage.setScene(scene);
         loginStage.show();
 
     }

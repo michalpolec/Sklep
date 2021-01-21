@@ -1,0 +1,44 @@
+.button{
+    -fx-background-color: #D0CDD7;
+    -fx-font-size: 14px;
+    -fx-font-family: Calibri;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-text-fill: #416165;
+}
+
+.button:focused{
+    -fx-background-color: #ACB0BD;
+}
+
+.label{
+    -fx-font-family: Calibri;
+    -fx-text-fill: #416165;
+    -fx-font-size: 13px;
+}
+
+.text-field{
+    -fx-background-color: #D0CDD7;
+    -fx-text-fill: #0b3948;
+    -fx-font-size: 12px;
+    -fx-font-family: Calibri;
+}
+
+.text-field:focused{
+    -fx-background-color: #ACB0BD;
+}
+
+#mainLayoutOfLoginScreen{
+    -fx-background-color: #D9DBF1;
+}
+
+#adminAnchorPane{
+    -fx-background-color: #D9DBF1;
+}
+
+#tableOfDB{
+    -fx-background-color: #D0CDD7;
+    -fx-font-family: Calibri;
+    -fx-text-fill: #0B3948;
+}
+
