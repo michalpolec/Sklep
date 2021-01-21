@@ -21,9 +21,7 @@ public class addSubcategoryScreenController {
     String nameOfFirstColumn;
     String nameOfSecondColumn;
 
-
     ObservableList<restOfElements>  categories;
-
 
     public void setOptionOfSubcategoryScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
 
@@ -34,6 +32,7 @@ public class addSubcategoryScreenController {
         this.categories = categories;
 
     }
+
     public void setCategoriesInComboBox(){
 
         categoryBox.setItems(categories);
@@ -79,10 +78,6 @@ public class addSubcategoryScreenController {
         }
         statement.close();
         connection.close();
-
-
-
-
 
     }
 

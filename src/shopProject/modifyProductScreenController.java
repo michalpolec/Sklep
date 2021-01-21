@@ -104,14 +104,12 @@ public class modifyProductScreenController {
 
     }
 
-
-
     public void onCancelAction(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
-   public void addProductToDB() throws ClassNotFoundException, SQLException {
+   public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException {
 
        String productName = "";
        double productPrice = 0.0;

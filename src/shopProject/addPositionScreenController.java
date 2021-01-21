@@ -20,12 +20,9 @@ public class addPositionScreenController {
     public TextField regalField;
     public Button addPosition;
 
-
     String nameOfTable;
     String nameOfFirstColumn;
     String nameOfSecondColumn;
-
-
 
     public void setOptionOfPositionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
 
@@ -40,7 +37,6 @@ public class addPositionScreenController {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
-
 
         String shelf = shelfField.getText();
         String regal = regalField.getText();
@@ -66,10 +62,6 @@ public class addPositionScreenController {
         }
         statement.close();
         connection.close();
-
-
-
-
 
     }
 

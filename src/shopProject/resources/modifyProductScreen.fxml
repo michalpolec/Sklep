@@ -108,7 +108,7 @@
          </children>
       </GridPane>
       <Label id="title" layoutX="272.0" layoutY="45.0" text="Dodawanie nowego elementu" />
-      <Button id="addButton" fx:id="addProductToDB" layoutX="334.0" layoutY="603.0" mnemonicParsing="false" onAction="#addProductToDB" text="Dodaj" />
+      <Button id="addButton" fx:id="addProductToDB" layoutX="334.0" layoutY="603.0" mnemonicParsing="false" onAction="#modifyDatabaseButtonPressed" text="Dodaj" />
       <Button fx:id="cancelButton" layoutX="431.0" layoutY="603.0" mnemonicParsing="false" onAction="#onCancelAction" text="Anuluj" />
    </children>
 </AnchorPane>
