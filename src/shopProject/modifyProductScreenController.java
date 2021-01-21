@@ -104,13 +104,7 @@ public class modifyProductScreenController {
 
     }
 
-    public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
-        this.selectedProduct = selectedProduct;
-    }
 
-    public Product getSelectedProduct(){
-        return selectedProduct;
-    }
 
     public void onCancelAction(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
@@ -239,6 +233,7 @@ public class modifyProductScreenController {
        openPositionScreen();
     }
 
+
    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
 
        Stage addElement =  new Stage();
@@ -345,33 +340,6 @@ public class modifyProductScreenController {
 
     }
 
-   public void getDataToArrays() throws SQLException, ClassNotFoundException {
-
-       room.clear();
-       categories.clear();
-       subcategories.clear();
-       colors.clear();
-       materials.clear();
-       dimensions.clear();
-       positions.clear();
-
-       getChosenDataFromDB("IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", room);
-       getChosenDataFromDB("IDKategorii","NazwaKategorii", "kategoria", categories);
-       getSubcategoryData();
-       getChosenDataFromDB("IDKoloru", "NazwaKoloru", "kolor", colors);
-       getChosenDataFromDB("IDMaterialu","NazwaMaterialu", "material", materials);
-       getDimensionData();
-       getPositionData();
-
-       roomBox.setItems(room);
-       categoryBox.setItems(categories);
-       subcategoryBox.setItems(subcategory);
-       colorBox.setItems(colors);
-       materialBox.setItems(materials);
-       dimensionsBox.setItems(dimensions);
-       positionBox.setItems(positions);
-
-   }
 
    public void getSubcategoryData() throws ClassNotFoundException, SQLException {
 
@@ -435,6 +403,7 @@ public class modifyProductScreenController {
 
     }
 
+
     public int getIDofElementForSubcategory(String nameOfElement, ObservableList<Subcategory> listsOfElements) {
 
        int ID = 0;
@@ -487,23 +456,6 @@ public class modifyProductScreenController {
         return ID;
     }
 
-    public void Info(String titleOfInfo, String contentOfInfo){
-        javafx.scene.control.Alert nullData = new Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-        nullData.setTitle(titleOfInfo);
-        nullData.setHeaderText(null);
-        nullData.setContentText(contentOfInfo);
-
-        nullData.showAndWait();
-    }
-
-    void Alert(String setTitle, String setContents) {
-        Alert badClick = new Alert(Alert.AlertType.ERROR);
-        badClick.setTitle(setTitle);
-        badClick.setHeaderText(null);
-        badClick.setContentText(setContents);
-
-        badClick.showAndWait();
-    }
 
     public Statement createConnectionAndStatement() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -518,6 +470,35 @@ public class modifyProductScreenController {
            Connection connection = statement.getConnection();
            statement.close();
            connection.close();
+
+    }
+
+
+    public void getDataToArrays() throws SQLException, ClassNotFoundException {
+
+        room.clear();
+        categories.clear();
+        subcategories.clear();
+        colors.clear();
+        materials.clear();
+        dimensions.clear();
+        positions.clear();
+
+        getChosenDataFromDB("IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", room);
+        getChosenDataFromDB("IDKategorii","NazwaKategorii", "kategoria", categories);
+        getSubcategoryData();
+        getChosenDataFromDB("IDKoloru", "NazwaKoloru", "kolor", colors);
+        getChosenDataFromDB("IDMaterialu","NazwaMaterialu", "material", materials);
+        getDimensionData();
+        getPositionData();
+
+        roomBox.setItems(room);
+        categoryBox.setItems(categories);
+        subcategoryBox.setItems(subcategory);
+        colorBox.setItems(colors);
+        materialBox.setItems(materials);
+        dimensionsBox.setItems(dimensions);
+        positionBox.setItems(positions);
 
     }
 
@@ -539,8 +520,7 @@ public class modifyProductScreenController {
 
     }
 
-    public int getIndexToComboBox(String object, ObservableList<String> objects)
-    {
+    public int getIndexToComboBox(String object, ObservableList<String> objects) {
         int i = 0;
         for(String testObject: objects)
         {
@@ -565,6 +545,14 @@ public class modifyProductScreenController {
             }
         }
         subcategoryBox.setDisable(false);
+    }
+
+    public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
+        this.selectedProduct = selectedProduct;
+    }
+
+    public Product getSelectedProduct(){
+        return selectedProduct;
     }
 
     public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException {
@@ -624,5 +612,24 @@ public class modifyProductScreenController {
         }
 
         closeStatementAndConnection(statement);
+    }
+
+
+    public void Info(String titleOfInfo, String contentOfInfo){
+        javafx.scene.control.Alert nullData = new Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        nullData.setTitle(titleOfInfo);
+        nullData.setHeaderText(null);
+        nullData.setContentText(contentOfInfo);
+
+        nullData.showAndWait();
+    }
+
+    void Alert(String setTitle, String setContents) {
+        Alert badClick = new Alert(Alert.AlertType.ERROR);
+        badClick.setTitle(setTitle);
+        badClick.setHeaderText(null);
+        badClick.setContentText(setContents);
+
+        badClick.showAndWait();
     }
 }
