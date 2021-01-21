@@ -42,15 +42,6 @@ public class adminScreenController {
 
     Product selectedProduct;
 
-
-    public void getAllData(ObservableList<Product> products) {
-        this.products.setAll(products);
-    }
-
-    void initializeTable() {
-        tableOfDB.setItems(products);
-    }
-
     public void initialize() {
         IDproduct.setCellValueFactory(new PropertyValueFactory<Product, Integer>("productID"));
         NameProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("nameOfProduct"));
@@ -70,6 +61,15 @@ public class adminScreenController {
 
         initializeTable();
     }
+
+    public void getAllData(ObservableList<Product> products) {
+        this.products.setAll(products);
+    }
+
+    void initializeTable() {
+        tableOfDB.setItems(products);
+    }
+
 
     @FXML
     private void onAddButtonPressed() throws IOException {
@@ -109,6 +109,7 @@ public class adminScreenController {
             modifyProductScreenController newController = loader.getController();
             newController.setAddOrEdit(false);
             newController.setSelectedProduct(selectedProduct);
+            newController.initializeData();
             newController.addProductToDB.setText("Edytuj");
 
 
@@ -123,9 +124,6 @@ public class adminScreenController {
                 }
             });
         }
-
-
-
 
     }
 
@@ -193,7 +191,6 @@ public class adminScreenController {
                 break;
             }
         }
-
 
     }
 

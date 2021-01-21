@@ -89,7 +89,6 @@ public class modifyProductScreenController {
 
     public void initializeData() throws SQLException, ClassNotFoundException {
 
-
        nameField.setText(selectedProduct.getNameOfProduct());
        priceField.setText(String.valueOf(selectedProduct.getPrice()));
        descriptionField.setText(selectedProduct.getDescription());
@@ -107,8 +106,8 @@ public class modifyProductScreenController {
 
     public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
         this.selectedProduct = selectedProduct;
-        initializeData();
     }
+
     public Product getSelectedProduct(){
         return selectedProduct;
     }
@@ -120,26 +119,43 @@ public class modifyProductScreenController {
 
    public void addProductToDB() throws ClassNotFoundException, SQLException {
 
-       if(AddOrEdit) {
+       String productName = "";
+       double productPrice = 0.0;
+       String productDescription = "";
+       int roomID = 0;
+       int subcategoryID = 0;
+       int colorID = 0;
+       int materialID = 0;
+       int dimensionID = 0;
+       int positionID = 0;
+       int productStock = 0;
+       boolean Continue = true;
 
-           int positionID = getIDofElementForPosition(positionBox.getValue().toString(), positions);
-           int dimensionID = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
-           int materialID = getIDofElement(materialBox.getValue().toString(), materials);
-           int colorID = getIDofElement(colorBox.getValue().toString(), colors);
+       try {
+           productName = nameField.getText();
+           productPrice = Double.parseDouble(priceField.getText());
+           productDescription = descriptionField.getText();
+           roomID = getIDofElement(roomBox.getValue().toString(), room);
+           subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategory);
+           colorID = getIDofElement(colorBox.getValue().toString(), colors);
+           materialID = getIDofElement(materialBox.getValue().toString(), materials);
+           dimensionID = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
+           positionID = getIDofElementForPosition(positionBox.getValue().toString(), positions);
+           productStock = Integer.parseInt(stockField.getText());
+       }
+       catch (Exception e){
+         System.out.println(e);
+         Alert("Błąd wprowadzania danych", "Wprowadzono niepoprawne dane lub nie wprowadzono ich wcale.");
+         Continue = false;
+       }
 
-           String productName = nameField.getText();
-           double productPrice = Double.parseDouble(priceField.getText());
-           String descriptionName = descriptionField.getText();
-           int roomID = getIDofElement(roomBox.getValue().toString(), room);
-           int subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategories);
-           int productStock = Integer.parseInt(stockField.getText());
-
+       if(AddOrEdit && Continue) {
 
            Statement statement = createConnectionAndStatement();
 
            String sql_details = "INSERT INTO szczegoly (IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
            createConnectionAndStatement().executeUpdate(sql_details);
-           String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productName + "', '" + productPrice + "', '" + descriptionName + "', '" + roomID + "', '" + subcategoryID + "','" + productStock + "');";
+           String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productName + "', '" + productPrice + "', '" + productDescription + "', '" + roomID + "', '" + subcategoryID + "','" + productStock + "');";
            createConnectionAndStatement().executeUpdate(sql_products);
 
            setSelectedProductFromDB(0);
@@ -152,29 +168,16 @@ public class modifyProductScreenController {
            closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
            closeLoginStage.close();
        }
-       else {
-
+       else if (Continue){
 
            int IDProduct = selectedProduct.getProductID();
 
-           int IDcolor = getIDofElement(colorBox.getValue().toString(), colors);
-           int IDmaterial = getIDofElement(materialBox.getValue().toString(), materials);
-           int IDdimension = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
-           int IDposition = getIDofElementForPosition(positionBox.getValue().toString(), positions);
-
-           String name = nameField.getText();
-           String price = priceField.getText();
-           String description = descriptionField.getText();
-           int IDroom = getIDofElement(roomBox.getValue().toString(), room);
-           int IDsubcategory = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategory);
-           int stock = Integer.parseInt(stockField.getText());
-
            Statement statement = createConnectionAndStatement();
 
-           String sql_details = "UPDATE `sklep`.`szczegoly` SET `IDPozycji` = '"+ IDposition +"', `IDWymiarow` = '"+ IDdimension +"', `IDMaterialu` = '"+ IDmaterial +"', `IDKoloru` = '"+ IDcolor +"' WHERE (`IDProduktu` = '"+ IDProduct +"');";
+           String sql_details = "UPDATE `sklep`.`szczegoly` SET `IDPozycji` = '"+ positionID +"', `IDWymiarow` = '"+ dimensionID +"', `IDMaterialu` = '"+ materialID +"', `IDKoloru` = '"+ colorID +"' WHERE (`IDProduktu` = '"+ IDProduct +"');";
            statement.executeUpdate(sql_details);
 
-           String sql_products = "UPDATE `sklep`.`produkty` SET `NazwaProduktu` = '" + name + "', `CenaProduktu` = '" + price + "', `OpisProduktu` = '" + description + "', `IDPomieszczenia` = '" + IDroom + "', `IDPodkategorii` = '" + IDsubcategory + "', `StanMagazynowy` = '" + stock + "' WHERE (`IDProduktu` = '" + IDProduct + "');";
+           String sql_products = "UPDATE `sklep`.`produkty` SET `NazwaProduktu` = '" + productName + "', `CenaProduktu` = '" + productPrice + "', `OpisProduktu` = '" + productDescription + "', `IDPomieszczenia` = '" + roomID + "', `IDPodkategorii` = '" + subcategoryID + "', `StanMagazynowy` = '" + productStock + "' WHERE (`IDProduktu` = '" + IDProduct + "');";
            statement.executeUpdate(sql_products);
 
            setSelectedProductFromDB(IDProduct);
@@ -235,7 +238,6 @@ public class modifyProductScreenController {
 
        openPositionScreen();
     }
-
 
    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
 
@@ -492,6 +494,15 @@ public class modifyProductScreenController {
         nullData.setContentText(contentOfInfo);
 
         nullData.showAndWait();
+    }
+
+    void Alert(String setTitle, String setContents) {
+        Alert badClick = new Alert(Alert.AlertType.ERROR);
+        badClick.setTitle(setTitle);
+        badClick.setHeaderText(null);
+        badClick.setContentText(setContents);
+
+        badClick.showAndWait();
     }
 
     public Statement createConnectionAndStatement() throws ClassNotFoundException, SQLException {
