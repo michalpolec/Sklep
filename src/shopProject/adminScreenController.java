@@ -2,7 +2,6 @@ package shopProject;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -85,11 +83,9 @@ public class adminScreenController {
 
         addNewElementStage.setScene(new Scene(root));
         addNewElementStage.show();
-        addNewElementStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            public void handle(WindowEvent we) {
-                products.add(newController.getSelectedProduct());
-                tableOfDB.refresh();
-            }
+        addNewElementStage.setOnCloseRequest(we -> {
+            products.add(newController.getSelectedProduct());
+            tableOfDB.refresh();
         });
 
     }
@@ -102,10 +98,9 @@ public class adminScreenController {
         }
         else{
 
-
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/modifyProductScreen.fxml"));
             Parent root = loader.load();
+            root.getStylesheets().add("Stylesheets/style.css");
 
             modifyProductScreenController newController = loader.getController();
             newController.setAddOrEdit(false);
@@ -118,11 +113,9 @@ public class adminScreenController {
             editProductbaseStage.setScene(new Scene(root));
             editProductbaseStage.setTitle("Edycja produktu o ID:" + selectedProduct.getProductID());
             editProductbaseStage.show();
-            editProductbaseStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                public void handle(WindowEvent we) {
-                    changeProductInTable(newController.getSelectedProduct());
-                    tableOfDB.refresh();
-                }
+            editProductbaseStage.setOnCloseRequest(we -> {
+                changeProductInTable(newController.getSelectedProduct());
+                tableOfDB.refresh();
             });
         }
 
@@ -192,7 +185,6 @@ public class adminScreenController {
                 break;
             }
         }
-
     }
 
     void Alert(String setTitle, String setContents) {
@@ -203,5 +195,4 @@ public class adminScreenController {
 
         badClick.showAndWait();
     }
-
 }

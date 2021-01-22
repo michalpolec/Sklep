@@ -10,10 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -56,6 +53,9 @@ public class modifyProductScreenController {
     public Button positionButton;
     public Button addProductToDB;
     public Button cancelButton;
+
+    public Label labelINFO;
+
 
 
    public void initialize() throws SQLException, ClassNotFoundException {
@@ -184,9 +184,6 @@ public class modifyProductScreenController {
 
 
        }
-
-
-
    }
 
    public void addRoom() throws IOException, SQLException, ClassNotFoundException {
@@ -238,6 +235,7 @@ public class modifyProductScreenController {
        addElement.setTitle(nameOfStage);
        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addElementScreen.fxml"));
        Parent root = loader.load();
+       root.getStylesheets().add("Stylesheets/style.css");
        addElement.setScene(new Scene(root));
 
        addElementScreenController newController = loader.getController();
@@ -265,6 +263,7 @@ public class modifyProductScreenController {
        addSubcategory.setTitle("Dodawnie nowej podkategorii");
        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addSubcategoryScreen.fxml"));
        Parent root = loader.load();
+       root.getStylesheets().add("Stylesheets/style.css");
        addSubcategory.setScene(new Scene(root));
 
        addSubcategoryScreenController newController = loader.getController();
@@ -291,6 +290,7 @@ public class modifyProductScreenController {
        addDimension.setTitle("Dodawnie nowego wymiaru");
        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addDimensionScreen.fxml"));
        Parent root = loader.load();
+       root.getStylesheets().add("Stylesheets/style.css");
        addDimension.setScene(new Scene(root));
 
        addDimensionScreenController newController = loader.getController();
@@ -317,6 +317,7 @@ public class modifyProductScreenController {
        addPosition.setTitle("Dodawnie nowej pozycji");
        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addPositionScreen.fxml"));
        Parent root = loader.load();
+       root.getStylesheets().add("Stylesheets/style.css");
        addPosition.setScene(new Scene(root));
 
        addPositionScreenController newController = loader.getController();
@@ -630,4 +631,8 @@ public class modifyProductScreenController {
 
         badClick.showAndWait();
     }
+
+    //public void setLabelINFO(String text){
+     //  labelINFO.setText(text);
+    //}
 }

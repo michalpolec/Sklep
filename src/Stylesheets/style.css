@@ -110,3 +110,43 @@ table-view .virtual-flow .scroll-bar:vertical .thumb{
     -fx-background-color: #2B2C28;
     -fx-text-fill: #FFFAFB;
 }
+.combo-box:hover {
+    -fx-background-color:  linear-gradient(to bottom, #339989, #7de2d1);
+}
+
+.combo-box:focused {
+    -fx-background-color:  linear-gradient(to bottom, #339989, #7de2d1);
+}
+
+.combo-box .scroll-bar {
+    -fx-background-color:  linear-gradient(to bottom, #339989, #7de2d1);
+}
+
+.combo-box .list-cell{
+    -fx-background-color: #2B2C28;
+    -fx-text-fill: #FFFAFB;
+}
+
+.combo-box .list-cell:hover{
+    -fx-background-color: #339989;
+}
+
+#addAnchorPane{
+    -fx-background-color: #131515;
+}
+
+#positionAnchorPane{
+    -fx-background-color: #131515;
+}
+
+#elementAnchorPane{
+    -fx-background-color: #131515;
+}
+
+#dimensionAnchorPane{
+    -fx-background-color: #131515;
+}
+
+#subcategoryAnchorPane {
+    -fx-background-color: #131515;
+}
