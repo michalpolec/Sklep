@@ -78,6 +78,7 @@ public class adminScreenController {
         addNewElementStage.setTitle("Dodawanie nowego elementu");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/modifyProductScreen.fxml"));
         Parent root = loader.load();
+        root.getStylesheets().add("Stylesheets/style.css");
 
         modifyProductScreenController newController = loader.getController();
         newController.setAddOrEdit(true);

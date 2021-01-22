@@ -105,3 +105,8 @@ table-view .virtual-flow .scroll-bar:vertical .thumb{
     -fx-background-radius: 15px;
     -fx-text-background-color: #7DE2D1;
 }
+
+.combo-box {
+    -fx-background-color: #2B2C28;
+    -fx-text-fill: #FFFAFB;
+}
