@@ -80,6 +80,7 @@ public class adminScreenController {
 
         modifyProductScreenController newController = loader.getController();
         newController.setAddOrEdit(true);
+        newController.setLabelINFO("Dodawanie nowego elementu");
 
         addNewElementStage.setScene(new Scene(root));
         addNewElementStage.show();
@@ -107,6 +108,7 @@ public class adminScreenController {
             newController.setSelectedProduct(selectedProduct);
             newController.initializeData();
             newController.addProductToDB.setText("Edytuj");
+            newController.setLabelINFO("Edycja wybranego elementu");
 
 
             Stage editProductbaseStage = new Stage();

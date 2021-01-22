@@ -56,8 +56,6 @@ public class modifyProductScreenController {
 
     public Label labelINFO;
 
-
-
    public void initialize() throws SQLException, ClassNotFoundException {
 
        subcategoryBox.setDisable(true);
@@ -143,6 +141,7 @@ public class modifyProductScreenController {
 
        if(AddOrEdit && Continue) {
 
+
            Statement statement = createConnectionAndStatement();
 
            String sql_details = "INSERT INTO szczegoly (IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
@@ -161,6 +160,7 @@ public class modifyProductScreenController {
            closeLoginStage.close();
        }
        else if (Continue){
+
 
            int IDProduct = selectedProduct.getProductID();
 
@@ -632,7 +632,9 @@ public class modifyProductScreenController {
         badClick.showAndWait();
     }
 
-    //public void setLabelINFO(String text){
-     //  labelINFO.setText(text);
-    //}
+    void setLabelINFO(String labelText)
+    {
+        labelINFO.setText(labelText);
+    }
+
 }
