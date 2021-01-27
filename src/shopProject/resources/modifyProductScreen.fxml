@@ -112,6 +112,6 @@
       <Button id="addButton" fx:id="addProductToDB" layoutX="254.0" layoutY="695.0" mnemonicParsing="false" onAction="#modifyDatabaseButtonPressed" text="Dodaj" />
       <Button fx:id="cancelButton" layoutX="379.0" layoutY="695.0" mnemonicParsing="false" onAction="#onCancelAction" text="Anuluj" />
       <ImageView fx:id="imageView" fitHeight="101.0" fitWidth="156.0" layoutX="200.0" layoutY="581.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="imageButton" layoutX="429.0" layoutY="612.0" mnemonicParsing="false" onAction="#getImage" prefHeight="40.0" prefWidth="103.0" text="Wybierz obraz" />
+      <Button fx:id="imageButton" layoutX="429.0" layoutY="612.0" mnemonicParsing="false" onAction="#getImageFromFile" prefHeight="40.0" prefWidth="103.0" text="Wybierz obraz" />
    </children>
 </AnchorPane>

@@ -15,10 +15,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
@@ -28,6 +30,7 @@ public class modifyProductScreenController {
 
     private Product selectedProduct;
     boolean AddOrEdit;
+    public Image imageFromFile;
 
     ObservableList<restOfElements> room =  FXCollections.observableArrayList();
     ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
@@ -70,8 +73,6 @@ public class modifyProductScreenController {
 
        subcategoryBox.setDisable(true);
        getDataToArrays();
-
-
 
        priceField.textProperty().addListener(new ChangeListener<String>() {
            @Override
@@ -122,7 +123,7 @@ public class modifyProductScreenController {
         stage.close();
     }
 
-   public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException, UnsupportedEncodingException {
+   public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException, IOException {
 
        String productName = "";
        double productPrice = 0.0;
@@ -134,6 +135,7 @@ public class modifyProductScreenController {
        int dimensionID = 0;
        int positionID = 0;
        int productStock = 0;
+       InputStream image = null;
        boolean Continue = true;
 
        try {
@@ -147,6 +149,13 @@ public class modifyProductScreenController {
            dimensionID = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
            positionID = getIDofElementForPosition(positionBox.getValue().toString(), positions);
            productStock = Integer.parseInt(stockField.getText());
+
+
+           BufferedImage bImage = SwingFXUtils.fromFXImage(imageView.getImage(), null);
+           ByteArrayOutputStream s = new ByteArrayOutputStream();
+           ImageIO.write(bImage, "png", s);
+           byte[] res  = s.toByteArray();
+           image = new ByteArrayInputStream(res);
        }
        catch (Exception e){
          System.out.println(e);
@@ -163,11 +172,21 @@ public class modifyProductScreenController {
 
            String sql_details = "INSERT INTO szczegoly (IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
            statement.executeUpdate(sql_details);
-           String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productName + "', '" + productPrice + "', '" + productDescription + "', '" + roomID + "', '" + subcategoryID + "','" + productStock + "');";
-           statement.executeUpdate(sql_products);
+           String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy, Zdjecie) VALUES (?,?,?,?,?,?,?);";
+
+           PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
+           preparedStatement.setString(1,productName);
+           preparedStatement.setDouble(2,productPrice);
+           preparedStatement.setString(3, productDescription);
+           preparedStatement.setInt(4, roomID);
+           preparedStatement.setInt(5, subcategoryID);
+           preparedStatement.setInt(6, productStock);
+           preparedStatement.setBinaryStream(7, image);
+           preparedStatement.executeUpdate();
 
            setSelectedProductFromDB(0);
 
+           preparedStatement.close();
            statement.close();
            connection.close();;
 
@@ -188,11 +207,22 @@ public class modifyProductScreenController {
            String sql_details = "UPDATE `sklep`.`szczegoly` SET `IDPozycji` = '"+ positionID +"', `IDWymiarow` = '"+ dimensionID +"', `IDMaterialu` = '"+ materialID +"', `IDKoloru` = '"+ colorID +"' WHERE (`IDProduktu` = '"+ IDProduct +"');";
            statement.executeUpdate(sql_details);
 
-           String sql_products = "UPDATE `sklep`.`produkty` SET `NazwaProduktu` = '" + productName + "', `CenaProduktu` = '" + productPrice + "', `OpisProduktu` = '" + productDescription + "', `IDPomieszczenia` = '" + roomID + "', `IDPodkategorii` = '" + subcategoryID + "', `StanMagazynowy` = '" + productStock + "' WHERE (`IDProduktu` = '" + IDProduct + "');";
-           statement.executeUpdate(sql_products);
+           String sql_products = "UPDATE `sklep`.`produkty` SET NazwaProduktu = ?, CenaProduktu = ?, OpisProduktu = ?, IDPomieszczenia = ?, IDPodkategorii = ?, StanMagazynowy = ?, Zdjecie = ? WHERE (IDProduktu = ?);";
+           PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
+
+           preparedStatement.setString(1,productName);
+           preparedStatement.setDouble(2,productPrice);
+           preparedStatement.setString(3, productDescription);
+           preparedStatement.setInt(4, roomID);
+           preparedStatement.setInt(5, subcategoryID);
+           preparedStatement.setInt(6, productStock);
+           preparedStatement.setBinaryStream(7, image);
+           preparedStatement.setInt(8, IDProduct);
+           preparedStatement.executeUpdate();
 
            setSelectedProductFromDB(IDProduct);
 
+           preparedStatement.close();
            statement.close();
            connection.close();
 
@@ -248,8 +278,20 @@ public class modifyProductScreenController {
        openPositionScreen();
     }
 
-    public void getImage(ActionEvent actionEvent) {
+    public void getImageFromFile(ActionEvent actionEvent) throws FileNotFoundException {
 
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Wczytaj nowe zdjęcie");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Pliki obrazów", "*.jpg", "*.png")
+        );
+        Stage stage = (Stage) imageButton.getScene().getWindow();
+
+        File file = fileChooser.showOpenDialog(null);
+
+        FileInputStream in =  new FileInputStream(file.getPath());
+        imageFromFile = new Image(in);
+        imageView.setImage(imageFromFile);
     }
 
    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
