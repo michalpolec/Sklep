@@ -10,10 +10,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 
 public class mainScreenController {
@@ -89,24 +91,26 @@ public class mainScreenController {
 
             while(resultSet.next()) {
 
-                Product newProduct = new Product(Integer.parseInt(resultSet.getString("IDProduktu")),
+
+                Product newProduct = new Product(
+                        resultSet.getInt("IDProduktu"),
                         resultSet.getString("NazwaProduktu"),
-                        Double.parseDouble(resultSet.getString("CenaProduktu")),
+                        resultSet.getDouble("CenaProduktu"),
                         resultSet.getString("OpisProduktu"),
                         resultSet.getString("NazwaPomieszczenia"),
                         resultSet.getString("NazwaKategorii"),
                         resultSet.getString("NazwaPodkategorii"),
                         resultSet.getString("NazwaKoloru"),
                         resultSet.getString("NazwaMaterialu"),
-                        Double.parseDouble(resultSet.getString("Szerokosc")),
-                        Double.parseDouble(resultSet.getString("Wysokosc")),
-                        Double.parseDouble(resultSet.getString("Dlugosc")),
-                        Integer.parseInt(resultSet.getString("Polka")),
-                        Integer.parseInt(resultSet.getString("Regal")),
-                        Integer.parseInt(resultSet.getString("StanMagazynowy")));
+                        resultSet.getDouble("Szerokosc"),
+                        resultSet.getDouble("Wysokosc"),
+                        resultSet.getDouble("Dlugosc"),
+                        resultSet.getInt("Polka"),
+                        resultSet.getInt("Regal"),
+                        resultSet.getInt("StanMagazynowy"),
+                        resultSet.getBlob("Zdjecie"));
 
                 products.add(newProduct);
-
 
             }
 

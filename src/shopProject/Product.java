@@ -1,5 +1,9 @@
 package shopProject;
 
+import javafx.scene.image.Image;
+
+import java.sql.Blob;
+
 public class Product extends Object {
 
     private int productID;
@@ -18,7 +22,9 @@ public class Product extends Object {
     private int regal;
     private int stock;
 
-    public Product(int productID, String nameOfProduct, double price, String description, String room, String category, String subcategory, String color, String material, double width, double height, double length, int shelf, int regal, int stock) {
+    private Blob image;
+
+    public Product(int productID, String nameOfProduct, double price, String description, String room, String category, String subcategory, String color, String material, double width, double height, double length, int shelf, int regal, int stock, Blob image) {
         this.productID = productID;
         this.nameOfProduct = nameOfProduct;
         this.price = price;
@@ -34,6 +40,7 @@ public class Product extends Object {
         this.shelf = shelf;
         this.regal = regal;
         this.stock = stock;
+        this.image = image;
     }
 
     public int getProductID() {
@@ -154,6 +161,14 @@ public class Product extends Object {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public Blob getImage() {
+        return image;
+    }
+
+    public void setImage(Blob image) {
+        this.image = image;
     }
 
 }

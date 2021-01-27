@@ -4,12 +4,13 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="addAnchorPane" prefHeight="689.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.modifyProductScreenController">
+<AnchorPane fx:id="addAnchorPane" prefHeight="754.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.modifyProductScreenController">
    <children>
       <GridPane layoutX="72.0" layoutY="104.0" prefHeight="470.0" prefWidth="578.0">
         <columnConstraints>
@@ -108,7 +109,9 @@
          </children>
       </GridPane>
       <Label id="title" fx:id="labelINFO" layoutX="272.0" layoutY="45.0" text="" />
-      <Button id="addButton" fx:id="addProductToDB" layoutX="334.0" layoutY="603.0" mnemonicParsing="false" onAction="#modifyDatabaseButtonPressed" text="Dodaj" />
-      <Button fx:id="cancelButton" layoutX="431.0" layoutY="603.0" mnemonicParsing="false" onAction="#onCancelAction" text="Anuluj" />
+      <Button id="addButton" fx:id="addProductToDB" layoutX="254.0" layoutY="695.0" mnemonicParsing="false" onAction="#modifyDatabaseButtonPressed" text="Dodaj" />
+      <Button fx:id="cancelButton" layoutX="379.0" layoutY="695.0" mnemonicParsing="false" onAction="#onCancelAction" text="Anuluj" />
+      <ImageView fx:id="imageView" fitHeight="101.0" fitWidth="156.0" layoutX="200.0" layoutY="581.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="imageButton" layoutX="429.0" layoutY="612.0" mnemonicParsing="false" onAction="#getImage" prefHeight="40.0" prefWidth="103.0" text="Wybierz obraz" />
    </children>
 </AnchorPane>

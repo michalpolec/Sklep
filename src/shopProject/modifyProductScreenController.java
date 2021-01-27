@@ -5,16 +5,23 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Files;
 import java.sql.*;
 
 public class modifyProductScreenController {
@@ -30,6 +37,8 @@ public class modifyProductScreenController {
     ObservableList<restOfElements> materials =  FXCollections.observableArrayList();
     ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
     ObservableList<Position> positions = FXCollections.observableArrayList();
+
+    public ImageView imageView;
 
     public TextField nameField;
     public TextField priceField;
@@ -53,6 +62,7 @@ public class modifyProductScreenController {
     public Button positionButton;
     public Button addProductToDB;
     public Button cancelButton;
+    public Button imageButton;
 
     public Label labelINFO;
 
@@ -85,7 +95,7 @@ public class modifyProductScreenController {
 
    }
 
-    public void initializeData() throws SQLException, ClassNotFoundException {
+    public void initializeData() throws SQLException, ClassNotFoundException, IOException {
 
        nameField.setText(selectedProduct.getNameOfProduct());
        priceField.setText(String.valueOf(selectedProduct.getPrice()));
@@ -100,6 +110,11 @@ public class modifyProductScreenController {
        dimensionsBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getWidth() + "cm x " + selectedProduct.getHeight() + "cm x " + selectedProduct.getLength() + "cm",getStringArray(dimensions)));
        positionBox.getSelectionModel().select(getIndexToComboBox("Półka: " + selectedProduct.getShelf() + ", Regał: " + selectedProduct.getRegal(), getStringArray(positions)));
 
+        InputStream in = selectedProduct.getImage().getBinaryStream(1, (int) selectedProduct.getImage().length());
+        Image image = new Image(in);
+
+        imageView.setImage(image);
+
     }
 
     public void onCancelAction(){
@@ -107,7 +122,7 @@ public class modifyProductScreenController {
         stage.close();
     }
 
-   public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException {
+   public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException, UnsupportedEncodingException {
 
        String productName = "";
        double productPrice = 0.0;
@@ -141,17 +156,20 @@ public class modifyProductScreenController {
 
        if(AddOrEdit && Continue) {
 
+           Class.forName("com.mysql.cj.jdbc.Driver");
+           Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+           Statement statement = connection.createStatement();
 
-           Statement statement = createConnectionAndStatement();
 
            String sql_details = "INSERT INTO szczegoly (IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
-           createConnectionAndStatement().executeUpdate(sql_details);
+           statement.executeUpdate(sql_details);
            String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy) VALUES ('" + productName + "', '" + productPrice + "', '" + productDescription + "', '" + roomID + "', '" + subcategoryID + "','" + productStock + "');";
-           createConnectionAndStatement().executeUpdate(sql_products);
+           statement.executeUpdate(sql_products);
 
            setSelectedProductFromDB(0);
 
-           closeStatementAndConnection(statement);
+           statement.close();
+           connection.close();;
 
            Info("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.");
 
@@ -161,10 +179,11 @@ public class modifyProductScreenController {
        }
        else if (Continue){
 
+           Class.forName("com.mysql.cj.jdbc.Driver");
+           Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+           Statement statement = connection.createStatement();
 
            int IDProduct = selectedProduct.getProductID();
-
-           Statement statement = createConnectionAndStatement();
 
            String sql_details = "UPDATE `sklep`.`szczegoly` SET `IDPozycji` = '"+ positionID +"', `IDWymiarow` = '"+ dimensionID +"', `IDMaterialu` = '"+ materialID +"', `IDKoloru` = '"+ colorID +"' WHERE (`IDProduktu` = '"+ IDProduct +"');";
            statement.executeUpdate(sql_details);
@@ -174,7 +193,8 @@ public class modifyProductScreenController {
 
            setSelectedProductFromDB(IDProduct);
 
-           closeStatementAndConnection(statement);
+           statement.close();
+           connection.close();
 
            Info("Edytowano nowy produkt do bazy", "Poprawnie edytowno element.");
 
@@ -228,6 +248,9 @@ public class modifyProductScreenController {
        openPositionScreen();
     }
 
+    public void getImage(ActionEvent actionEvent) {
+
+    }
 
    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
 
@@ -342,38 +365,49 @@ public class modifyProductScreenController {
 
    public void getSubcategoryData() throws ClassNotFoundException, SQLException {
 
+       Class.forName("com.mysql.cj.jdbc.Driver");
+       Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+       Statement statement = connection.createStatement();
+
+
        String sql = "SELECT * FROM sklep.podkategoria";
-       ResultSet resultSet = createConnectionAndStatement().executeQuery(sql);
+       ResultSet resultSet = statement.executeQuery(sql);
 
        while(resultSet.next()) {
             Subcategory subcategory = new Subcategory(Integer.parseInt(resultSet.getString("IDPodkategorii")),resultSet.getString("NazwaPodkategorii"),Integer.parseInt(resultSet.getString("IDKategorii")));
             subcategories.add(subcategory);
        }
-
-       closeStatementAndConnection(resultSet.getStatement());
+       statement.close();
+       connection.close();
    }
 
     public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> litsOfData) throws ClassNotFoundException, SQLException {
 
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
 
         String sql = "SELECT * FROM sklep." + nameOfTable;
-        ResultSet resultSet = createConnectionAndStatement().executeQuery(sql);
+        ResultSet resultSet = statement.executeQuery(sql);
 
         while(resultSet.next()) {
             restOfElements table = new restOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
                     resultSet.getString(nameOfSecondColumn));
             litsOfData.add(table);
         }
-
-        closeStatementAndConnection(resultSet.getStatement());
+        statement.close();
+        connection.close();
 
     }
 
     public void getDimensionData() throws ClassNotFoundException, SQLException {
 
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
 
         String sql = "SELECT * FROM sklep.wymiary";
-        ResultSet resultSet = createConnectionAndStatement().executeQuery(sql);
+        ResultSet resultSet = statement.executeQuery(sql);
 
 
         while(resultSet.next()) {
@@ -381,16 +415,18 @@ public class modifyProductScreenController {
             Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("IDWymiarow")), (int) Double.parseDouble(resultSet.getString("Szerokosc")), (int) Double.parseDouble(resultSet.getString("Wysokosc")), (int) Double.parseDouble(resultSet.getString("Dlugosc")));
             dimensions.add(dimension);
         }
-
-        closeStatementAndConnection(resultSet.getStatement());
+        statement.close();
+        connection.close();
     }
 
     public void getPositionData() throws ClassNotFoundException, SQLException {
 
-
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
 
         String sql = "SELECT * FROM sklep.pozycja";
-        ResultSet resultSet = createConnectionAndStatement().executeQuery(sql);
+        ResultSet resultSet = statement.executeQuery(sql);
 
         while(resultSet.next()) {
 
@@ -398,7 +434,8 @@ public class modifyProductScreenController {
             positions.add(position);
         }
 
-        closeStatementAndConnection(resultSet.getStatement());
+        statement.close();
+        connection.close();
 
     }
 
@@ -453,23 +490,6 @@ public class modifyProductScreenController {
             }
         }
         return ID;
-    }
-
-
-    public Statement createConnectionAndStatement() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
-        Statement statement = connection.createStatement();
-
-        return statement;
-    }
-
-    public void closeStatementAndConnection(Statement statement) throws SQLException {
-
-           Connection connection = statement.getConnection();
-           statement.close();
-           connection.close();
-
     }
 
 
@@ -554,9 +574,10 @@ public class modifyProductScreenController {
         return selectedProduct;
     }
 
-    public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException {
-
-        Statement statement = createConnectionAndStatement();
+    public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException, UnsupportedEncodingException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
         String sql_getID = "";
         if(AddOrEdit) {
 
@@ -593,24 +614,27 @@ public class modifyProductScreenController {
 
         while(resultSet.next()) {
 
-            selectedProduct = new Product(Integer.parseInt(resultSet.getString("IDProduktu")),
+
+            selectedProduct = new Product(
+                    resultSet.getInt("IDProduktu"),
                     resultSet.getString("NazwaProduktu"),
-                    Double.parseDouble(resultSet.getString("CenaProduktu")),
+                    resultSet.getDouble("CenaProduktu"),
                     resultSet.getString("OpisProduktu"),
                     resultSet.getString("NazwaPomieszczenia"),
                     resultSet.getString("NazwaKategorii"),
                     resultSet.getString("NazwaPodkategorii"),
                     resultSet.getString("NazwaKoloru"),
                     resultSet.getString("NazwaMaterialu"),
-                    Double.parseDouble(resultSet.getString("Szerokosc")),
-                    Double.parseDouble(resultSet.getString("Wysokosc")),
-                    Double.parseDouble(resultSet.getString("Dlugosc")),
-                    Integer.parseInt(resultSet.getString("Polka")),
-                    Integer.parseInt(resultSet.getString("Regal")),
-                    Integer.parseInt(resultSet.getString("StanMagazynowy")));
+                    resultSet.getDouble("Szerokosc"),
+                    resultSet.getDouble("Wysokosc"),
+                    resultSet.getDouble("Dlugosc"),
+                    resultSet.getInt("Polka"),
+                    resultSet.getInt("Regal"),
+                    resultSet.getInt("StanMagazynowy"),
+                    resultSet.getBlob("Zdjecie"));
         }
-
-        closeStatementAndConnection(statement);
+        statement.close();
+        connection.close();
     }
 
 
@@ -636,5 +660,6 @@ public class modifyProductScreenController {
     {
         labelINFO.setText(labelText);
     }
+
 
 }
