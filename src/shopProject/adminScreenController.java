@@ -184,6 +184,7 @@ public class adminScreenController {
                 products.get(i).setShelf(product.getShelf());
                 products.get(i).setRegal(product.getRegal());
                 products.get(i).setStock(product.getStock());
+                products.get(i).setImage(product.getImage());
                 break;
             }
         }
