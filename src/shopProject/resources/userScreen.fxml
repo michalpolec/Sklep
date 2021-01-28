@@ -15,8 +15,8 @@
 <AnchorPane prefHeight="522.0" prefWidth="716.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.userScreenController">
    <children>
       <JFXHamburger fx:id="hamburgerFx" layoutX="32.0" layoutY="14.0" prefHeight="39.0" prefWidth="42.0" />
-      <JFXDrawer fx:id="drawerFX" layoutY="53.0" prefHeight="536.0" prefWidth="223.0" />
-      <StackPane fx:id="stackPaneFX" layoutX="-2.0" layoutY="66.0" prefHeight="524.0" prefWidth="231.0">
+      <JFXDrawer fx:id="drawerFX" layoutY="53.0" prefHeight="536.0" prefWidth="270.0" />
+      <StackPane fx:id="stackPaneFX" layoutX="-2.0" layoutY="66.0" prefHeight="524.0" prefWidth="242.0">
          <children>
             <Button fx:id="productsButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="110.0" text="Produkty" StackPane.alignment="TOP_CENTER">
                <StackPane.margin>
@@ -30,10 +30,10 @@
             </Label>
             <Pane fx:id="livingroomPane" onMousePressed="#onLivingRoomPressed" prefHeight="50.0" prefWidth="50.0">
                <StackPane.margin>
-                  <Insets bottom="350.0" left="5.0" right="120.0" top="100.0" />
+                  <Insets bottom="340.0" left="5.0" right="130.0" top="100.0" />
                </StackPane.margin>
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="100.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="livingroomImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
                      <image>
                         <Image url="@../../../../../Desktop/Pierdoły/DCIM/DSC_0629.JPG" />
                      </image>
@@ -50,10 +50,10 @@
             </Pane>
             <Pane fx:id="bedroomPane" prefHeight="53.0" prefWidth="103.0">
                <StackPane.margin>
-                  <Insets bottom="350.0" left="120.0" right="5.0" top="100.0" />
+                  <Insets bottom="340.0" left="130.0" right="5.0" top="100.0" />
                </StackPane.margin>
                <children>
-                  <ImageView fitHeight="40.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="bedroomImage" fitHeight="60.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Sypialnia">
                      <padding>
                         <Insets left="15.0" top="60.0" />
@@ -64,15 +64,101 @@
                   </Label>
                </children>
             </Pane>
-            <Pane prefHeight="53.0" prefWidth="103.0">
+            <Pane fx:id="kitchenPane" layoutX="130.0" layoutY="110.0" prefHeight="53.0" prefWidth="103.0">
                <children>
-                  <ImageView fitHeight="40.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label text="Sypialnia">
+                  <ImageView fx:id="kitchenImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
+                  <Label text="Kuchnia">
                      <padding>
                         <Insets left="15.0" top="60.0" />
                      </padding>
+                     <font>
+                        <Font size="11.0" />
+                     </font>
                   </Label>
                </children>
+               <StackPane.margin>
+                  <Insets bottom="250.0" left="5.0" right="130.0" top="190.0" />
+               </StackPane.margin>
+            </Pane>
+            <Pane fx:id="diningroomPane" layoutX="15.0" layoutY="200.0" prefHeight="53.0" prefWidth="103.0">
+               <children>
+                  <ImageView fx:id="diningImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
+                  <Label text="Jadalnia">
+                     <padding>
+                        <Insets left="15.0" top="60.0" />
+                     </padding>
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="250.0" left="130.0" right="5.0" top="190.0" />
+               </StackPane.margin>
+            </Pane>
+            <Pane fx:id="kidsroomPane" layoutX="130.0" layoutY="200.0" prefHeight="53.0" prefWidth="103.0">
+               <children>
+                  <ImageView fx:id="kidsImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
+                  <Label text="Pokój dziecięcy">
+                     <padding>
+                        <Insets left="15.0" top="60.0" />
+                     </padding>
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="160.0" left="5.0" right="130.0" top="280.0" />
+               </StackPane.margin>
+            </Pane>
+            <Pane fx:id="homeofficePane" layoutX="15.0" layoutY="290.0" prefHeight="53.0" prefWidth="103.0">
+               <children>
+                  <ImageView fx:id="officeImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
+                  <Label text="Domowe biuro">
+                     <padding>
+                        <Insets left="15.0" top="60.0" />
+                     </padding>
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="160.0" left="130.0" right="5.0" top="280.0" />
+               </StackPane.margin>
+            </Pane>
+            <Pane fx:id="bathroomPane" layoutX="130.0" layoutY="290.0" prefHeight="53.0" prefWidth="103.0">
+               <children>
+                  <ImageView fx:id="bathroomImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
+                  <Label text="Łazienka">
+                     <padding>
+                        <Insets left="15.0" top="60.0" />
+                     </padding>
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="70.0" left="5.0" right="130.0" top="370.0" />
+               </StackPane.margin>
+            </Pane>
+            <Pane fx:id="hallPane" layoutX="15.0" layoutY="380.0" prefHeight="53.0" prefWidth="103.0">
+               <children>
+                  <ImageView fx:id="hallImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
+                  <Label text="Przedpokój">
+                     <padding>
+                        <Insets left="15.0" top="60.0" />
+                     </padding>
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="70.0" left="130.0" right="5.0" top="370.0" />
+               </StackPane.margin>
             </Pane>
          </children>
       </StackPane>
