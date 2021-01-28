@@ -88,4 +88,32 @@ public class userScreenController {
     public void onLivingRoomPressed(MouseEvent mouseEvent) {
         System.out.println("living room");
     }
+
+    public void onBedroomPressed(MouseEvent mouseEvent) {
+        System.out.println("bedroom");
+    }
+
+    public void onKitchenPressed(MouseEvent mouseEvent) {
+        System.out.println("kitchen");
+    }
+
+    public void onDiningroomPressed(MouseEvent mouseEvent) {
+        System.out.println("dining room");
+    }
+
+    public void onKidsroomPressed(MouseEvent mouseEvent) {
+        System.out.println("kids room");
+    }
+
+    public void onOfficePressed(MouseEvent mouseEvent) {
+        System.out.println("home office");
+    }
+
+    public void onBathroomPressed(MouseEvent mouseEvent) {
+        System.out.println("bathroom");
+    }
+
+    public void onHallPressed(MouseEvent mouseEvent) {
+        System.out.println("hall");
+    }
 }

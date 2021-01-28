@@ -61,7 +61,7 @@ public class mainScreenController {
         userStage.setTitle("Sklep meblowy!");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/userScreen.fxml"));
         Parent root = loader.load();
-        root.getStylesheets().add("Stylesheets/style.css");
+        root.getStylesheets().add("Stylesheets/user.css");
         userStage.setScene(new Scene(root));
 
         userScreenController userScreenController = new userScreenController();

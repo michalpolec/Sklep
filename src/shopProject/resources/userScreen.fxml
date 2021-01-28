@@ -5,7 +5,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -14,9 +13,9 @@
 
 <AnchorPane prefHeight="522.0" prefWidth="716.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.userScreenController">
    <children>
-      <JFXHamburger fx:id="hamburgerFx" layoutX="32.0" layoutY="14.0" prefHeight="39.0" prefWidth="42.0" />
-      <JFXDrawer fx:id="drawerFX" layoutY="53.0" prefHeight="536.0" prefWidth="270.0" />
-      <StackPane fx:id="stackPaneFX" layoutX="-2.0" layoutY="66.0" prefHeight="524.0" prefWidth="242.0">
+      <JFXHamburger fx:id="hamburgerFx" layoutX="34.0" layoutY="14.0" prefHeight="39.0" prefWidth="42.0" />
+      <JFXDrawer fx:id="drawerFX" layoutY="53.0" prefHeight="536.0" prefWidth="249.0" />
+      <StackPane fx:id="stackPaneFX" layoutX="-2.0" layoutY="66.0" prefHeight="524.0" prefWidth="242.0" style="-fx-background-color: #FFFAFB;">
          <children>
             <Button fx:id="productsButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="110.0" text="Produkty" StackPane.alignment="TOP_CENTER">
                <StackPane.margin>
@@ -33,11 +32,7 @@
                   <Insets bottom="340.0" left="5.0" right="130.0" top="100.0" />
                </StackPane.margin>
                <children>
-                  <ImageView fx:id="livingroomImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false">
-                     <image>
-                        <Image url="@../../../../../Desktop/Pierdoły/DCIM/DSC_0629.JPG" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="livingroomImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" smooth="false" />
                   <Label prefHeight="66.0" prefWidth="90.0" text="Pokój dzienny">
                      <padding>
                         <Insets left="15.0" top="60.0" />
@@ -48,7 +43,7 @@
                   </Label>
                </children>
             </Pane>
-            <Pane fx:id="bedroomPane" prefHeight="53.0" prefWidth="103.0">
+            <Pane fx:id="bedroomPane" onMousePressed="#onBedroomPressed" prefHeight="53.0" prefWidth="103.0">
                <StackPane.margin>
                   <Insets bottom="340.0" left="130.0" right="5.0" top="100.0" />
                </StackPane.margin>
@@ -64,7 +59,7 @@
                   </Label>
                </children>
             </Pane>
-            <Pane fx:id="kitchenPane" layoutX="130.0" layoutY="110.0" prefHeight="53.0" prefWidth="103.0">
+            <Pane fx:id="kitchenPane" layoutX="130.0" layoutY="110.0" onMousePressed="#onKitchenPressed" prefHeight="53.0" prefWidth="103.0">
                <children>
                   <ImageView fx:id="kitchenImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Kuchnia">
@@ -80,7 +75,7 @@
                   <Insets bottom="250.0" left="5.0" right="130.0" top="190.0" />
                </StackPane.margin>
             </Pane>
-            <Pane fx:id="diningroomPane" layoutX="15.0" layoutY="200.0" prefHeight="53.0" prefWidth="103.0">
+            <Pane fx:id="diningroomPane" layoutX="15.0" layoutY="200.0" onMousePressed="#onDiningroomPressed" prefHeight="53.0" prefWidth="103.0">
                <children>
                   <ImageView fx:id="diningImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Jadalnia">
@@ -96,7 +91,7 @@
                   <Insets bottom="250.0" left="130.0" right="5.0" top="190.0" />
                </StackPane.margin>
             </Pane>
-            <Pane fx:id="kidsroomPane" layoutX="130.0" layoutY="200.0" prefHeight="53.0" prefWidth="103.0">
+            <Pane fx:id="kidsroomPane" layoutX="130.0" layoutY="200.0" onMousePressed="#onKidsroomPressed" prefHeight="53.0" prefWidth="103.0">
                <children>
                   <ImageView fx:id="kidsImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Pokój dziecięcy">
@@ -112,7 +107,7 @@
                   <Insets bottom="160.0" left="5.0" right="130.0" top="280.0" />
                </StackPane.margin>
             </Pane>
-            <Pane fx:id="homeofficePane" layoutX="15.0" layoutY="290.0" prefHeight="53.0" prefWidth="103.0">
+            <Pane fx:id="homeofficePane" layoutX="15.0" layoutY="290.0" onMousePressed="#onOfficePressed" prefHeight="53.0" prefWidth="103.0">
                <children>
                   <ImageView fx:id="officeImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Domowe biuro">
@@ -128,9 +123,9 @@
                   <Insets bottom="160.0" left="130.0" right="5.0" top="280.0" />
                </StackPane.margin>
             </Pane>
-            <Pane fx:id="bathroomPane" layoutX="130.0" layoutY="290.0" prefHeight="53.0" prefWidth="103.0">
+            <Pane fx:id="bathroomPane" layoutX="130.0" layoutY="290.0" onMousePressed="#onBathroomPressed" prefHeight="53.0" prefWidth="103.0">
                <children>
-                  <ImageView fx:id="bathroomImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="bathroomImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true"  pickOnBounds="true" preserveRatio="true" />
                   <Label text="Łazienka">
                      <padding>
                         <Insets left="15.0" top="60.0" />
@@ -144,7 +139,7 @@
                   <Insets bottom="70.0" left="5.0" right="130.0" top="370.0" />
                </StackPane.margin>
             </Pane>
-            <Pane fx:id="hallPane" layoutX="15.0" layoutY="380.0" prefHeight="53.0" prefWidth="103.0">
+            <Pane fx:id="hallPane" layoutX="15.0" layoutY="380.0" onMousePressed="#onHallPressed" prefHeight="53.0" prefWidth="103.0">
                <children>
                   <ImageView fx:id="hallImage" fitHeight="60.0" fitWidth="100.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true" />
                   <Label text="Przedpokój">
