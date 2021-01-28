@@ -59,7 +59,13 @@ public class mainScreenController {
     private void userLoginButtonPressed() throws IOException {
         Stage userStage = new Stage();
         userStage.setTitle("Sklep meblowy!");
-        userStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("resources/userScreen.fxml"))));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/userScreen.fxml"));
+        Parent root = loader.load();
+        root.getStylesheets().add("Stylesheets/style.css");
+        userStage.setScene(new Scene(root));
+
+        userScreenController userScreenController = new userScreenController();
+        userScreenController.getAllData(products);
         userStage.show();
 
         Stage closeLoginStage = (Stage) loginAsUser.getScene().getWindow();
