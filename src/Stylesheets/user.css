@@ -1,0 +1,33 @@
+.label
+{
+    -fx-font-family: Calibri;
+    -fx-text-fill: #131515;
+    -fx-font-size: 12px;
+}
+
+.label:hover
+{
+    -fx-text-fill: #2B2C28;
+    -fx-highlight-text-fill: #131515;
+}
+
+.button{
+    -fx-background-color: #FFFAFB;
+    -fx-font-size: 14px;
+    -fx-font-family: Calibri;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-text-fill: #131515;
+}
+
+.button:hover{
+    -fx-text-fill: #2B2C28;
+}
+
+#roomLabel
+{
+    -fx-font-size: 15px;
+}
+
+
+
