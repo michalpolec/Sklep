@@ -6,14 +6,18 @@ import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+
+import java.io.InputStream;
+import java.sql.SQLException;
 
 public class userScreenController {
     ObservableList<Product> products =  FXCollections.observableArrayList();
+    ObservableList<Product> currentProducts = FXCollections.observableArrayList();
     public JFXHamburger hamburgerFx;
     public JFXDrawer drawerFX;
     public StackPane stackPaneFX;
@@ -37,14 +41,16 @@ public class userScreenController {
     public ImageView bathroomImage;
     public ImageView hallImage;
 
+    public GridPane gridPane;
+
 
     public void getAllData(ObservableList<Product> products) {
         this.products.setAll(products);
     }
 
-    public void initialize()
-    {
+    public void initialize()  {
         initializeDrawer();
+        initializeGridPane();
         drawerAction();
     }
 
@@ -83,6 +89,35 @@ public class userScreenController {
         hallImage.setImage(new Image("images/hall.png"));
     }
 
+    public void initializeGridPane()  {
+        //how space need to products in grid pane
+        gridPane.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+
+        gridPane.add(new ImageView("images/hall.png"), 0, 0);
+        gridPane.add(new ImageView("images/hall.png"), 1, 0);
+        gridPane.add(new ImageView("images/hall.png"), 1, 1);
+        gridPane.add(new ImageView("images/hall.png"), 0, 1);
+        gridPane.add(new ImageView("images/hall.png"), 0, 2);
+        gridPane.add(new ImageView("images/hall.png"), 1, 2);
+        gridPane.add(new ImageView("images/hall.png"), 0, 3);
+        gridPane.add(new ImageView("images/hall.png"), 1, 3);
+
+
+
+
+        int numberofproducts = products.size()%2;
+        if(numberofproducts == 0)
+            numberofproducts = products.size()/2;
+        else
+            numberofproducts = products.size()/2 + 1;
+
+        if(numberofproducts > 0)
+        {
+
+        }
+
+    }
+
 
     //it works
     public void onLivingRoomPressed(MouseEvent mouseEvent) {
@@ -116,4 +151,5 @@ public class userScreenController {
     public void onHallPressed(MouseEvent mouseEvent) {
         System.out.println("hall");
     }
+
 }
