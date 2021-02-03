@@ -6,7 +6,10 @@ import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -15,7 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.*;
 
 public class userScreenController {
@@ -143,7 +148,23 @@ public class userScreenController {
             anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    System.out.println(nameOfProducts);
+                    Stage userStage = new Stage();
+                    userStage.setTitle(product.getNameOfProduct());
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/detailsOfProductScreen.fxml"));
+                    Parent root = null;
+                    try {
+                        root = loader.load();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    userStage.setScene(new Scene(root));
+
+                    detailsOfProductScreenController newController = loader.getController();
+                    newController.setSelectedProduct(product);
+
+                    userStage.show();
+
+
                 }
             });
 
