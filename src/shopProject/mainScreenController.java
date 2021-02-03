@@ -63,9 +63,6 @@ public class mainScreenController {
         Parent root = loader.load();
         root.getStylesheets().add("Stylesheets/user.css");
         userStage.setScene(new Scene(root));
-
-        userScreenController userScreenController = new userScreenController();
-        userScreenController.getAllData(products);
         userStage.show();
 
         Stage closeLoginStage = (Stage) loginAsUser.getScene().getWindow();
