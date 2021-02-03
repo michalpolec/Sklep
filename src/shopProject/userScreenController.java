@@ -5,15 +5,16 @@ import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.sql.*;
 
@@ -59,7 +60,6 @@ public class userScreenController {
     public void initialize() throws SQLException {
         initializeDrawer();
         getAllDataFromDB();
-        initializeGridPane();
         drawerAction();
     }
 
@@ -99,42 +99,73 @@ public class userScreenController {
         gardenImage.setImage(new Image("images/garden.png"));
     }
 
-    public void initializeGridPane() throws SQLException {
+    public void initializeGridPane(ObservableList<Product> products) throws SQLException {
         //how space need to products in grid pane
 
-        gridPane.resize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        String ifAvaliable;
 
-
-        int numberofproducts = products.size()%2;
-        if(numberofproducts == 0)
-            numberofproducts = products.size()/2;
-        else
-            numberofproducts = products.size()/2 + 1;
-
-        if(numberofproducts > 0)
+        int i = 0;
+        for(Product product:products)
         {
-            for(int i = 0; i < numberofproducts; i++)
-            {
-
+            if (product.getStock() > 0) {
+                ifAvaliable = "Dostępny w ilości" + products.get(i).getStock();
+            } else {
+                ifAvaliable = "Niedostępny";
             }
+
+            final Label nameOfProducts = new Label(product.getNameOfProduct());
+            final Label priceOfProducts = new Label(String.valueOf(product.getPrice()) + " PLN");
+            final Label stockOfProducts = new Label(ifAvaliable);
+            final ImageView imageOfProducts = new ImageView(new Image(product.getImage().getBinaryStream(1, (int) product.getImage().length())));
+            imageOfProducts.setFitHeight(100);
+            imageOfProducts.setFitWidth(100);
+
+            final AnchorPane anchorPane = new AnchorPane();
+            anchorPane.setMinHeight(120);
+            anchorPane.setMinWidth(420);
+
+            anchorPane.getChildren().add(imageOfProducts);
+            imageOfProducts.setLayoutX(10);
+            imageOfProducts.setLayoutY(10);
+
+            anchorPane.getChildren().add(nameOfProducts);
+            nameOfProducts.setLayoutX(135);
+            nameOfProducts.setLayoutY(15);
+
+            anchorPane.getChildren().add(priceOfProducts);
+            priceOfProducts.setLayoutX(320);
+            priceOfProducts.setLayoutY(50);
+
+            anchorPane.getChildren().add(stockOfProducts);
+            stockOfProducts.setLayoutX(320);
+            stockOfProducts.setLayoutY(80);
+
+            anchorPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    System.out.println(nameOfProducts);
+                }
+            });
+
+            final Separator separator1 = new Separator();
+            separator1.setOrientation(Orientation.VERTICAL);
+
+            gridPane.add(anchorPane, 0, i);
+            gridPane.add(separator1, 1, i);
+            i++;
+
+            final Separator separator2 = new Separator();
+            final Separator separator3 = new Separator();
+            gridPane.add(separator2, 0, i);
+            gridPane.add(separator3, 1, i);
+            i++;
         }
-
-        ImageView imageview = new ImageView();
-        imageview.setFitHeight(50);
-        imageview.setFitWidth(65);
-
-        gridPane.add(new ImageView(new Image(products.get(0).getImage().getBinaryStream(1, (int) products.get(0).getImage().length()))), 0, 0);
-        gridPane.add(new ImageView(new Image(products.get(1).getImage().getBinaryStream(1, (int) products.get(1).getImage().length()))), 1, 0);
-
-        scrollPane.setContent(gridPane);
-        scrollPane.autosize();
-        scrollPane.resize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
     }
 
 
     //it works
-    public void onLivingRoomPressed(MouseEvent mouseEvent) {
+    public void onLivingRoomPressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("living room");
         room = "Salon";
         currentProducts.clear();
@@ -150,9 +181,10 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
-    public void onBedroomPressed(MouseEvent mouseEvent) {
+    public void onBedroomPressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("bedroom");
         currentProducts.clear();
         room = "Sypialnia";
@@ -168,9 +200,10 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
-    public void onKitchenPressed(MouseEvent mouseEvent) {
+    public void onKitchenPressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("kitchen");
         currentProducts.clear();
         room = "Kuchnia";
@@ -186,9 +219,10 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
-    public void onDiningroomPressed(MouseEvent mouseEvent) {
+    public void onDiningroomPressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("dining room");
         currentProducts.clear();
         room = "Jadalnia";
@@ -204,9 +238,10 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
-    public void onKidsroomPressed(MouseEvent mouseEvent) {
+    public void onKidsroomPressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("kids room");
         currentProducts.clear();
         room = "Pokój dziecięcy";
@@ -222,9 +257,10 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
-    public void onOfficePressed(MouseEvent mouseEvent) {
+    public void onOfficePressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("home office");
         currentProducts.clear();
         room = "Domowe biuro";
@@ -240,10 +276,11 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
 
-    public void onBathroomPressed(MouseEvent mouseEvent) {
+    public void onBathroomPressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("bathroom");
         currentProducts.clear();
         room = "Łazienka";
@@ -259,9 +296,10 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
-    public void onHallPressed(MouseEvent mouseEvent) {
+    public void onHallPressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("hall");
         currentProducts.clear();
         room = "Przedpokój";
@@ -277,9 +315,10 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
-    public void onGardenPressed(MouseEvent mouseEvent) {
+    public void onGardenPressed(MouseEvent mouseEvent) throws SQLException {
         System.out.println("garden");
         currentProducts.clear();
         room = "Ogród";
@@ -295,6 +334,7 @@ public class userScreenController {
             i++;
         }
         System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 
     public void getAllDataFromDB()
