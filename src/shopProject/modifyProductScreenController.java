@@ -595,7 +595,6 @@ public class modifyProductScreenController {
     }
 
     public void setCorrectSubcategories(){
-
         subcategory.clear();
         int IDofCategory = getIDofElement(categoryBox.getValue().toString(), categories);
 

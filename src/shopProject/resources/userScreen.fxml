@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
@@ -20,7 +21,7 @@
    <children>
       <JFXHamburger fx:id="hamburgerFx" layoutX="34.0" layoutY="8.0" prefHeight="39.0" prefWidth="42.0" />
       <JFXDrawer fx:id="drawerFX" layoutY="53.0" prefHeight="536.0" prefWidth="249.0" />
-      <StackPane fx:id="stackPaneFX" layoutX="-2.0" layoutY="66.0" prefHeight="524.0" prefWidth="242.0" style="-fx-background-color: #FFFAFB;">
+      <StackPane fx:id="stackPaneFX" layoutX="-2.0" layoutY="66.0" prefHeight="524.0" prefWidth="239.0" style="-fx-background-color: #FFFAFB;">
          <children>
             <Button fx:id="productsButton" mnemonicParsing="false" onMousePressed="#onProductsPressed" prefHeight="32.0" prefWidth="110.0" text="Produkty" StackPane.alignment="TOP_CENTER">
                <StackPane.margin>
@@ -166,7 +167,7 @@
             </AnchorPane>
          </children>
       </StackPane>
-      <ScrollPane fx:id="scrollPane" layoutX="250.0" layoutY="53.0" prefHeight="514.0" prefWidth="449.0">
+      <ScrollPane fx:id="scrollPane" layoutX="259.0" layoutY="65.0" prefHeight="512.0" prefWidth="446.0">
          <content>
             <GridPane fx:id="gridPane" prefHeight="252.0" prefWidth="400.0">
               <columnConstraints>
@@ -185,5 +186,9 @@
             </GridPane>
          </content>
       </ScrollPane>
+      <ComboBox fx:id="subcategoryComboBox" layoutX="146.0" layoutY="19.0" prefHeight="28.0" prefWidth="139.0" promptText="Podkategroia" />
+      <ComboBox fx:id="colorComboBox" layoutX="298.0" layoutY="19.0" prefWidth="150.0" promptText="Kolor" />
+      <ComboBox fx:id="materialComboBox" layoutX="458.0" layoutY="19.0" prefWidth="150.0" promptText="Materiał" />
+      <Button fx:id="sortButton" layoutX="637.0" layoutY="17.0" mnemonicParsing="false" text="Filtruj" />
    </children>
 </AnchorPane>

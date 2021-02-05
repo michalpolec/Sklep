@@ -24,6 +24,8 @@ import java.sql.*;
 public class userScreenController {
     ObservableList<Product> products =  FXCollections.observableArrayList();
     ObservableList<Product> currentProducts = FXCollections.observableArrayList();
+    ObservableList<Subcategory> currentSubcategories = FXCollections.observableArrayList();
+    //ObservableList<restOfElements> currentColors = FXCollections.observableArrayList();
     ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
     ObservableList<Subcategory>  subcategories = FXCollections.observableArrayList();
     ObservableList<restOfElements> colors =  FXCollections.observableArrayList();
@@ -63,6 +65,10 @@ public class userScreenController {
 
     public JFXListView JFXcategoriesListView;
 
+    public ComboBox subcategoryComboBox;
+    public ComboBox colorComboBox;
+    public ComboBox materialComboBox;
+
     //variable use to sort products
     String room = "";
     String category = "";
@@ -76,6 +82,9 @@ public class userScreenController {
         getAllDataFromDB();
         getData();
         drawerAction();
+        subcategoryComboBox.setVisible(false);
+        colorComboBox.setVisible(false);
+        materialComboBox.setVisible(false);
     }
 
     private void drawerAction()
@@ -110,6 +119,8 @@ public class userScreenController {
     public void initializeGridPane(ObservableList<Product> products) throws SQLException {
 
         String ifAvaliable;
+
+        gridPane.getChildren().clear(); //delete previous data
 
         int i = 0;
         for(Product product:products)
@@ -404,6 +415,7 @@ public class userScreenController {
     public void onRoomButtonPressed(MouseEvent mouseEvent) {
         productsAnchorPane.setVisible(false);
         roomAnchorPane.setVisible(true);
+        subcategoryComboBox.setVisible(false);
         livingroomImage.setImage(new Image("images/living.png"));
         bedroomImage.setImage(new Image("images/bedroom.png"));
         diningImage.setImage(new Image("images/diningroom.png"));
@@ -413,6 +425,8 @@ public class userScreenController {
         bathroomImage.setImage(new Image("images/bathroom.png"));
         hallImage.setImage(new Image("images/hall.png"));
         gardenImage.setImage(new Image("images/garden.png"));
+        setColorsComboBox();
+        setMaterialsComboBox();
     }
 
     public void onProductsPressed(MouseEvent mouseEvent) {
@@ -420,6 +434,8 @@ public class userScreenController {
         productsAnchorPane.setVisible(true);
         JFXcategoriesListView.setVisible(true);
         JFXcategoriesListView.setItems(categories);
+        setColorsComboBox();
+        setMaterialsComboBox();
     }
 
     public void getData() throws ClassNotFoundException, SQLException {
@@ -469,8 +485,6 @@ public class userScreenController {
         category = JFXcategoriesListView.getSelectionModel().getSelectedItems().toString();
         category = category.substring(1, category.length()-1); //it must be here!!!
         System.out.println(category);
-
-
         currentProducts.clear();
         sizeOfCurrentProducts = 0;
         for(Product product:products)
@@ -483,5 +497,37 @@ public class userScreenController {
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
+
+        int IDofCategory = 0;
+        for(restOfElements cat:categories)
+        {
+            if(cat.getName().equals(category)) {
+                IDofCategory = cat.getID();
+            }
+        }
+
+        currentSubcategories.clear();
+        for(Subcategory sub:subcategories)
+        {
+            if(sub.getCategoryID() == IDofCategory)
+            {
+                currentSubcategories.add(sub);
+            }
+        }
+
+        subcategoryComboBox.setVisible(true);
+        subcategoryComboBox.setItems(currentSubcategories);
+    }
+
+    public void setColorsComboBox()
+    {
+        colorComboBox.setItems(colors);
+        colorComboBox.setVisible(true);
+    }
+
+    public void setMaterialsComboBox()
+    {
+        materialComboBox.setItems(materials);
+        materialComboBox.setVisible(true);
     }
 }
