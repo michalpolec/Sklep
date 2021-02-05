@@ -2,6 +2,7 @@ package shopProject;
 
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.controls.JFXListView;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,10 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Separator;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -26,10 +24,16 @@ import java.sql.*;
 public class userScreenController {
     ObservableList<Product> products =  FXCollections.observableArrayList();
     ObservableList<Product> currentProducts = FXCollections.observableArrayList();
+    ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
+    ObservableList<Subcategory>  subcategories = FXCollections.observableArrayList();
+    ObservableList<restOfElements> colors =  FXCollections.observableArrayList();
+    ObservableList<restOfElements> materials =  FXCollections.observableArrayList();
+
     public JFXHamburger hamburgerFx;
     public JFXDrawer drawerFX;
     public StackPane stackPaneFX;
     public Button productsButton;
+    public Button roomButton;
     public Pane livingroomPane;
     public Pane bedroomPane;
     public Pane kitchenPane;
@@ -54,6 +58,11 @@ public class userScreenController {
     public GridPane gridPane;
     public ScrollPane scrollPane;
 
+    public AnchorPane roomAnchorPane;
+    public AnchorPane productsAnchorPane;
+
+    public JFXListView JFXcategoriesListView;
+
     //variable use to sort products
     String room = "";
     String category = "";
@@ -62,9 +71,10 @@ public class userScreenController {
     int sizeOfCurrentProducts = 0;
 
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         initializeDrawer();
         getAllDataFromDB();
+        getData();
         drawerAction();
     }
 
@@ -93,19 +103,11 @@ public class userScreenController {
         drawerFX.setDefaultDrawerSize(280);
         drawerFX.setOverLayVisible(true);
         drawerFX.setResizableOnDrag(true);
-        livingroomImage.setImage(new Image("images/living.png"));
-        bedroomImage.setImage(new Image("images/bedroom.png"));
-        diningImage.setImage(new Image("images/diningroom.png"));
-        kitchenImage.setImage(new Image("images/kitchen.png"));
-        kidsImage.setImage(new Image("images/kidsroom.png"));
-        officeImage.setImage(new Image("images/homeoffice.png"));
-        bathroomImage.setImage(new Image("images/bathroom.png"));
-        hallImage.setImage(new Image("images/hall.png"));
-        gardenImage.setImage(new Image("images/garden.png"));
+        roomAnchorPane.setVisible(false);
+        productsAnchorPane.setVisible(false);
     }
 
     public void initializeGridPane(ObservableList<Product> products) throws SQLException {
-        //how space need to products in grid pane
 
         String ifAvaliable;
 
@@ -415,4 +417,65 @@ public class userScreenController {
 
     }
 
+    public void onRoomButtonPressed(MouseEvent mouseEvent) {
+        productsAnchorPane.setVisible(false);
+        roomAnchorPane.setVisible(true);
+        livingroomImage.setImage(new Image("images/living.png"));
+        bedroomImage.setImage(new Image("images/bedroom.png"));
+        diningImage.setImage(new Image("images/diningroom.png"));
+        kitchenImage.setImage(new Image("images/kitchen.png"));
+        kidsImage.setImage(new Image("images/kidsroom.png"));
+        officeImage.setImage(new Image("images/homeoffice.png"));
+        bathroomImage.setImage(new Image("images/bathroom.png"));
+        hallImage.setImage(new Image("images/hall.png"));
+        gardenImage.setImage(new Image("images/garden.png"));
+    }
+
+    public void onProductsPressed(MouseEvent mouseEvent) {
+        roomAnchorPane.setVisible(false);
+        productsAnchorPane.setVisible(true);
+        JFXcategoriesListView.setItems(categories);
+    }
+
+    public void getData() throws ClassNotFoundException, SQLException {
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
+
+        String subcategory = "SELECT * FROM sklep.podkategoria";
+        ResultSet resultSet = statement.executeQuery(subcategory);
+
+        while(resultSet.next()) {
+            Subcategory podkategoria = new Subcategory(Integer.parseInt(resultSet.getString("IDPodkategorii")),resultSet.getString("NazwaPodkategorii"),Integer.parseInt(resultSet.getString("IDKategorii")));
+            subcategories.add(podkategoria);
+        }
+
+        String category = "SELECT * FROM sklep.kategoria";
+        ResultSet resultSetCategories = statement.executeQuery(category);
+
+        while(resultSetCategories.next()){
+            restOfElements kategoria = new restOfElements(resultSetCategories.getInt(1), resultSetCategories.getString(2));
+            categories.add(kategoria);
+        }
+
+        String color = "SELECT * FROM sklep.kolor";
+        ResultSet resultSetColor = statement.executeQuery(color);
+
+        while(resultSetColor.next()){
+            restOfElements kolor = new restOfElements(resultSetColor.getInt(1), resultSetColor.getString(2));
+            colors.add(kolor);
+        }
+
+        String material = "SELECT * FROM sklep.material";
+        ResultSet resultSetMaterial = statement.executeQuery(material);
+
+        while(resultSetMaterial.next()){
+            restOfElements mat = new restOfElements(resultSetMaterial.getInt(1), resultSetMaterial.getString(2));
+            materials.add(mat);
+        }
+
+        statement.close();
+        connection.close();
+    }
 }
