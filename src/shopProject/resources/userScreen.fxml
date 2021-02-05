@@ -161,7 +161,7 @@
                   <Insets top="120.0" />
                </StackPane.margin>
                <children>
-                  <JFXListView fx:id="JFXcategoriesListView" prefHeight="400.0" prefWidth="242.0" />
+                  <JFXListView fx:id="JFXcategoriesListView" onMouseClicked="#onListClicked" prefHeight="404.0" prefWidth="242.0" />
                </children>
             </AnchorPane>
          </children>

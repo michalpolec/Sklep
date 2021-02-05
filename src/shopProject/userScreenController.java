@@ -192,16 +192,14 @@ public class userScreenController {
         System.out.println("living room");
         room = "Salon";
         currentProducts.clear();
-        int i = 0;
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -211,16 +209,14 @@ public class userScreenController {
         System.out.println("bedroom");
         currentProducts.clear();
         room = "Sypialnia";
-        int i = 0;
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -230,16 +226,14 @@ public class userScreenController {
         System.out.println("kitchen");
         currentProducts.clear();
         room = "Kuchnia";
-        int i = 0;
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -249,16 +243,14 @@ public class userScreenController {
         System.out.println("dining room");
         currentProducts.clear();
         room = "Jadalnia";
-        int i = 0;
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -268,16 +260,14 @@ public class userScreenController {
         System.out.println("kids room");
         currentProducts.clear();
         room = "Pokój dziecięcy";
-        int i = 0;
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -287,16 +277,14 @@ public class userScreenController {
         System.out.println("home office");
         currentProducts.clear();
         room = "Domowe biuro";
-        int i = 0;
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -307,16 +295,15 @@ public class userScreenController {
         System.out.println("bathroom");
         currentProducts.clear();
         room = "Łazienka";
-        int i = 0;
+
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -326,16 +313,15 @@ public class userScreenController {
         System.out.println("hall");
         currentProducts.clear();
         room = "Przedpokój";
-        int i = 0;
+
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -345,16 +331,14 @@ public class userScreenController {
         System.out.println("garden");
         currentProducts.clear();
         room = "Ogród";
-        int i = 0;
         sizeOfCurrentProducts = 0;
         for(Product p:products)
         {
-            if(products.get(i).getRoom().equals(room))
+            if(p.getRoom().equals(room))
             {
                 currentProducts.add(p);
                 sizeOfCurrentProducts++;
             }
-            i++;
         }
         System.out.println(sizeOfCurrentProducts);
         initializeGridPane(currentProducts);
@@ -434,6 +418,7 @@ public class userScreenController {
     public void onProductsPressed(MouseEvent mouseEvent) {
         roomAnchorPane.setVisible(false);
         productsAnchorPane.setVisible(true);
+        JFXcategoriesListView.setVisible(true);
         JFXcategoriesListView.setItems(categories);
     }
 
@@ -477,5 +462,26 @@ public class userScreenController {
 
         statement.close();
         connection.close();
+    }
+
+    //not works
+    public void onListClicked(MouseEvent mouseEvent) throws SQLException {
+        category = JFXcategoriesListView.getSelectionModel().getSelectedItems().toString();
+        category = category.substring(1, category.length()-1); //it must be here!!!
+        System.out.println(category);
+
+
+        currentProducts.clear();
+        sizeOfCurrentProducts = 0;
+        for(Product product:products)
+        {
+            if(product.getCategory().equals(category))
+            {
+                currentProducts.add(product);
+                sizeOfCurrentProducts++;
+            }
+        }
+        System.out.println(sizeOfCurrentProducts);
+        initializeGridPane(currentProducts);
     }
 }

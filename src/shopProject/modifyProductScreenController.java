@@ -703,5 +703,4 @@ public class modifyProductScreenController {
         labelINFO.setText(labelText);
     }
 
-
 }
