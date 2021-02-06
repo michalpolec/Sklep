@@ -25,7 +25,8 @@ public class userScreenController {
     ObservableList<Product> products =  FXCollections.observableArrayList();
     ObservableList<Product> currentProducts = FXCollections.observableArrayList();
     ObservableList<Subcategory> currentSubcategories = FXCollections.observableArrayList();
-    //ObservableList<restOfElements> currentColors = FXCollections.observableArrayList();
+    ObservableList<restOfElements> currentColors = FXCollections.observableArrayList();
+    ObservableList<restOfElements> currentMaterial = FXCollections.observableArrayList();
     ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
     ObservableList<Subcategory>  subcategories = FXCollections.observableArrayList();
     ObservableList<restOfElements> colors =  FXCollections.observableArrayList();
@@ -74,6 +75,7 @@ public class userScreenController {
     String category = "";
     String subcategory = "";
     String color = "";
+    String material = "";
     int sizeOfCurrentProducts = 0;
 
 
@@ -425,8 +427,6 @@ public class userScreenController {
         bathroomImage.setImage(new Image("images/bathroom.png"));
         hallImage.setImage(new Image("images/hall.png"));
         gardenImage.setImage(new Image("images/garden.png"));
-        setColorsComboBox();
-        setMaterialsComboBox();
     }
 
     public void onProductsPressed(MouseEvent mouseEvent) {
@@ -434,8 +434,6 @@ public class userScreenController {
         productsAnchorPane.setVisible(true);
         JFXcategoriesListView.setVisible(true);
         JFXcategoriesListView.setItems(categories);
-        setColorsComboBox();
-        setMaterialsComboBox();
     }
 
     public void getData() throws ClassNotFoundException, SQLException {
@@ -481,7 +479,7 @@ public class userScreenController {
     }
 
     //not works
-    public void onListClicked(MouseEvent mouseEvent) throws SQLException {
+    public void onListClicked(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         category = JFXcategoriesListView.getSelectionModel().getSelectedItems().toString();
         category = category.substring(1, category.length()-1); //it must be here!!!
         System.out.println(category);
@@ -517,17 +515,74 @@ public class userScreenController {
 
         subcategoryComboBox.setVisible(true);
         subcategoryComboBox.setItems(currentSubcategories);
+
+        setColorsComboBox(category);
+        setMaterialsComboBox(category);
     }
 
-    public void setColorsComboBox()
-    {
-        colorComboBox.setItems(colors);
+    public void setColorsComboBox(String category) throws ClassNotFoundException, SQLException {
+        currentColors.clear();
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT DISTINCT kolor.IDKoloru, kolor.NazwaKoloru\n" +
+                "                    FROM ((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
+                "                    INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii) \n" +
+                "                    INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
+                "                    INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
+                "WHERE kategoria.NazwaKategorii = ?;";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        preparedStatement.setString(1,category);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()){
+            restOfElements kolor = new restOfElements(resultSet.getInt(1), resultSet.getString(2));
+            currentColors.add(kolor);
+        }
+
+        colorComboBox.setItems(currentColors);
         colorComboBox.setVisible(true);
+
+        preparedStatement.close();
+        statement.close();
+        connection.close();
     }
 
-    public void setMaterialsComboBox()
-    {
-        materialComboBox.setItems(materials);
+    public void setMaterialsComboBox(String category) throws ClassNotFoundException, SQLException {
+        currentMaterial.clear();
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT distinct material.IDMaterialu, material.NazwaMaterialu\n" +
+                "                    FROM ((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
+                "                    INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii) \n" +
+                "                    INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
+                "                    INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
+                "WHERE kategoria.NazwaKategorii = ?;";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        preparedStatement.setString(1,category);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()){
+            restOfElements material = new restOfElements(resultSet.getInt(1), resultSet.getString(2));
+            currentMaterial.add(material);
+        }
+
+        materialComboBox.setItems(currentMaterial);
         materialComboBox.setVisible(true);
+
+        preparedStatement.close();
+        statement.close();
+        connection.close();
     }
 }
