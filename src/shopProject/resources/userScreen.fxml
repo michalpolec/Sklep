@@ -189,6 +189,6 @@
       <ComboBox fx:id="subcategoryComboBox" layoutX="146.0" layoutY="19.0" prefHeight="28.0" prefWidth="139.0" promptText="Podkategroia" />
       <ComboBox fx:id="colorComboBox" layoutX="298.0" layoutY="19.0" prefWidth="150.0" promptText="Kolor" />
       <ComboBox fx:id="materialComboBox" layoutX="458.0" layoutY="19.0" prefWidth="150.0" promptText="Materiał" />
-      <Button fx:id="sortButton" layoutX="637.0" layoutY="17.0" mnemonicParsing="false" text="Filtruj" />
+      <Button fx:id="sortButton" layoutX="637.0" layoutY="17.0" mnemonicParsing="false" onMouseClicked="#onSortButtonClicked" text="Filtruj" />
    </children>
 </AnchorPane>

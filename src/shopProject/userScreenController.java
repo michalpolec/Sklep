@@ -70,6 +70,8 @@ public class userScreenController {
     public ComboBox colorComboBox;
     public ComboBox materialComboBox;
 
+    public Button sortButton;
+
     //variable use to sort products
     String room = "";
     String category = "";
@@ -87,6 +89,7 @@ public class userScreenController {
         subcategoryComboBox.setVisible(false);
         colorComboBox.setVisible(false);
         materialComboBox.setVisible(false);
+        sortButton.setVisible(false);
     }
 
     private void drawerAction()
@@ -418,6 +421,9 @@ public class userScreenController {
         productsAnchorPane.setVisible(false);
         roomAnchorPane.setVisible(true);
         subcategoryComboBox.setVisible(false);
+        colorComboBox.setVisible(false);
+        materialComboBox.setVisible(false);
+        sortButton.setVisible(false);
         livingroomImage.setImage(new Image("images/living.png"));
         bedroomImage.setImage(new Image("images/bedroom.png"));
         diningImage.setImage(new Image("images/diningroom.png"));
@@ -518,6 +524,7 @@ public class userScreenController {
 
         setColorsComboBox(category);
         setMaterialsComboBox(category);
+        sortButton.setVisible(true);
     }
 
     public void setColorsComboBox(String category) throws ClassNotFoundException, SQLException {
@@ -581,6 +588,88 @@ public class userScreenController {
         materialComboBox.setItems(currentMaterial);
         materialComboBox.setVisible(true);
 
+        preparedStatement.close();
+        statement.close();
+        connection.close();
+    }
+
+    public void onSortButtonClicked(MouseEvent mouseEvent) throws ClassNotFoundException, SQLException {
+        boolean colorbool = colorComboBox.getSelectionModel().isEmpty();
+        boolean materialbool = materialComboBox.getSelectionModel().isEmpty();
+        boolean subcategorybool = subcategoryComboBox.getSelectionModel().isEmpty();
+
+        if(colorbool == true) {
+            color = "IS NOT NULL";
+        }
+        else{
+            color =  colorComboBox.getValue().toString();
+        }
+
+        if(materialbool == true) {
+            material = "IS NOT NULL";
+        }
+        else{
+            material = materialComboBox.getValue().toString();
+        }
+
+        if(subcategorybool == true) {
+            subcategory = "IS NOT NULL";
+        }
+        else{
+            subcategory =  subcategoryComboBox.getValue().toString();
+        }
+
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
+
+        ResultSet resultSet = null;
+
+        currentProducts.clear();
+
+        String sql = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii,\n" +
+                    "                    podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
+                    "                     pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
+                    "                    FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
+                    "                    INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
+                    "                    INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
+                    "                    INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
+                    "                    INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
+                    "                    INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
+                    "                    INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
+                    "                    INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji)\n" +
+                    "WHERE (podkategoria.NazwaPodkategorii = ?) AND (kolor.NazwaKoloru = ?) AND (material.NazwaMaterialu = ?);";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        preparedStatement.setString(1,subcategory);
+        preparedStatement.setString(2, color);
+        preparedStatement.setString(3, material);
+        resultSet = preparedStatement.executeQuery();
+
+        while(resultSet.next()){
+            Product product = new Product(
+                    resultSet.getInt("IDProduktu"),
+                    resultSet.getString("NazwaProduktu"),
+                    resultSet.getDouble("CenaProduktu"),
+                    resultSet.getString("OpisProduktu"),
+                    resultSet.getString("NazwaPomieszczenia"),
+                    resultSet.getString("NazwaKategorii"),
+                    resultSet.getString("NazwaPodkategorii"),
+                    resultSet.getString("NazwaKoloru"),
+                    resultSet.getString("NazwaMaterialu"),
+                    resultSet.getDouble("Szerokosc"),
+                    resultSet.getDouble("Wysokosc"),
+                    resultSet.getDouble("Dlugosc"),
+                    resultSet.getInt("Polka"),
+                    resultSet.getInt("Regal"),
+                    resultSet.getInt("StanMagazynowy"),
+                    resultSet.getBlob("Zdjecie"));
+            currentProducts.add(product);
+        }
+
+        initializeGridPane(currentProducts);
         preparedStatement.close();
         statement.close();
         connection.close();
