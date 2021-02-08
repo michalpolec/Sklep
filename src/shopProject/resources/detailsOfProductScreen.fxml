@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.detailsOfProductScreenController">
+<AnchorPane fx:id="anchorPane" prefHeight="500.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.detailsOfProductScreenController">
    <children>
+      <ImageView fx:id="detailImageView" fitHeight="235.0" fitWidth="333.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="priceLabel" layoutX="287.0" layoutY="366.0" prefHeight="115.0" prefWidth="171.0">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="374.0" layoutY="24.0" prefHeight="33.0" prefWidth="51.0" text="Kolor" />
+      <Label fx:id="colorLabel" layoutX="377.0" layoutY="57.0" prefHeight="49.0" prefWidth="91.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label layoutX="378.0" layoutY="147.0" text="Materiał" />
+      <Label fx:id="materialLabel" layoutX="382.0" layoutY="178.0" prefHeight="49.0" prefWidth="81.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="descriptionLabel" layoutX="11.0" layoutY="288.0" prefHeight="64.0" prefWidth="324.0" />
+      <Label layoutX="14.0" layoutY="359.0" prefHeight="17.0" prefWidth="51.0" text="Wymiary:" />
+      <Label fx:id="dimensionLabel" layoutX="96.0" layoutY="359.0" prefHeight="17.0" prefWidth="208.0" text="Label" />
+      <Label layoutX="17.0" layoutY="392.0" prefHeight="17.0" prefWidth="121.0" text="Magazyn">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="77.0" layoutY="425.0" prefHeight="17.0" prefWidth="44.0" text="Półka" />
+      <Label fx:id="shelfLabel" layoutX="141.0" layoutY="425.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
+      <Label layoutX="186.0" layoutY="425.0" text="Regał" />
+      <Label fx:id="regalLabel" layoutX="235.0" layoutY="425.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
+      <Label layoutX="77.0" layoutY="462.0" text="Stan magazynowy" />
+      <Label fx:id="stockLabel" layoutX="213.0" layoutY="462.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
+      <Label fx:id="nameLabel" layoutX="40.0" layoutY="271.0" prefHeight="17.0" prefWidth="302.0" text="Label" />
    </children>
 </AnchorPane>

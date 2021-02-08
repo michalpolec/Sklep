@@ -172,13 +172,18 @@ public class userScreenController {
                     Parent root = null;
                     try {
                         root = loader.load();
+                        root.getStylesheets().add("stylesheets/details.css");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     userStage.setScene(new Scene(root));
 
                     detailsOfProductScreenController newController = loader.getController();
-                    newController.setSelectedProduct(product);
+                    try {
+                        newController.setSelectedProduct(product);
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
 
                     userStage.show();
 
