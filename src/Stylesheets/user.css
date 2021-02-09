@@ -21,7 +21,7 @@
 }
 
 .button:hover{
-    -fx-text-fill: #2B2C28;
+    -fx-text-fill: #339989;
 }
 
 #roomLabel
@@ -74,6 +74,31 @@
 .jfx-list-view .virtual-flow .scroll-bar:vertical .track,
 .jfx-list-view .virtual-flow .scroll-bar:vertical .track-background{
     -fx-background-color: transparent;
+}
+
+.combo-box {
+    -fx-background-color: #FFFAFB;
+    -fx-text-fill: #2B2C28;
+}
+.combo-box:hover {
+    -fx-background-color:  linear-gradient(to bottom, #339989, #7de2d1);
+}
+
+.combo-box:focused {
+    -fx-background-color:  linear-gradient(to bottom, #339989, #7de2d1);
+}
+
+.combo-box .scroll-bar {
+    -fx-background-color:  linear-gradient(to bottom, #339989, #7de2d1);
+}
+
+.combo-box .list-cell{
+    -fx-background-color: #FFFAFB;
+    -fx-text-fill: #2B2C28;
+}
+
+.combo-box .list-cell:hover{
+    -fx-background-color: #7de2d1;
 }
 
 

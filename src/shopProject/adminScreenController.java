@@ -56,7 +56,6 @@ public class adminScreenController {
         shelf.setCellValueFactory(new PropertyValueFactory<Product, Integer>("shelf"));
         regal.setCellValueFactory(new PropertyValueFactory<Product, Integer>("regal"));
         stock.setCellValueFactory(new PropertyValueFactory<Product, Integer>("stock"));
-
         initializeTable();
     }
 
@@ -124,7 +123,7 @@ public class adminScreenController {
     }
 
     @FXML
-    private void onDeleteButtonPressed() throws IOException, SQLException, ClassNotFoundException {
+    private void onDeleteButtonPressed() throws SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
         if(selectedProduct == null){
             Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do usunięcia." );
@@ -160,7 +159,6 @@ public class adminScreenController {
                 statement.close();
                 connection.close();
             }
-
         }
     }
 

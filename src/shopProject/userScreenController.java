@@ -71,6 +71,7 @@ public class userScreenController {
     public ComboBox materialComboBox;
 
     public Button sortButton;
+    public Button cleanButton;
 
     //variable use to sort products
     String room = "";
@@ -90,6 +91,7 @@ public class userScreenController {
         colorComboBox.setVisible(false);
         materialComboBox.setVisible(false);
         sortButton.setVisible(false);
+        cleanButton.setVisible(false);
     }
 
     private void drawerAction()
@@ -429,6 +431,7 @@ public class userScreenController {
         colorComboBox.setVisible(false);
         materialComboBox.setVisible(false);
         sortButton.setVisible(false);
+        cleanButton.setVisible(false);
         livingroomImage.setImage(new Image("images/living.png"));
         bedroomImage.setImage(new Image("images/bedroom.png"));
         diningImage.setImage(new Image("images/diningroom.png"));
@@ -530,6 +533,7 @@ public class userScreenController {
         setColorsComboBox(category);
         setMaterialsComboBox(category);
         sortButton.setVisible(true);
+        cleanButton.setVisible(true);
     }
 
     public void setColorsComboBox(String category) throws ClassNotFoundException, SQLException {
@@ -678,5 +682,24 @@ public class userScreenController {
         preparedStatement.close();
         statement.close();
         connection.close();
+    }
+
+    public void onCleanClicked(MouseEvent mouseEvent) throws SQLException {
+        currentProducts.clear();
+
+        for(Product p:products)
+        {
+            if(p.getCategory().equals(category))
+            {
+                currentProducts.add(p);
+            }
+        }
+
+        initializeGridPane(currentProducts);
+
+        //default setting of combobox - not works
+        colorComboBox.setPromptText("Kolor");
+        materialComboBox.setPromptText("Materiał");
+        subcategoryComboBox.setPromptText("Podkategoria");
     }
 }
