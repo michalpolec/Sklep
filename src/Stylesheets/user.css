@@ -9,6 +9,7 @@
 {
     -fx-text-fill: #2B2C28;
     -fx-highlight-text-fill: #131515;
+    -fx-underline: true;
 }
 
 .button{
