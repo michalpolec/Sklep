@@ -170,9 +170,22 @@ public class modifyProductScreenController {
            Statement statement = connection.createStatement();
 
 
-           String sql_details = "INSERT INTO szczegoly (IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
+           String sql = "SELECT max(IDProduktu) FROM sklep.produkty";
+           ResultSet resultSet = statement.executeQuery(sql);
+           int greatestID = resultSet.getInt("IDProduktu");
+
+
+           String sql_increment1 = "ALTER TABLE `sklep`.`produkty` AUTO_INCREMENT = " + greatestID + 1 + ";";
+           statement.executeUpdate(sql_increment1);
+           String sql_increment2 = "ALTER TABLE `sklep`.`szczegoly` AUTO_INCREMENT = " + greatestID + 1 + ";";
+           statement.executeUpdate(sql_increment2);
+
+
+           String sql_details = "INSERT INTO szczegoly ( IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
            statement.executeUpdate(sql_details);
-           String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy, Zdjecie) VALUES (?,?,?,?,?,?,?);";
+
+
+           String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy, Zdjecie) VALUES (?,?,?,?,?,?,?,?);";
 
            PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
            preparedStatement.setString(1,productName);
@@ -182,6 +195,7 @@ public class modifyProductScreenController {
            preparedStatement.setInt(5, subcategoryID);
            preparedStatement.setInt(6, productStock);
            preparedStatement.setBinaryStream(7, image);
+
            preparedStatement.executeUpdate();
 
            setSelectedProductFromDB(0);
