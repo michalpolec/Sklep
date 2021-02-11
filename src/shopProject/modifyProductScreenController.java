@@ -171,38 +171,49 @@ public class modifyProductScreenController {
 
 
            String sql = "SELECT max(IDProduktu) FROM sklep.produkty";
+           int greatestID = 0;
            ResultSet resultSet = statement.executeQuery(sql);
-           int greatestID = resultSet.getInt("IDProduktu");
+
+           while(resultSet.next()) {
+               greatestID = resultSet.getInt("max(IDProduktu)") + 1;
+           }
 
 
-           String sql_increment1 = "ALTER TABLE `sklep`.`produkty` AUTO_INCREMENT = " + greatestID + 1 + ";";
+
+           String sql_increment1 = "ALTER TABLE `sklep`.`produkty` AUTO_INCREMENT = " + greatestID + ";";
            statement.executeUpdate(sql_increment1);
-           String sql_increment2 = "ALTER TABLE `sklep`.`szczegoly` AUTO_INCREMENT = " + greatestID + 1 + ";";
+           String sql_increment2 = "ALTER TABLE `sklep`.`szczegoly` AUTO_INCREMENT = " + greatestID + ";";
            statement.executeUpdate(sql_increment2);
 
+           try {
 
-           String sql_details = "INSERT INTO szczegoly ( IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
-           statement.executeUpdate(sql_details);
+               String sql_details = "INSERT INTO szczegoly ( IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
+               statement.executeUpdate(sql_details);
+
+               String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy, Zdjecie) VALUES (?,?,?,?,?,?,?);";
+
+               PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
+               preparedStatement.setString(1,productName);
+               preparedStatement.setDouble(2,productPrice);
+               preparedStatement.setString(3, productDescription);
+               preparedStatement.setInt(4, roomID);
+               preparedStatement.setInt(5, subcategoryID);
+               preparedStatement.setInt(6, productStock);
+               preparedStatement.setBinaryStream(7, image);
+
+               preparedStatement.executeUpdate();
 
 
-           String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy, Zdjecie) VALUES (?,?,?,?,?,?,?,?);";
+               setSelectedProductFromDB(0);
 
-           PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
-           preparedStatement.setString(1,productName);
-           preparedStatement.setDouble(2,productPrice);
-           preparedStatement.setString(3, productDescription);
-           preparedStatement.setInt(4, roomID);
-           preparedStatement.setInt(5, subcategoryID);
-           preparedStatement.setInt(6, productStock);
-           preparedStatement.setBinaryStream(7, image);
+               preparedStatement.close();
+               statement.close();
+               connection.close();
 
-           preparedStatement.executeUpdate();
-
-           setSelectedProductFromDB(0);
-
-           preparedStatement.close();
-           statement.close();
-           connection.close();;
+           }
+           catch (Exception e){
+               System.out.println(e);
+           }
 
            Info("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.");
 
