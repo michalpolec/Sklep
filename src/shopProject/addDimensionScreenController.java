@@ -1,5 +1,7 @@
 package shopProject;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,6 +28,15 @@ public class addDimensionScreenController {
     String nameOfSecondColumn;
     String nameOfThirdColumn;
 
+    public void initialize(){
+
+        OnlyNumbersInTextField(widthField);
+        OnlyNumbersInTextField(heightField);
+        OnlyNumbersInTextField(lenghtField);
+
+    }
+
+
     public void setOptionOfDimensionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
@@ -39,9 +50,12 @@ public class addDimensionScreenController {
 
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
+
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
+
+
 
         String width = widthField.getText();
         String height = heightField.getText();
@@ -79,6 +93,19 @@ public class addDimensionScreenController {
         nullData.setContentText("Nic nie wpisano");
 
         nullData.showAndWait();
+    }
+
+    public void OnlyNumbersInTextField(TextField textfield){
+
+        textfield.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d{0,4}([\\.]\\d{0,2})?")) {
+                    textfield.setText(oldValue);
+                }
+            }
+        });
     }
 
 }
