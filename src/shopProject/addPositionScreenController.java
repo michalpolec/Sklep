@@ -1,5 +1,7 @@
 package shopProject;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,6 +25,13 @@ public class addPositionScreenController {
     String nameOfTable;
     String nameOfFirstColumn;
     String nameOfSecondColumn;
+
+    public void initialize(){
+
+        OnlyNumbersInTextField(shelfField);
+        OnlyNumbersInTextField(regalField);
+
+    }
 
     public void setOptionOfPositionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
 
@@ -72,6 +81,19 @@ public class addPositionScreenController {
         nullData.setContentText("Nic nie wpisano");
 
         nullData.showAndWait();
+    }
+
+    public void OnlyNumbersInTextField(TextField textfield){
+
+        textfield.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    textfield.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     }
 
 }
