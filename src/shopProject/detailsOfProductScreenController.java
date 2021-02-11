@@ -31,13 +31,31 @@ public class detailsOfProductScreenController {
         detailImageView.setImage(new Image(product.getImage().getBinaryStream()));
         colorLabel.setText(product.getColor());
         materialLabel.setText(product.getMaterial());
-        priceLabel.setText(product.getPrice() + "PLN");
+
+        double num = product.getPrice();
+        long iPart = (long) num;
+        double fPart = num - iPart;
+        if(fPart == 0){
+            priceLabel.setText(iPart + " PLN");
+        }
+        else {
+            priceLabel.setText(num + " PLN");
+        }
+
         nameLabel.setText(product.getNameOfProduct());
         descriptionLabel.setText(product.getDescription());
         dimensionLabel.setText(product.getWidth() + "cm x " + product.getHeight() + "cm x " + product.getLength() + "cm");
         shelfLabel.setText(String.valueOf(product.getShelf()));
         regalLabel.setText(String.valueOf(product.getRegal()));
-        stockLabel.setText(String.valueOf(product.getStock()));
+
+        String ifAvaliable;
+
+        if (product.getStock() > 0) {
+            ifAvaliable = "Dostępny w ilości " + product.getStock();
+        } else {
+            ifAvaliable = "Niedostępny";
+        }
+        stockLabel.setText(ifAvaliable);
     }
 
 }

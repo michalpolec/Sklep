@@ -57,7 +57,7 @@
             <Label fx:id="shelfLabel" layoutX="135.0" layoutY="31.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
             <Label fx:id="regalLabel" layoutX="291.0" layoutY="31.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
             <Label layoutX="75.0" layoutY="67.0" text="Stan magazynowy" />
-            <Label fx:id="stockLabel" layoutX="201.0" layoutY="67.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
+            <Label fx:id="stockLabel" layoutX="201.0" layoutY="67.0" prefHeight="17.0" prefWidth="255.0" text="Label" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorPaneDimension" layoutY="357.0" prefHeight="33.0" prefWidth="474.0">

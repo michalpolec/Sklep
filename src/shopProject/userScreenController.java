@@ -133,13 +133,23 @@ public class userScreenController {
         for(Product product:products)
         {
             if (product.getStock() > 0) {
-                ifAvaliable = "Dostępny w ilości" + products.get(i).getStock();
+                ifAvaliable = "Dostępny w ilości " + products.get(i).getStock();
             } else {
                 ifAvaliable = "Niedostępny";
             }
 
             final Label nameOfProducts = new Label(product.getNameOfProduct());
-            final Label priceOfProducts = new Label(String.valueOf(product.getPrice()) + " PLN");
+            double num = product.getPrice();
+            long iPart = (long) num;
+            double fPart = num - iPart;
+            String price;
+            if(fPart == 0){
+                price = iPart + " PLN";
+            }
+            else {
+                price = num + " PLN";
+            }
+            final Label priceOfProducts = new Label(price);
             final Label stockOfProducts = new Label(ifAvaliable);
             final ImageView imageOfProducts = new ImageView(new Image(product.getImage().getBinaryStream(1, (int) product.getImage().length())));
             imageOfProducts.setFitHeight(100);
