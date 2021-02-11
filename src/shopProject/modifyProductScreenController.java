@@ -14,16 +14,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
-import javax.sql.rowset.serial.SerialBlob;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
 import java.sql.*;
 
 public class modifyProductScreenController {
@@ -158,7 +155,6 @@ public class modifyProductScreenController {
            image = new ByteArrayInputStream(res);
        }
        catch (Exception e){
-         System.out.println(e);
          Alert("Błąd wprowadzania danych", "Wprowadzono niepoprawne dane lub nie wprowadzono ich wcale.");
          Continue = false;
        }
@@ -169,57 +165,87 @@ public class modifyProductScreenController {
            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
            Statement statement = connection.createStatement();
 
+           boolean continueTypingData = true;
 
-           String sql = "SELECT max(IDProduktu) FROM sklep.produkty";
-           int greatestID = 0;
-           ResultSet resultSet = statement.executeQuery(sql);
-
-           while(resultSet.next()) {
-               greatestID = resultSet.getInt("max(IDProduktu)") + 1;
+           String sql_getIDfromProducts = "SELECT max(IDProduktu) FROM sklep.produkty";
+           int greatestIDofProducts = 0;
+           ResultSet resultSet1 = statement.executeQuery(sql_getIDfromProducts);
+           while(resultSet1.next()) {
+               greatestIDofProducts = resultSet1.getInt("max(IDProduktu)") + 1;
            }
 
+           String sql_getIDfromDetails = "SELECT max(IDProduktu) FROM sklep.szczegoly";
+           int greatestIDofDetails = 0;
+           ResultSet resultSet2 = statement.executeQuery(sql_getIDfromDetails);
+           while(resultSet2.next()) {
+               greatestIDofDetails = resultSet2.getInt("max(IDProduktu)") + 1;
+           }
+
+           if (greatestIDofProducts == greatestIDofDetails) {
+
+               String sql_increment1 = "ALTER TABLE `sklep`.`produkty` AUTO_INCREMENT = " + greatestIDofProducts + ";";
+               statement.executeUpdate(sql_increment1);
+               String sql_increment2 = "ALTER TABLE `sklep`.`szczegoly` AUTO_INCREMENT = " + greatestIDofDetails + ";";
+               statement.executeUpdate(sql_increment2);
+
+               try {
+
+                   String sql_details = "INSERT INTO szczegoly ( IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
+                   statement.executeUpdate(sql_details);
+               } catch (SQLException e) {
+                   Alert("Błąd polecenia", "Błędne polecenie");
+                   continueTypingData = false;
+               }
+
+               if (continueTypingData) {
+
+                   try {
+
+                       String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy, Zdjecie) VALUES (?,?,?,?,?,?,?);";
+
+                       PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
+                       preparedStatement.setString(1, productName);
+                       preparedStatement.setDouble(2, productPrice);
+                       preparedStatement.setString(3, productDescription);
+                       preparedStatement.setInt(4, roomID);
+                       preparedStatement.setInt(5, subcategoryID);
+                       preparedStatement.setInt(6, productStock);
+                       preparedStatement.setBinaryStream(7, image);
+
+                       preparedStatement.executeUpdate();
+
+                       setSelectedProductFromDB(0); // Dodwanie do wyświetlanych produktów
+
+                       preparedStatement.close();
+
+                   } catch (SQLException e) {
+
+                       Alert("Błąd bazy danych", "Niezgodność ID produktów");
+                       String sql_backroll_details = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '" + greatestIDofDetails + "')";
+                       statement.executeUpdate(sql_backroll_details);
+
+                       statement.close();
+                       connection.close();
 
 
-           String sql_increment1 = "ALTER TABLE `sklep`.`produkty` AUTO_INCREMENT = " + greatestID + ";";
-           statement.executeUpdate(sql_increment1);
-           String sql_increment2 = "ALTER TABLE `sklep`.`szczegoly` AUTO_INCREMENT = " + greatestID + ";";
-           statement.executeUpdate(sql_increment2);
-
-           try {
-
-               String sql_details = "INSERT INTO szczegoly ( IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
-               statement.executeUpdate(sql_details);
-
-               String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy, Zdjecie) VALUES (?,?,?,?,?,?,?);";
-
-               PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
-               preparedStatement.setString(1,productName);
-               preparedStatement.setDouble(2,productPrice);
-               preparedStatement.setString(3, productDescription);
-               preparedStatement.setInt(4, roomID);
-               preparedStatement.setInt(5, subcategoryID);
-               preparedStatement.setInt(6, productStock);
-               preparedStatement.setBinaryStream(7, image);
-
-               preparedStatement.executeUpdate();
-
-
-               setSelectedProductFromDB(0);
-
-               preparedStatement.close();
+                   }
+               }
                statement.close();
                connection.close();
 
+               Info("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.");
+
+               Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
+               closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+               closeLoginStage.close();
            }
-           catch (Exception e){
-               System.out.println(e);
+           else {
+               Alert("Błąd bazy danych", "Niezgodność tabel Produkty i Szczegóły");
+               Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
+               closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+               closeLoginStage.close();
            }
 
-           Info("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.");
-
-           Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
-           closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-           closeLoginStage.close();
        }
        else if (Continue){
 
