@@ -220,7 +220,7 @@ public class userScreenController {
 
     }
 
-    public void sortByRoom(String room) throws SQLException, ClassNotFoundException {
+    public int sortByRoom(String room) throws SQLException, ClassNotFoundException {
         currentProducts.clear();
         sizeOfCurrentProducts = 0;
 
@@ -266,12 +266,14 @@ public class userScreenController {
                     resultSet.getInt("StanMagazynowy"),
                     resultSet.getBlob("Zdjecie"));
             currentProducts.add(product);
+            sizeOfCurrentProducts++;
         }
 
         initializeGridPane(currentProducts);
         preparedStatement.close();
         statement.close();
         connection.close();
+        return sizeOfCurrentProducts;
     }
 
     //it works
