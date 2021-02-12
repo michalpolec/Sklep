@@ -28,17 +28,18 @@ public class detailsOfProductScreenController {
     }
 
     public void setDetails(Product product) throws SQLException {
-        detailImageView.setImage(new Image(product.getImage().getBinaryStream()));
+        Image image = new Image(product.getImage().getBinaryStream());
+        detailImageView.setImage(image);
+        centerImage(detailImageView);
         colorLabel.setText(product.getColor());
         materialLabel.setText(product.getMaterial());
 
         double num = product.getPrice();
         long iPart = (long) num;
         double fPart = num - iPart;
-        if(fPart == 0){
+        if (fPart == 0) {
             priceLabel.setText(iPart + " PLN");
-        }
-        else {
+        } else {
             priceLabel.setText(num + " PLN");
         }
 
@@ -58,4 +59,28 @@ public class detailsOfProductScreenController {
         stockLabel.setText(ifAvaliable);
     }
 
+    public void centerImage(ImageView imageView) {
+        Image img = imageView.getImage();
+        if (img != null) {
+            double w = 0;
+            double h = 0;
+
+            double ratioX = imageView.getFitWidth() / img.getWidth();
+            double ratioY = imageView.getFitHeight() / img.getHeight();
+
+            double reducCoeff = 0;
+            if (ratioX >= ratioY) {
+                reducCoeff = ratioY;
+            } else {
+                reducCoeff = ratioX;
+            }
+
+            w = img.getWidth() * reducCoeff;
+            h = img.getHeight() * reducCoeff;
+
+            imageView.setX((imageView.getFitWidth() - w) / 2);
+            imageView.setY((imageView.getFitHeight() - h) / 2);
+
+        }
+    }
 }

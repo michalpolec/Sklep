@@ -9,8 +9,29 @@
     -fx-background-color: #FFFAFB;
 }
 
-.separator
+.separator *.line
+{
+    -fx-border-style: solid;
+    -fx-border-width: 0.5px;
+    -fx-border-color: #339989;
+}
+
+#detailAnchorPaneInfo
 {
 
 }
 
+#anchorPaneDimension
+{
+
+}
+
+#anchorPaneMagazyn
+{
+
+}
+
+#anchorPaneGeneralInfo
+{
+
+}

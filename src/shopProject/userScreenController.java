@@ -92,6 +92,7 @@ public class userScreenController {
         materialComboBox.setVisible(false);
         sortButton.setVisible(false);
         cleanButton.setVisible(false);
+        initializeGridPane(products);
     }
 
     private void drawerAction()
@@ -133,7 +134,7 @@ public class userScreenController {
         for(Product product:products)
         {
             if (product.getStock() > 0) {
-                ifAvaliable = "Dostępny w ilości " + products.get(i).getStock();
+                ifAvaliable = "Dostępny w ilości " + product.getStock();
             } else {
                 ifAvaliable = "Niedostępny";
             }
@@ -219,162 +220,105 @@ public class userScreenController {
 
     }
 
+    public void sortByRoom(String room) throws SQLException, ClassNotFoundException {
+        currentProducts.clear();
+        sizeOfCurrentProducts = 0;
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
+
+
+        String sql = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii,\n" +
+                "                    podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
+                "                     pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
+                "                    FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
+                "                    INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
+                "                    INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
+                "                    INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
+                "                    INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
+                "                    INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
+                "                    INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
+                "                    INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji)\n" +
+                " WHERE (pomieszczenie.NazwaPomieszczenia = ?);";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, room);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        while(resultSet.next()){
+            Product product = new Product(
+                    resultSet.getInt("IDProduktu"),
+                    resultSet.getString("NazwaProduktu"),
+                    resultSet.getDouble("CenaProduktu"),
+                    resultSet.getString("OpisProduktu"),
+                    resultSet.getString("NazwaPomieszczenia"),
+                    resultSet.getString("NazwaKategorii"),
+                    resultSet.getString("NazwaPodkategorii"),
+                    resultSet.getString("NazwaKoloru"),
+                    resultSet.getString("NazwaMaterialu"),
+                    resultSet.getDouble("Szerokosc"),
+                    resultSet.getDouble("Wysokosc"),
+                    resultSet.getDouble("Dlugosc"),
+                    resultSet.getInt("Polka"),
+                    resultSet.getInt("Regal"),
+                    resultSet.getInt("StanMagazynowy"),
+                    resultSet.getBlob("Zdjecie"));
+            currentProducts.add(product);
+        }
+
+        initializeGridPane(currentProducts);
+        preparedStatement.close();
+        statement.close();
+        connection.close();
+    }
 
     //it works
-    public void onLivingRoomPressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("living room");
+    public void onLivingRoomPressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Salon";
-        currentProducts.clear();
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
-    public void onBedroomPressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("bedroom");
-        currentProducts.clear();
+    public void onBedroomPressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Sypialnia";
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
-    public void onKitchenPressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("kitchen");
-        currentProducts.clear();
+    public void onKitchenPressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Kuchnia";
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
-    public void onDiningroomPressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("dining room");
-        currentProducts.clear();
+    public void onDiningroomPressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Jadalnia";
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
-    public void onKidsroomPressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("kids room");
-        currentProducts.clear();
+    public void onKidsroomPressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Pokój dziecięcy";
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
-    public void onOfficePressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("home office");
-        currentProducts.clear();
+    public void onOfficePressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Domowe biuro";
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
 
-    public void onBathroomPressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("bathroom");
-        currentProducts.clear();
+    public void onBathroomPressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Łazienka";
-
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
-    public void onHallPressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("hall");
-        currentProducts.clear();
+    public void onHallPressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Przedpokój";
-
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
-    public void onGardenPressed(MouseEvent mouseEvent) throws SQLException {
-        System.out.println("garden");
-        currentProducts.clear();
+    public void onGardenPressed(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         room = "Ogród";
-        sizeOfCurrentProducts = 0;
-        for(Product p:products)
-        {
-            if(p.getRoom().equals(room))
-            {
-                currentProducts.add(p);
-                sizeOfCurrentProducts++;
-            }
-        }
-        System.out.println(sizeOfCurrentProducts);
-        initializeGridPane(currentProducts);
+        sortByRoom(room);
     }
 
     public void getAllDataFromDB()
