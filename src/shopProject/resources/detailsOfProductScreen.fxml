@@ -59,7 +59,7 @@
             <Separator prefHeight="3.0" prefWidth="484.0" />
             <Separator layoutY="53.0" prefHeight="3.0" prefWidth="484.0" />
             <Separator layoutX="-3.0" layoutY="29.0" prefHeight="3.0" prefWidth="486.0" />
-            <Separator layoutX="231.0" layoutY="29.0" orientation="VERTICAL" prefHeight="27.0" prefWidth="0.0" />
+            <Separator layoutX="219.0" layoutY="29.0" orientation="VERTICAL" prefHeight="25.0" prefWidth="18.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorPaneDimension" layoutY="360.0" prefHeight="33.0" prefWidth="478.0">
