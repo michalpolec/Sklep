@@ -87,6 +87,7 @@ public class adminScreenController {
         newController.setLabelINFO("Dodawanie nowego elementu");
 
         addNewElementStage.setScene(new Scene(root));
+        addNewElementStage.setResizable(false);
         addNewElementStage.show();
         addNewElementStage.setOnCloseRequest(we -> {
             products.add(newController.getSelectedProduct());
@@ -119,6 +120,7 @@ public class adminScreenController {
             Stage editProductbaseStage = new Stage();
             editProductbaseStage.setScene(new Scene(root));
             editProductbaseStage.setTitle("Edycja produktu o ID:" + selectedProduct.getProductID());
+            editProductbaseStage.setResizable(false);
             editProductbaseStage.show();
             editProductbaseStage.setOnCloseRequest(we -> {
                 changeProductInTable(newController.getSelectedProduct());

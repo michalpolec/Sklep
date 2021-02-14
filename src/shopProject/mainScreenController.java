@@ -45,6 +45,7 @@ public class mainScreenController {
 
             adminScreenController newController = loader.getController();
             newController.getAllData(products);
+            editDatabaseStage.setResizable(false);
             editDatabaseStage.show();
 
         }
@@ -64,6 +65,7 @@ public class mainScreenController {
         Parent root = loader.load();
         root.getStylesheets().add("Stylesheets/user.css");
         userStage.setScene(new Scene(root));
+        userStage.setResizable(false);
         userStage.show();
 
         Stage closeLoginStage = (Stage) loginAsUser.getScene().getWindow();

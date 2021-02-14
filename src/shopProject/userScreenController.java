@@ -96,7 +96,7 @@ public class userScreenController {
         initializeGridPane(products);
     }
 
-    //metoda ustawiająca akcję na kliknięce Hamburgera -> wyświetlenie bądź zamknięcie menu
+    //Metoda ustawiająca akcję na kliknięce Hamburgera -> wyświetlenie bądź zamknięcie menu
     private void drawerAction()
     {
         HamburgerBackArrowBasicTransition transitionClose = new HamburgerBackArrowBasicTransition(hamburgerFx);
@@ -202,7 +202,7 @@ public class userScreenController {
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
-
+                    userStage.setResizable(false);
                     userStage.show();
 
 
@@ -225,7 +225,7 @@ public class userScreenController {
 
     }
 
-    //metoda umozliwiająca sortowanie produktów poprzez wybór pomieszczenia
+    //Metoda umozliwiająca sortowanie produktów poprzez wybór pomieszczenia
     public int sortByRoom(String room) throws SQLException, ClassNotFoundException {
         currentProducts.clear();
         sizeOfCurrentProducts = 0;
@@ -329,7 +329,7 @@ public class userScreenController {
         sortByRoom(room);
     }
 
-    //metoda pobierająca wszystkie produkty z bazy danych
+    //Metoda pobierająca wszystkie produkty z bazy danych
     public void getAllDataFromDB()
     {
         try {
@@ -387,7 +387,7 @@ public class userScreenController {
 
     }
 
-    //metoda ustawiająca widoczność menu - pomieszczenia
+    //Metoda ustawiająca widoczność menu - pomieszczenia
     public void onRoomButtonPressed(MouseEvent mouseEvent) {
         productsAnchorPane.setVisible(false);
         roomAnchorPane.setVisible(true);
@@ -407,7 +407,7 @@ public class userScreenController {
         gardenImage.setImage(new Image("images/garden.png"));
     }
 
-    //metoda ustawiająca widoczność menu - kategorie produktów
+    //Metoda ustawiająca widoczność menu - kategorie produktów
     public void onProductsPressed(MouseEvent mouseEvent) {
         roomAnchorPane.setVisible(false);
         productsAnchorPane.setVisible(true);
@@ -415,7 +415,7 @@ public class userScreenController {
         JFXcategoriesListView.setItems(categories);
     }
 
-    //metoda pobierająca pozostałe dane szczegółowe - podkategorie, kategorie, kolory, materiały
+    //Metoda pobierająca pozostałe dane szczegółowe - podkategorie, kategorie, kolory, materiały
     public void getData() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -458,7 +458,7 @@ public class userScreenController {
         connection.close();
     }
 
-    //metoda dzialająca na kliknięcie dowolnego elementu listy - ustawia odpowiednie podkatgorie, kolory i materiały w comboboxach i sortuje wszystkie produkty po danej kategorii
+    //Metoda dzialająca na kliknięcie dowolnego elementu listy - ustawia odpowiednie podkatgorie, kolory i materiały w comboboxach i sortuje wszystkie produkty po danej kategorii
     public void onListClicked(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         category = JFXcategoriesListView.getSelectionModel().getSelectedItems().toString();
         category = category.substring(1, category.length()-1); //it must be here!!!
@@ -502,7 +502,7 @@ public class userScreenController {
         cleanButton.setVisible(true);
     }
 
-    //metoda ustawiająca odpowiednie kolory  (wystepujace w danej kategorii) w colorComboBox
+    //Metoda ustawiająca odpowiednie kolory  (wystepujace w danej kategorii) w colorComboBox
     public void setColorsComboBox(String category) throws ClassNotFoundException, SQLException {
         currentColors.clear();
 
@@ -536,7 +536,7 @@ public class userScreenController {
         connection.close();
     }
 
-    //metoda ustawiająca odpowiednie materiały (wystepujace w danej kategorii) w materialComboBox
+    //Metoda ustawiająca odpowiednie materiały (wystepujace w danej kategorii) w materialComboBox
     public void setMaterialsComboBox(String category) throws ClassNotFoundException, SQLException {
         currentMaterial.clear();
 
@@ -570,7 +570,7 @@ public class userScreenController {
         connection.close();
     }
 
-    //metoda sortująca produkty po danych z comboBox'ow
+    //Metoda sortująca produkty po danych z comboBox'ow
     public void onSortButtonClicked(MouseEvent mouseEvent) throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
@@ -690,7 +690,7 @@ public class userScreenController {
         connection.close();
     }
 
-    //metoda czyszcząca wyniki po sortowaniu - ustawiane są wszystkie produkty z głównej kategorii
+    //Metoda czyszcząca wyniki po sortowaniu - ustawiane są wszystkie produkty z głównej kategorii
     public void onCleanClicked(MouseEvent mouseEvent) throws SQLException {
         currentProducts.clear();
 

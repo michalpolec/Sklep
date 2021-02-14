@@ -14,6 +14,7 @@ public class Main extends Application {
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("resources/mainScreen.fxml")));
         scene.getStylesheets().add("Stylesheets/style.css");
         loginStage.setScene(scene);
+        loginStage.setResizable(false);
         loginStage.show();
 
     }
