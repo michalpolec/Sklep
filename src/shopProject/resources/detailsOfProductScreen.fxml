@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="507.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.detailsOfProductScreenController">
+<AnchorPane fx:id="anchorPane" prefHeight="456.0" prefWidth="484.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.detailsOfProductScreenController">
    <children>
       <ImageView fx:id="detailImageView" fitHeight="235.0" fitWidth="324.0" layoutX="15.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true" />
       <AnchorPane fx:id="detailAnchorPaneInfo" layoutX="355.0" layoutY="-2.0" prefHeight="360.0" prefWidth="121.0">
@@ -43,23 +43,24 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorPaneMagazyn" layoutY="392.0" prefHeight="89.0" prefWidth="484.0">
+      <AnchorPane fx:id="anchorPaneMagazyn" layoutY="392.0" prefHeight="64.0" prefWidth="484.0">
          <children>
             <Label layoutX="14.0" layoutY="4.0" prefHeight="18.0" prefWidth="122.0" text="Magazyn">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="75.0" layoutY="31.0" prefHeight="17.0" prefWidth="44.0" text="Półka" />
-            <Label layoutX="237.0" layoutY="31.0" text="Regał" />
-            <Label fx:id="shelfLabel" layoutX="135.0" layoutY="31.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
-            <Label fx:id="regalLabel" layoutX="291.0" layoutY="31.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
-            <Label layoutX="109.0" layoutY="66.0" text="Stan magazynowy" />
-            <Label fx:id="stockLabel" layoutX="252.0" layoutY="65.0" prefHeight="18.0" prefWidth="181.0" text="Label" />
+            <Label layoutX="31.0" layoutY="33.0" prefHeight="17.0" prefWidth="44.0" text="Półka" />
+            <Label layoutX="142.0" layoutY="33.0" text="Regał" />
+            <Label fx:id="shelfLabel" layoutX="75.0" layoutY="33.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
+            <Label fx:id="regalLabel" layoutX="183.0" layoutY="33.0" prefHeight="17.0" prefWidth="44.0" text="Label" />
+            <Label layoutX="240.0" layoutY="33.0" prefHeight="20.0" text="Stan magazynowy:" />
+            <Label fx:id="stockLabel" layoutX="345.0" layoutY="33.0" prefHeight="20.0" prefWidth="106.0" text="Label" />
             <Separator prefHeight="3.0" prefWidth="484.0" />
             <Separator layoutY="53.0" prefHeight="3.0" prefWidth="484.0" />
             <Separator layoutX="-3.0" layoutY="29.0" prefHeight="3.0" prefWidth="486.0" />
-            <Separator layoutX="219.0" layoutY="29.0" orientation="VERTICAL" prefHeight="25.0" prefWidth="18.0" />
+            <Separator layoutX="110.0" layoutY="30.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="18.0" />
+            <Separator layoutX="214.0" layoutY="30.0" orientation="VERTICAL" prefHeight="24.0" prefWidth="25.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorPaneDimension" layoutY="360.0" prefHeight="33.0" prefWidth="478.0">
@@ -70,6 +71,5 @@
          </children>
       </AnchorPane>
       <Label fx:id="descriptionLabel" layoutX="15.0" layoutY="285.0" prefHeight="64.0" prefWidth="324.0" />
-      <Separator layoutX="1.0" layoutY="491.0" prefHeight="3.0" prefWidth="484.0" />
    </children>
 </AnchorPane>
