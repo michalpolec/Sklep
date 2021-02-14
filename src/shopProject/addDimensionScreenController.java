@@ -28,7 +28,7 @@ public class addDimensionScreenController {
     String nameOfSecondColumn;
     String nameOfThirdColumn;
 
-    public void initialize(){
+    public void initialize(){ //Inicjalizacja klasy
 
         OnlyNumbersInTextField(widthField);
         OnlyNumbersInTextField(heightField);
@@ -36,7 +36,7 @@ public class addDimensionScreenController {
 
     }
 
-
+    // Ustawienie zmiennych
     public void setOptionOfDimensionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
@@ -47,15 +47,12 @@ public class addDimensionScreenController {
 
     }
 
-
+    //Dodawanie nowych wymiarów do bazy danych
     public void addToDatabase() throws ClassNotFoundException, SQLException {
-
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
-
-
 
         String width = widthField.getText();
         String height = heightField.getText();
@@ -86,6 +83,7 @@ public class addDimensionScreenController {
 
     }
 
+    // Funkcja wyświetlająca błąd
     public void Alert(){
         Alert nullData = new Alert(Alert.AlertType.ERROR);
         nullData.setTitle("Błąd podczas wpisywania");
@@ -95,6 +93,7 @@ public class addDimensionScreenController {
         nullData.showAndWait();
     }
 
+    // Funkcja ustawiające pole TextField aby przyjmował wartości double
     public void OnlyNumbersInTextField(TextField textfield){
 
         textfield.textProperty().addListener(new ChangeListener<String>() {

@@ -26,6 +26,7 @@ public class addPositionScreenController {
     String nameOfFirstColumn;
     String nameOfSecondColumn;
 
+    //Inicjalizacja klasy
     public void initialize(){
 
         OnlyNumbersInTextField(shelfField);
@@ -33,6 +34,7 @@ public class addPositionScreenController {
 
     }
 
+    //Ustawienie zmiennych klasy
     public void setOptionOfPositionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
@@ -41,6 +43,7 @@ public class addPositionScreenController {
 
     }
 
+    //Dodanie nowej pozycji do bazy danych
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -74,6 +77,7 @@ public class addPositionScreenController {
 
     }
 
+    //Funkcja wyświetlająca błąd
     public void Alert(){
         Alert nullData = new Alert(Alert.AlertType.ERROR);
         nullData.setTitle("Błąd podczas wpisywania");
@@ -83,6 +87,7 @@ public class addPositionScreenController {
         nullData.showAndWait();
     }
 
+    // Funkcja ustawiające pole TextField aby przyjmował wartości int
     public void OnlyNumbersInTextField(TextField textfield){
 
         textfield.textProperty().addListener(new ChangeListener<String>() {

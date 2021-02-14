@@ -19,6 +19,7 @@ import java.util.Optional;
 
 
 public class adminScreenController {
+    // Inicjalizacja zmiennych
     ObservableList<Product> products =  FXCollections.observableArrayList();
     public Button editionButton;
     public TableView<Product> tableOfDB;
@@ -40,6 +41,7 @@ public class adminScreenController {
 
     Product selectedProduct;
 
+    // Inicjalizaca klasy
     public void initialize() {
         IDproduct.setCellValueFactory(new PropertyValueFactory<Product, Integer>("productID"));
         NameProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("nameOfProduct"));
@@ -59,15 +61,18 @@ public class adminScreenController {
         initializeTable();
     }
 
+    // Pobranie wszystkich produktów
     public void getAllData(ObservableList<Product> products) {
         this.products.setAll(products);
     }
 
+    // Inicjalizacja tablicy
     void initializeTable() {
         tableOfDB.setItems(products);
     }
 
 
+    // Funkcja reakcji na wciśnięcie przycisku dodawanie nowego produktu do bazy danych
     @FXML
     private void onAddButtonPressed() throws IOException {
 
@@ -90,6 +95,7 @@ public class adminScreenController {
 
     }
 
+    // Funkcja reakcji na wciśnięcie przycisku edycji wybranego produktu
     @FXML
     private void onEditionButtonPressed() throws IOException, SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
@@ -122,6 +128,7 @@ public class adminScreenController {
 
     }
 
+    // Funkcja reakcji na wciśnięcie przycisku usunięcia wybranego produktu
     @FXML
     private void onDeleteButtonPressed() throws SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
@@ -162,6 +169,7 @@ public class adminScreenController {
         }
     }
 
+    // Funkcja aktualizująca tablice po zmiannach w bazie danych
     void changeProductInTable(Product product){
         int IDproduktu = product.getProductID();
 
@@ -188,6 +196,7 @@ public class adminScreenController {
         }
     }
 
+    // Funkcja wyświetlająca błędy
     void Alert(String setTitle, String setContents) {
         Alert badClick = new Alert(Alert.AlertType.ERROR);
         badClick.setTitle(setTitle);

@@ -23,6 +23,7 @@ public class addSubcategoryScreenController {
 
     ObservableList<restOfElements>  categories;
 
+    // Ustawienie zmiennyhc klasy
     public void setOptionOfSubcategoryScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
@@ -33,12 +34,14 @@ public class addSubcategoryScreenController {
 
     }
 
+    // Dodanie do ComboBox'a wybranych kategorii
     public void setCategoriesInComboBox(){
 
         categoryBox.setItems(categories);
 
     }
 
+    // Dodanie nowej podkategorii do bazy danych
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -81,6 +84,7 @@ public class addSubcategoryScreenController {
 
     }
 
+    // Funkcja wyświetlająca błąd
     public void Alert(){
         Alert nullData = new Alert(Alert.AlertType.ERROR);
         nullData.setTitle("Błąd podczas wpisywania");
