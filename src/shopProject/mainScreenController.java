@@ -18,17 +18,20 @@ import java.sql.*;
 public class mainScreenController {
 
 
+    // Inicjalizacja zmiennych
     public Button loginAsAdmin;
     public Button loginAsUser;
     public TextField loginField;
     public PasswordField passwordField;
     ObservableList<Product> products =  FXCollections.observableArrayList();
 
+    // Inicjalizacja klasy
     public void initialize(){
 
         getAllDataFromDB();
     }
 
+    // Funkcja reakcji na wciśnięcie logowania jako administrator
     @FXML
     private void adminLoginButtonPressed() throws IOException {
         if(checkCorrectionOfLoginAndPassword(loginField.getText(), passwordField.getText())) {
@@ -52,6 +55,7 @@ public class mainScreenController {
         passwordField.setText("");
     }
 
+    // Funkcja reakcji na wciśnięcie logowania jako użytkownik
     @FXML
     private void userLoginButtonPressed() throws IOException {
         Stage userStage = new Stage();
@@ -66,6 +70,7 @@ public class mainScreenController {
         closeLoginStage.close();
     }
 
+    // Funkcja pobierająca wszystkie produkty do listy
     public void getAllDataFromDB()
     {
         try {
@@ -120,11 +125,9 @@ public class mainScreenController {
         catch (SQLException | ClassNotFoundException e){
             e.printStackTrace();
         }
-
-
-
     }
 
+    // Funkcja sprawdzająca poprawność loginu i hasła
     boolean checkCorrectionOfLoginAndPassword(String typedLogin, String typedPassword)
     {
         String correctLogin = "admin";
@@ -139,6 +142,7 @@ public class mainScreenController {
 
     }
 
+    // Funkcja wyświetlająca błąd
     void Alert(String setTitle, String setContents) {
         Alert badClick = new Alert(Alert.AlertType.ERROR);
         badClick.setTitle(setTitle);
