@@ -21,12 +21,13 @@ public class detailsOfProductScreenController {
     public Label stockLabel;
     public Label nameLabel;
 
-
+    //metoda ustawiająca aktualnie wybrany produkt
     public void setSelectedProduct(Product selectedProduct) throws SQLException {
         this.selectedProduct = selectedProduct;
         setDetails(selectedProduct);
     }
 
+    //metoda ustawiająca szczegóły produktu w nowym oknie
     public void setDetails(Product product) throws SQLException {
         Image image = new Image(product.getImage().getBinaryStream());
         detailImageView.setImage(image);
@@ -59,6 +60,7 @@ public class detailsOfProductScreenController {
         stockLabel.setText(ifAvaliable);
     }
 
+    //metoda wyśrodkowująca obraz
     public void centerImage(ImageView imageView) {
         Image img = imageView.getImage();
         if (img != null) {
