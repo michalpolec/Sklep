@@ -66,6 +66,7 @@ public class modifyProductScreenController {
 
     public Label labelINFO;
 
+    //inicjalizacja - ustawienie odpowiednich textField'ow tak aby mozna bylo wpisywac tylko cyfry
    public void initialize() throws SQLException, ClassNotFoundException {
 
        subcategoryBox.setDisable(true);
@@ -93,6 +94,7 @@ public class modifyProductScreenController {
 
    }
 
+   //inicjalizowanie wybranymi danymi podczas edycji produktu
     public void initializeData() throws SQLException, ClassNotFoundException, IOException {
 
        nameField.setText(selectedProduct.getNameOfProduct());
@@ -115,11 +117,13 @@ public class modifyProductScreenController {
 
     }
 
+    //metoda działające na przycisk 'anuluj'
     public void onCancelAction(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
+    //metoda umożliwiająca edytowanie/dodanie produktu - pobiera nowo-wpisane dane i odpowiednio edytuje bądź dodaje jako nowy produkt
    public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException, IOException {
 
        String productName = "";
@@ -287,48 +291,57 @@ public class modifyProductScreenController {
        }
    }
 
+   //metoda działająca na kliknięcie przycisku 'dodaj nowe' pomieszczenie - otwiera nowe okno
    public void addRoom() throws IOException, SQLException, ClassNotFoundException {
 
        openElementScreen("Dodawanie nowego pomieszczenia", "NazwaPomieszczenia", "pomieszczenie",  "Wpisz nowe pomieszczenie");
 
    }
 
+    //metoda działająca na kliknięcie przycisku 'dodaj nową' ketgorię - otwiera nowe okno
    public void addCategory() throws IOException, SQLException, ClassNotFoundException {
 
        openElementScreen("Dodawanie nowej kategorii", "NazwaKategorii", "kategoria",  "Wpisz nową kategorie" );
    }
 
+    //metoda działająca na kliknięcie przycisku 'dodaj nową' podkategorię - otwiera nowe okno
    public void addSubcategory() throws IOException, SQLException, ClassNotFoundException {
 
         openSubcategoryScreen();
    }
 
+   //metoda ustawiająca podaktegorie w zależności od wybranej wcześniej kategorii
     public void chosenCategory() {
 
         setCorrectSubcategories();
 
     }
 
+    //metoda działająca na kliknięcie przycisku 'dodaj nowy' kolor - otwiera nowe okno
    public void addColor() throws IOException, SQLException, ClassNotFoundException {
 
        openElementScreen("Dodawanie nowego koloru" , "NazwaKoloru", "kolor",  "Wpisz nowy kolor");
    }
 
+    //metoda działająca na kliknięcie przycisku 'dodaj nowy' materiał - otwiera nowe okno
    public void addMaterial() throws IOException, SQLException, ClassNotFoundException {
 
        openElementScreen("Dodawanie nowego materiału" ,  "NazwaMaterialu", "material", "Wpisz nowy materiał");
    }
 
+    //metoda działająca na kliknięcie przycisku 'dodaj nowe' wymiary - otwiera nowe okno
     public void addDimensions(ActionEvent actionEvent) throws SQLException, IOException, ClassNotFoundException {
 
         openDimensionScreen();
     }
 
+    //metoda działająca na kliknięcie przycisku 'dodaj nową' pozycję na magazynie - otwiera nowe okno
     public void addPosition() throws IOException, SQLException, ClassNotFoundException {
 
        openPositionScreen();
     }
 
+    //metoda działająca na kliknięcie przycisku 'dodaj obraz'- otwiera FileChoosera i jest możliwe wybranie obrazu png/jpg
     public void getImageFromFile(ActionEvent actionEvent) throws FileNotFoundException {
 
         FileChooser fileChooser = new FileChooser();
@@ -345,6 +358,7 @@ public class modifyProductScreenController {
         imageView.setImage(imageFromFile);
     }
 
+    //ogólna metoda otwierająca nowe okno w celu dodania nowych danych/szczegółów
    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
 
        Stage addElement =  new Stage();
@@ -373,6 +387,7 @@ public class modifyProductScreenController {
 
    }
 
+   //metoda otwierająca nowe okno dodania podakategorii
    public void openSubcategoryScreen() throws IOException, SQLException, ClassNotFoundException {
 
        Stage addSubcategory =  new Stage();
@@ -400,6 +415,7 @@ public class modifyProductScreenController {
        });
    }
 
+   //metoda otwierająca nowe okno dodania wymiarów
    public void openDimensionScreen() throws IOException, SQLException, ClassNotFoundException {
 
        Stage addDimension =  new Stage();
@@ -427,6 +443,7 @@ public class modifyProductScreenController {
        });
    }
 
+    //metoda otwierająca nowe okno dodania pozycji w magazynie
    public void openPositionScreen() throws IOException, SQLException, ClassNotFoundException {
 
        Stage addPosition =  new Stage();
@@ -455,7 +472,7 @@ public class modifyProductScreenController {
 
     }
 
-
+    //metoda pobierająca wszystkie podkategorie z bazy danych
    public void getSubcategoryData() throws ClassNotFoundException, SQLException {
 
        Class.forName("com.mysql.cj.jdbc.Driver");
@@ -474,6 +491,7 @@ public class modifyProductScreenController {
        connection.close();
    }
 
+   //metoda pobierająca wybrane dane z bazy danych
     public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> litsOfData) throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -493,6 +511,7 @@ public class modifyProductScreenController {
 
     }
 
+    //metoda pobierająca wszystkie wymiary z bazy danych
     public void getDimensionData() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -512,6 +531,7 @@ public class modifyProductScreenController {
         connection.close();
     }
 
+    //metoda pobierająca wszystkie pozycje z bazy danych
     public void getPositionData() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -532,7 +552,7 @@ public class modifyProductScreenController {
 
     }
 
-
+    //metoda wyszukująca ID danej podkategorii
     public int getIDofElementForSubcategory(String nameOfElement, ObservableList<Subcategory> listsOfElements) {
 
        int ID = 0;
@@ -546,6 +566,7 @@ public class modifyProductScreenController {
        return ID;
     }
 
+    //ogólna metoda wyszukująca ID restOfElements
     public int getIDofElement(String nameOfElement, ObservableList<restOfElements> listsOfElements) {
 
         int ID = 0;
@@ -559,6 +580,7 @@ public class modifyProductScreenController {
         return ID;
     }
 
+    //metoda wyszukująca ID wymiaru
     public int getIDofElementForDimension(String nameOfElement, ObservableList<Dimension> listsOfElements) {
 
         int ID = 0;
@@ -572,6 +594,7 @@ public class modifyProductScreenController {
         return ID;
     }
 
+    //metoda wyszukująca ID pozycji
     public int getIDofElementForPosition(String nameOfElement, ObservableList<Position> listsOfElements) {
 
         int ID = 0;
@@ -585,9 +608,9 @@ public class modifyProductScreenController {
         return ID;
     }
 
-
+    //metoda ustawiająca dane w comboboxach
     public void getDataToArrays() throws SQLException, ClassNotFoundException {
-
+        //czyszczenie
         room.clear();
         categories.clear();
         subcategories.clear();
@@ -596,6 +619,7 @@ public class modifyProductScreenController {
         dimensions.clear();
         positions.clear();
 
+        //pobieranie danych
         getChosenDataFromDB("IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", room);
         getChosenDataFromDB("IDKategorii","NazwaKategorii", "kategoria", categories);
         getSubcategoryData();
@@ -604,6 +628,7 @@ public class modifyProductScreenController {
         getDimensionData();
         getPositionData();
 
+        //ustawianie danych
         roomBox.setItems(room);
         categoryBox.setItems(categories);
         subcategoryBox.setItems(subcategory);
@@ -614,13 +639,15 @@ public class modifyProductScreenController {
 
     }
 
+    //metoda decydująca o edycji lub dodawanius
     public void setAddOrEdit(boolean AddOrEdit){
        this.AddOrEdit = AddOrEdit;
     }
 
+    //metoda zwracająca listę stringóws
     public ObservableList<String> getStringArray(ObservableList objects) {
 
-        ObservableList<String> stringArray = FXCollections.observableArrayList();;
+        ObservableList<String> stringArray = FXCollections.observableArrayList();
         for(Object testObject: objects)
         {
 
@@ -632,6 +659,7 @@ public class modifyProductScreenController {
 
     }
 
+    //metoda zwracająca indeks wybranej opcji comboBoxa
     public int getIndexToComboBox(String object, ObservableList<String> objects) {
         int i = 0;
         for(String testObject: objects)
@@ -645,6 +673,7 @@ public class modifyProductScreenController {
         return i;
     }
 
+    //metoda ustawiająca właściwe podkategorie w zależności od wybranej Kateogrii
     public void setCorrectSubcategories(){
         subcategory.clear();
         int IDofCategory = getIDofElement(categoryBox.getValue().toString(), categories);
@@ -658,14 +687,17 @@ public class modifyProductScreenController {
         subcategoryBox.setDisable(false);
     }
 
+    //metoda ustawiająca wybrany produkt
     public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
         this.selectedProduct = selectedProduct;
     }
 
+    //metoda zwracająca wybrany produkt
     public Product getSelectedProduct(){
         return selectedProduct;
     }
 
+    //metoda ustawiająca wybrany produkt od danym ID z bazy danych
     public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException, UnsupportedEncodingException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
@@ -705,8 +737,6 @@ public class modifyProductScreenController {
 
 
         while(resultSet.next()) {
-
-
             selectedProduct = new Product(
                     resultSet.getInt("IDProduktu"),
                     resultSet.getString("NazwaProduktu"),
@@ -729,7 +759,7 @@ public class modifyProductScreenController {
         connection.close();
     }
 
-
+    //ogólna metoda informująca
     public void Info(String titleOfInfo, String contentOfInfo){
         javafx.scene.control.Alert nullData = new Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         nullData.setTitle(titleOfInfo);
@@ -739,6 +769,7 @@ public class modifyProductScreenController {
         nullData.showAndWait();
     }
 
+    //ogólna metoda ostrzegająca
     void Alert(String setTitle, String setContents) {
         Alert badClick = new Alert(Alert.AlertType.ERROR);
         badClick.setTitle(setTitle);
@@ -748,6 +779,7 @@ public class modifyProductScreenController {
         badClick.showAndWait();
     }
 
+    //metoda ustawiająca tytułowy label - edycja/dodawanie
     void setLabelINFO(String labelText)
     {
         labelINFO.setText(labelText);
