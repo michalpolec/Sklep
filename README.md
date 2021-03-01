@@ -20,3 +20,7 @@ This part was created to person, who will manage the shop (delivery, warehouse, 
 Second part was created for useres/clients. Everyone can browse products, sort them by selected criteria and check details and availability. 
 
 ![user](https://user-images.githubusercontent.com/63973627/109567964-7e99af80-7ae6-11eb-9cfb-6bbef8f07729.png)
+
+Sort products by comboBoxes
+
+![user2](https://user-images.githubusercontent.com/63973627/109568297-fec01500-7ae6-11eb-8d09-16f2f9789a34.png)
