@@ -1,3 +1,4 @@
+# Shop
 Simluation of management furniture shop. App supports two sides of shop: part of administration of databse and products and part of client. 
 Application made in Java with
 - JavaFX
