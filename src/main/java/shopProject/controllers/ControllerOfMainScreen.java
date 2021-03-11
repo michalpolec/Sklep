@@ -80,7 +80,12 @@ public class ControllerOfMainScreen {
        FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
        Parent root = getRoot(loader);
        ControllerOfModifyScreen newController = usingMethodsOfModifyScreen("Dodawanie nowego elementu",loader, true);
-       CreateNewModifyStage("Dodawanie nowego elementu", root, newController);
+        Stage newModifyStage = CreateNewModifyStage();
+        customizeStage("Dodawanie nowego elementu", root, newModifyStage);
+       newModifyStage.setOnCloseRequest(we -> {
+            products.add(newController.getSelectedProduct());
+            tableOfDB.refresh();
+        });
     }
 
     @FXML
@@ -92,23 +97,28 @@ public class ControllerOfMainScreen {
         else{
             FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
             Parent root = getRoot(loader);
-            ControllerOfModifyScreen newController = usingMethodsOfModifyScreen("Edycja elementu o numerze: ",loader, true);
-            CreateNewModifyStage("Edycja istniejącego elementu", root, newController);
+            ControllerOfModifyScreen newController = usingMethodsOfModifyScreen("Edycja elementu o numerze: ",loader, false);
+            Stage newModifyStage = CreateNewModifyStage();
+            customizeStage("Edycja istniejącego elementu", root, newModifyStage);
+            newModifyStage.setOnCloseRequest(we -> {
+                changeProductInTable(newController.getSelectedProduct());
+                tableOfDB.refresh();
+            });
         }
+    }
+
+    private Stage CreateNewModifyStage() throws IOException {
+        Stage newModifyStage = new Stage();
+        return newModifyStage;
 
     }
 
-    private void CreateNewModifyStage(String title, Parent root, ControllerOfModifyScreen newController) throws IOException {
-        Stage newModifyStage = new Stage();
+    private void customizeStage(String title, Parent root, Stage newModifyStage) {
         newModifyStage.setTitle(title);
         //root.getStylesheets().add("Stylesheets/style.css");
         newModifyStage.setScene(new Scene(root));
         newModifyStage.setResizable(false);
         newModifyStage.show();
-        newModifyStage.setOnCloseRequest(we -> {
-            products.add(newController.getSelectedProduct());
-            tableOfDB.refresh();
-        });
     }
 
     private Parent getRoot(FXMLLoader loader) throws IOException {
@@ -137,8 +147,6 @@ public class ControllerOfMainScreen {
         }
         return newController;
     }
-
-
 
     @FXML
     private void onDeleteButtonPressed() throws SQLException, ClassNotFoundException {
