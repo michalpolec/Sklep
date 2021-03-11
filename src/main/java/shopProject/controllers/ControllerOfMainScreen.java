@@ -90,14 +90,10 @@ public class ControllerOfMainScreen {
 
     @FXML
     private void onEditionButtonPressed() throws IOException, SQLException, ClassNotFoundException {
-        selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
-        if(selectedProduct == null){
-            Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do edycji." );
-        }
-        else{
+        if(checkIfItemIsSelected()) {
             FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
             Parent root = getRoot(loader);
-            ControllerOfModifyScreen newController = usingMethodsOfModifyScreen("Edycja elementu o numerze: ",loader, false);
+            ControllerOfModifyScreen newController = usingMethodsOfModifyScreen("Edycja elementu o numerze: ", loader, false);
             Stage newModifyStage = CreateNewModifyStage();
             customizeStage("Edycja istniejącego elementu", root, newModifyStage);
             newModifyStage.setOnCloseRequest(we -> {
@@ -148,46 +144,6 @@ public class ControllerOfMainScreen {
         return newController;
     }
 
-    @FXML
-    private void onDeleteButtonPressed() throws SQLException, ClassNotFoundException {
-        selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
-        if(selectedProduct == null){
-            Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do usunięcia." );
-        }
-        else{
-
-            Alert deleteClick = new Alert(Alert.AlertType.CONFIRMATION);
-            deleteClick.setTitle("Usuwanie elementu");
-            deleteClick.setHeaderText(null);
-            deleteClick.setContentText("Czy na pewno usunąć element?");
-            Optional<ButtonType> action = deleteClick.showAndWait();
-            if(action.get() == ButtonType.OK) {
-
-
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
-                Statement statement = connection.createStatement();
-                String sql = "DELETE FROM `sklep`.`produkty` WHERE (`IDProduktu` = '" + selectedProduct.getProductID() + "')";
-                statement.executeUpdate(sql);
-                sql = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '" + selectedProduct.getProductID() + "')";
-                statement.executeUpdate(sql);
-
-
-                for (Product pro : products) {
-                    if (pro.getProductID() == selectedProduct.getProductID()) {
-                        products.remove(pro);
-                        break;
-                    }
-                }
-
-                tableOfDB.refresh();
-
-                statement.close();
-                connection.close();
-            }
-        }
-    }
-
     void changeProductInTable(Product product){
         int IDproduktu = product.getProductID();
 
@@ -213,12 +169,59 @@ public class ControllerOfMainScreen {
         }
     }
 
-    void Alert(String setTitle, String setContents) {
-        Alert badClick = new Alert(Alert.AlertType.ERROR);
-        badClick.setTitle(setTitle);
-        badClick.setHeaderText(null);
-        badClick.setContentText(setContents);
+    @FXML
+    private void onDeleteButtonPressed() throws SQLException, ClassNotFoundException, IOException {
+        if(checkIfItemIsSelected()){
+            Alert deleteClick = Alert( "Usuwanie elementu", "Czy na pewno usunąć element?", Alert.AlertType.CONFIRMATION);
+            Optional<ButtonType> action = deleteClick.showAndWait();
+            if(action.get() == ButtonType.OK) {
 
-        badClick.showAndWait();
+                deleteElementFromDatabase();
+                deleteElementFromList();
+                tableOfDB.refresh();
+            }
+        }
+    }
+
+    private void deleteElementFromList() {
+        for (Product product : products) {
+            if (product.getProductID() == selectedProduct.getProductID()) {
+                products.remove(product);
+                break;
+            }
+        }
+    }
+
+    private void deleteElementFromDatabase() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Statement statement = connection.createStatement();
+        String sql = "DELETE FROM `sklep`.`produkty` WHERE (`IDProduktu` = '" + selectedProduct.getProductID() + "')";
+        statement.executeUpdate(sql);
+        sql = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '" + selectedProduct.getProductID() + "')";
+        statement.executeUpdate(sql);
+        statement.close();
+        connection.close();
+    }
+
+    private boolean checkIfItemIsSelected() throws IOException, SQLException, ClassNotFoundException {
+        selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
+        if(selectedProduct == null){
+            Alert errorAlert = Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do edycji." , Alert.AlertType.ERROR);
+            errorAlert.showAndWait();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    private Alert Alert(String setTitle, String setContents, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(setTitle);
+        alert.setHeaderText(null);
+        alert.setContentText(setContents);
+
+        return alert;
     }
 }
