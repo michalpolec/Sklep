@@ -105,7 +105,7 @@ public class ControllerOfModifyScreen {
        stockField.setText(String.valueOf(selectedProduct.getStock()));
        roomBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getRoom(),getStringArray(room)));
        categoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getCategory(), getStringArray(categories)));
-        setCorrectSubcategories();
+       setCorrectSubcategories();
         subcategoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getSubcategory(), getStringArray(subcategory)));
        colorBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getColor(), getStringArray(colors)));
        materialBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getMaterial(), getStringArray(materials)));
