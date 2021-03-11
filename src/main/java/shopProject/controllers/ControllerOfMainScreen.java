@@ -77,9 +77,10 @@ public class ControllerOfMainScreen {
     @FXML
     private void onAddButtonPressed() throws IOException, SQLException, ClassNotFoundException {
 
-        FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
-        ControllerOfModifyScreen newController = usingMethodsOfModifyScreen("Dodawanie nowego elementu",loader, true);
-        CreateNewModifyStage("Dodawanie nowego elementu", loader, newController);
+       FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
+       Parent root = getRoot(loader);
+       ControllerOfModifyScreen newController = usingMethodsOfModifyScreen("Dodawanie nowego elementu",loader, true);
+       CreateNewModifyStage("Dodawanie nowego elementu", root, newController);
     }
 
     @FXML
@@ -90,16 +91,16 @@ public class ControllerOfMainScreen {
         }
         else{
             FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
+            Parent root = getRoot(loader);
             ControllerOfModifyScreen newController = usingMethodsOfModifyScreen("Edycja elementu o numerze: ",loader, true);
-            CreateNewModifyStage("Edycja istniejącego elementu", loader, newController);
+            CreateNewModifyStage("Edycja istniejącego elementu", root, newController);
         }
 
     }
 
-    private void CreateNewModifyStage(String title, FXMLLoader loader, ControllerOfModifyScreen newController) throws IOException {
+    private void CreateNewModifyStage(String title, Parent root, ControllerOfModifyScreen newController) throws IOException {
         Stage newModifyStage = new Stage();
         newModifyStage.setTitle(title);
-        Parent root = loader.load();
         //root.getStylesheets().add("Stylesheets/style.css");
         newModifyStage.setScene(new Scene(root));
         newModifyStage.setResizable(false);
@@ -108,6 +109,11 @@ public class ControllerOfMainScreen {
             products.add(newController.getSelectedProduct());
             tableOfDB.refresh();
         });
+    }
+
+    private Parent getRoot(FXMLLoader loader) throws IOException {
+        Parent root = loader.load();
+        return root;
     }
 
     private FXMLLoader getFxmlLoader(String resource) {
