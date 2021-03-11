@@ -1,5 +1,6 @@
-package shopProject;
+package shopProject.controllers;
 
+import shopProject.entity.restOfElements;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -54,7 +55,7 @@ public class addSubcategoryScreenController {
 
         for(restOfElements cat : categories){
             if(cat.getName().contains(categoryBox.getValue().toString())){
-                idOfCategory = cat.ID;
+                idOfCategory = cat.getID();
             }
         }
 

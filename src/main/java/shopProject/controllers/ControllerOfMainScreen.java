@@ -1,5 +1,6 @@
-package shopProject;
+package shopProject.controllers;
 
+import shopProject.entity.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,9 +19,9 @@ import java.sql.Statement;
 import java.util.Optional;
 
 
-public class adminScreenController {
-    // Inicjalizacja zmiennych
-    ObservableList<Product> products =  FXCollections.observableArrayList();
+public class ControllerOfMainScreen {
+
+    private ObservableList<Product> products =  FXCollections.observableArrayList();
     public Button editionButton;
     public TableView<Product> tableOfDB;
     public TableColumn<Product, Integer> IDproduct;
@@ -39,10 +40,15 @@ public class adminScreenController {
     public TableColumn<Product, Integer> regal;
     public TableColumn<Product, Integer> stock;
 
-    Product selectedProduct;
+    private Product selectedProduct;
 
-    // Inicjalizaca klasy
     public void initialize() {
+        fillCellsWithData();
+        initializeTable();
+    }
+
+    private void fillCellsWithData() {
+
         IDproduct.setCellValueFactory(new PropertyValueFactory<Product, Integer>("productID"));
         NameProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("nameOfProduct"));
         PriceProduct.setCellValueFactory(new PropertyValueFactory<Product, Double>("price"));
@@ -58,45 +64,43 @@ public class adminScreenController {
         shelf.setCellValueFactory(new PropertyValueFactory<Product, Integer>("shelf"));
         regal.setCellValueFactory(new PropertyValueFactory<Product, Integer>("regal"));
         stock.setCellValueFactory(new PropertyValueFactory<Product, Integer>("stock"));
-        initializeTable();
     }
 
-    // Pobranie wszystkich produktów
     public void getAllData(ObservableList<Product> products) {
         this.products.setAll(products);
     }
 
-    // Inicjalizacja tablicy
     void initializeTable() {
         tableOfDB.setItems(products);
     }
 
-
-    // Funkcja reakcji na wciśnięcie przycisku dodawanie nowego produktu do bazy danych
     @FXML
     private void onAddButtonPressed() throws IOException {
 
-        Stage addNewElementStage = new Stage();
-        addNewElementStage.setTitle("Dodawanie nowego elementu");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/modifyProductScreen.fxml"));
-        Parent root = loader.load();
-        root.getStylesheets().add("Stylesheets/style.css");
-
-        modifyProductScreenController newController = loader.getController();
-        newController.setAddOrEdit(true);
-        newController.setLabelINFO("Dodawanie nowego elementu");
-
-        addNewElementStage.setScene(new Scene(root));
-        addNewElementStage.setResizable(false);
-        addNewElementStage.show();
-        addNewElementStage.setOnCloseRequest(we -> {
-            products.add(newController.getSelectedProduct());
-            tableOfDB.refresh();
-        });
+        CreateNewModifyStage("Dodawanie nowego elementu","ModifyProductScreen.fxml","Dodawanie nowego elementu" );
 
     }
 
-    // Funkcja reakcji na wciśnięcie przycisku edycji wybranego produktu
+    private void CreateNewModifyStage(String title, String resource, String label) throws IOException {
+        Stage newModifyStage = new Stage();
+        newModifyStage.setTitle(title);
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(resource));
+        Parent root = loader.load();
+        //root.getStylesheets().add("Stylesheets/style.css");
+
+        newModifyStage.setScene(new Scene(root));
+        newModifyStage.setResizable(false);
+        newModifyStage.show();
+        ControllerOfModifyScreen newController = loader.getController();
+        newController.setAddOrEdit(true);
+        newController.setLabelINFO(label);
+
+        newModifyStage.setOnCloseRequest(we -> {
+            products.add(newController.getSelectedProduct());
+            tableOfDB.refresh();
+        });
+    }
+
     @FXML
     private void onEditionButtonPressed() throws IOException, SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
@@ -105,32 +109,25 @@ public class adminScreenController {
         }
         else{
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/modifyProductScreen.fxml"));
-            Parent root = loader.load();
-            root.getStylesheets().add("Stylesheets/style.css");
+            CreateNewModifyStage("Edycja istniejącego elementu","ModifyProductScreen.fxml","Edycja istniejącego elementu" );
 
-            modifyProductScreenController newController = loader.getController();
+          /*
+
+
+
+
             newController.setAddOrEdit(false);
             newController.setSelectedProduct(selectedProduct);
             newController.initializeData();
             newController.addProductToDB.setText("Edytuj");
-            newController.setLabelINFO("Edycja wybranego elementu");
-
-
-            Stage editProductbaseStage = new Stage();
-            editProductbaseStage.setScene(new Scene(root));
             editProductbaseStage.setTitle("Edycja produktu o ID:" + selectedProduct.getProductID());
-            editProductbaseStage.setResizable(false);
-            editProductbaseStage.show();
-            editProductbaseStage.setOnCloseRequest(we -> {
-                changeProductInTable(newController.getSelectedProduct());
-                tableOfDB.refresh();
-            });
+            */
         }
 
     }
 
-    // Funkcja reakcji na wciśnięcie przycisku usunięcia wybranego produktu
+
+
     @FXML
     private void onDeleteButtonPressed() throws SQLException, ClassNotFoundException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
@@ -171,7 +168,6 @@ public class adminScreenController {
         }
     }
 
-    // Funkcja aktualizująca tablice po zmiannach w bazie danych
     void changeProductInTable(Product product){
         int IDproduktu = product.getProductID();
 
@@ -192,13 +188,11 @@ public class adminScreenController {
                 products.get(i).setShelf(product.getShelf());
                 products.get(i).setRegal(product.getRegal());
                 products.get(i).setStock(product.getStock());
-                products.get(i).setImage(product.getImage());
                 break;
             }
         }
     }
 
-    // Funkcja wyświetlająca błędy
     void Alert(String setTitle, String setContents) {
         Alert badClick = new Alert(Alert.AlertType.ERROR);
         badClick.setTitle(setTitle);

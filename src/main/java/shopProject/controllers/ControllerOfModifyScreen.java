@@ -1,6 +1,7 @@
-package shopProject;
+package shopProject.controllers;
 
 
+import shopProject.entity.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,7 +24,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.*;
 
-public class modifyProductScreenController {
+public class ControllerOfModifyScreen {
 
     // Incjalizacja zmiennych
     private Product selectedProduct;
@@ -111,10 +112,6 @@ public class modifyProductScreenController {
        dimensionsBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getWidth() + "cm x " + selectedProduct.getHeight() + "cm x " + selectedProduct.getLength() + "cm",getStringArray(dimensions)));
        positionBox.getSelectionModel().select(getIndexToComboBox("Półka: " + selectedProduct.getShelf() + ", Regał: " + selectedProduct.getRegal(), getStringArray(positions)));
 
-        InputStream in = selectedProduct.getImage().getBinaryStream(1, (int) selectedProduct.getImage().length());
-        Image image = new Image(in);
-
-        imageView.setImage(image);
 
     }
 
@@ -755,8 +752,7 @@ public class modifyProductScreenController {
                     resultSet.getDouble("Dlugosc"),
                     resultSet.getInt("Polka"),
                     resultSet.getInt("Regal"),
-                    resultSet.getInt("StanMagazynowy"),
-                    resultSet.getBlob("Zdjecie"));
+                    resultSet.getInt("StanMagazynowy"));
         }
         statement.close();
         connection.close();

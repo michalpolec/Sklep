@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="addAnchorPane" prefHeight="754.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.modifyProductScreenController">
+<AnchorPane fx:id="addAnchorPane" prefHeight="754.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfModifyScreen">
    <children>
       <GridPane layoutX="72.0" layoutY="104.0" prefHeight="470.0" prefWidth="578.0">
         <columnConstraints>

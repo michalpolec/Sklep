@@ -1,4 +1,4 @@
-package shopProject;
+package shopProject.controllers;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

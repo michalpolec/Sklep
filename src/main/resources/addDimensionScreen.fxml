@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="dimensionAnchorPane" prefHeight="277.0" prefWidth="342.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.addDimensionScreenController">
+<AnchorPane fx:id="dimensionAnchorPane" prefHeight="277.0" prefWidth="342.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.resources.controllers.addDimensionScreenController">
    <children>
       <Label fx:id="titleOfScreen" layoutX="8.0" layoutY="35.0" prefHeight="17.0" prefWidth="325.0" text="Label" />
       <Label layoutX="37.0" layoutY="175.0" text="Długość:" />

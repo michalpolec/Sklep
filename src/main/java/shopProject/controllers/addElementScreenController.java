@@ -1,4 +1,4 @@
-package shopProject;
+package shopProject.controllers;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;

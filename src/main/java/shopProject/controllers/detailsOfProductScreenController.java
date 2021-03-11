@@ -1,5 +1,6 @@
-package shopProject;
+package shopProject.controllers;
 
+import shopProject.entity.Product;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,9 +30,6 @@ public class detailsOfProductScreenController {
 
     //metoda ustawiająca szczegóły produktu w nowym oknie
     public void setDetails(Product product) throws SQLException {
-        Image image = new Image(product.getImage().getBinaryStream());
-        detailImageView.setImage(image);
-        centerImage(detailImageView);
         colorLabel.setText(product.getColor());
         materialLabel.setText(product.getMaterial());
 
