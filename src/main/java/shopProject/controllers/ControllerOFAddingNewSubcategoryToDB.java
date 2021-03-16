@@ -18,18 +18,11 @@ public class ControllerOFAddingNewSubcategoryToDB {
     public TextField subcategoryField;
     public ComboBox categoryBox;
 
-    String nameOfTable;
-    String nameOfFirstColumn;
-    String nameOfSecondColumn;
-
     ObservableList<restOfElements>  categories;
 
     // Ustawienie zmiennyhc klasy
-    public void setOptionOfSubcategoryScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfSubcategoryScreen(ObservableList<restOfElements> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
 
-        this.nameOfFirstColumn = nameOfFirstColumn;
-        this.nameOfSecondColumn = nameOfSecondColumn;
-        this.nameOfTable = nameOfTable;
         this.titleLabel.setText(textOfLabel);
         this.categories = categories;
 
@@ -46,7 +39,7 @@ public class ControllerOFAddingNewSubcategoryToDB {
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
 
@@ -66,7 +59,7 @@ public class ControllerOFAddingNewSubcategoryToDB {
             Alert();
         }
         else {
-            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn  +")"
+            String sql = "INSERT INTO subcategory (subcategoryName, categoryID)"
                     + " VALUES ('"  + contentOfFiled + "', '" + idOfCategory + "')";
             try {
                 statement.executeUpdate(sql);

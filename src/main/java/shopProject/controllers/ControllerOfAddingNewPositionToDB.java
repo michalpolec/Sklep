@@ -22,9 +22,7 @@ public class ControllerOfAddingNewPositionToDB {
     public TextField regalField;
     public Button addPosition;
 
-    String nameOfTable;
-    String nameOfFirstColumn;
-    String nameOfSecondColumn;
+
 
     //Inicjalizacja klasy
     public void initialize(){
@@ -35,11 +33,9 @@ public class ControllerOfAddingNewPositionToDB {
     }
 
     //Ustawienie zmiennych klasy
-    public void setOptionOfPositionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfPositionScreen(String textOfLabel) throws ClassNotFoundException, SQLException {
 
-        this.nameOfFirstColumn = nameOfFirstColumn;
-        this.nameOfSecondColumn = nameOfSecondColumn;
-        this.nameOfTable = nameOfTable;
+        this.titleOfScreen.setText(textOfLabel);
 
     }
 
@@ -47,7 +43,7 @@ public class ControllerOfAddingNewPositionToDB {
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
         String shelf = shelfField.getText();
@@ -58,7 +54,7 @@ public class ControllerOfAddingNewPositionToDB {
             Alert();
         }
         else {
-            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn + ")"
+            String sql = "INSERT INTO positions (shelf, regal)"
                     + " VALUES ('" + Integer.parseInt(shelf) + "', '" + Integer.parseInt(regal)  + "')";
             try {
                 statement.executeUpdate(sql);

@@ -23,10 +23,6 @@ public class ControllerOfAddingNewDimensionToDB {
     public TextField lenghtField;
     public Button addButtom;
 
-    String nameOfTable;
-    String nameOfFirstColumn;
-    String nameOfSecondColumn;
-    String nameOfThirdColumn;
 
     public void initialize(){ //Inicjalizacja klasy
 
@@ -37,12 +33,8 @@ public class ControllerOfAddingNewDimensionToDB {
     }
 
     // Ustawienie zmiennych
-    public void setOptionOfDimensionScreen(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfThirdColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfDimensionScreen(String textOfLabel) throws ClassNotFoundException, SQLException {
 
-        this.nameOfFirstColumn = nameOfFirstColumn;
-        this.nameOfSecondColumn = nameOfSecondColumn;
-        this.nameOfThirdColumn = nameOfThirdColumn;
-        this.nameOfTable = nameOfTable;
         this.titleOfScreen.setText(textOfLabel);
 
     }
@@ -51,7 +43,7 @@ public class ControllerOfAddingNewDimensionToDB {
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
         String width = widthField.getText();
@@ -63,7 +55,7 @@ public class ControllerOfAddingNewDimensionToDB {
             Alert();
         }
         else {
-            String sql = "INSERT INTO " + nameOfTable + " (" + nameOfFirstColumn + ", " + nameOfSecondColumn +  ", " + nameOfThirdColumn + ")"
+            String sql = "INSERT INTO dimension (width, height, length)"
                     + " VALUES ('" + Double.parseDouble(width) + "', '" + Double.parseDouble(height)  + "', '" + Double.parseDouble(lenght) +"')";
             try {
                 statement.executeUpdate(sql);
@@ -83,7 +75,6 @@ public class ControllerOfAddingNewDimensionToDB {
 
     }
 
-    // Funkcja wyświetlająca błąd
     public void Alert(){
         Alert nullData = new Alert(Alert.AlertType.ERROR);
         nullData.setTitle("Błąd podczas wpisywania");
@@ -93,8 +84,7 @@ public class ControllerOfAddingNewDimensionToDB {
         nullData.showAndWait();
     }
 
-    // Funkcja ustawiające pole TextField aby przyjmował wartości double
-    public void OnlyNumbersInTextField(TextField textfield){
+    private void OnlyNumbersInTextField(TextField textfield){
 
         textfield.textProperty().addListener(new ChangeListener<String>() {
             @Override

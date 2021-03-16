@@ -341,7 +341,7 @@ public class ControllerOfModifyScreen {
        FXMLLoader loader = getFxmlLoader("AddSubcategoryScreen.fxml");
        Parent root = getRoot(loader);
        ControllerOFAddingNewSubcategoryToDB newController = loader.getController();
-       newController.setOptionOfSubcategoryScreen("subcategoryName", "categoryID",  "subcategory", categories, "Wybierz kategorie oraz wpisz nową podkategorie");
+       newController.setOptionOfSubcategoryScreen( categories, "Wybierz kategorie oraz wpisz nową podkategorie");
        Stage newAddStage = CreateNewAddStage();
        customizeStage("Dodawnie nowej podkategorii", root, newAddStage);
        newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -360,19 +360,13 @@ public class ControllerOfModifyScreen {
    //Metoda otwierająca nowe okno dodania wymiarów
    public void openDimensionScreen() throws IOException, SQLException, ClassNotFoundException {
 
-       Stage addDimension =  new Stage();
-       addDimension.setTitle("Dodawnie nowego wymiaru");
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/AddDimensionScreen.fxml"));
-       Parent root = loader.load();
-       root.getStylesheets().add("Stylesheets/style.css");
-       addDimension.setScene(new Scene(root));
-
+       FXMLLoader loader = getFxmlLoader("AddDimensionScreen.fxml");
+       Parent root = getRoot(loader);
        ControllerOfAddingNewDimensionToDB newController = loader.getController();
-       newController.setOptionOfDimensionScreen("Szerokosc", "Wysokosc","Dlugosc", "wymiary",  "Wpisz szerokość, długość oraz wysokość produktu");
-
-       addDimension.setResizable(false);
-       addDimension.show();
-       addDimension.setOnCloseRequest(new EventHandler<WindowEvent>() {
+       newController.setOptionOfDimensionScreen("Wpisz szerokość, długość oraz wysokość produktu");
+       Stage newAddStage = CreateNewAddStage();
+       customizeStage("Dodawnie nowego wymiaru", root, newAddStage);
+       newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
            public void handle(WindowEvent we) {
                try {
                    getDataToArrays();
@@ -388,19 +382,13 @@ public class ControllerOfModifyScreen {
     //Metoda otwierająca nowe okno dodania pozycji w magazynie
    public void openPositionScreen() throws IOException, SQLException, ClassNotFoundException {
 
-       Stage addPosition =  new Stage();
-       addPosition.setTitle("Dodawnie nowej pozycji");
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/AddPositionScreen.fxml"));
-       Parent root = loader.load();
-       root.getStylesheets().add("Stylesheets/style.css");
-       addPosition.setScene(new Scene(root));
-
+       FXMLLoader loader = getFxmlLoader("AddPositionScreen.fxml");
+       Parent root = getRoot(loader);
        ControllerOfAddingNewPositionToDB newController = loader.getController();
-       newController.setOptionOfPositionScreen( "Polka", "Regal", "pozycja", "Wpisz półkę oraz regał");
-
-       addPosition.setResizable(false);
-       addPosition.show();
-       addPosition.setOnCloseRequest(new EventHandler<WindowEvent>() {
+       newController.setOptionOfPositionScreen("Wpisz półkę oraz regał");
+       Stage newAddStage = CreateNewAddStage();
+       customizeStage("Dodawnie nowej pozycji", root, newAddStage);
+       newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
            public void handle(WindowEvent we) {
                try {
                    getDataToArrays();
@@ -413,8 +401,6 @@ public class ControllerOfModifyScreen {
        });
 
     }
-
-
 
     private Stage CreateNewAddStage() throws IOException {
         Stage newModifyStage = new Stage();
