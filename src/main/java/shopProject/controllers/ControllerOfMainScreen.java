@@ -28,11 +28,10 @@ public class ControllerOfMainScreen {
     public TableColumn<Product, String> NameProduct;
     public TableColumn<Product, Double> PriceProduct;
     public TableColumn<Product, String> Descrpition;
-    public TableColumn<Product, String> room;
+    public TableColumn<Product, String> manufacturer;
     public TableColumn<Product, String> Category;
     public TableColumn<Product, String> Subcategory;
     public TableColumn<Product, String> color;
-    public TableColumn<Product, String> material;
     public TableColumn<Product, Double> width;
     public TableColumn<Product, Double> height;
     public TableColumn<Product, Double> length;
@@ -53,11 +52,10 @@ public class ControllerOfMainScreen {
         NameProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("nameOfProduct"));
         PriceProduct.setCellValueFactory(new PropertyValueFactory<Product, Double>("price"));
         Descrpition.setCellValueFactory(new PropertyValueFactory<Product, String>("description"));
-        room.setCellValueFactory(new PropertyValueFactory<Product, String>("room"));
+        manufacturer.setCellValueFactory(new PropertyValueFactory<Product, String>("manufacturer"));
         Category.setCellValueFactory(new PropertyValueFactory<Product, String>("category"));
         Subcategory.setCellValueFactory(new PropertyValueFactory<Product, String>("subcategory"));
         color.setCellValueFactory(new PropertyValueFactory<Product, String>("color"));
-        material.setCellValueFactory(new PropertyValueFactory<Product, String>("material"));
         width.setCellValueFactory(new PropertyValueFactory<Product, Double>("width"));
         height.setCellValueFactory(new PropertyValueFactory<Product, Double>("height"));
         length.setCellValueFactory(new PropertyValueFactory<Product, Double>("length"));

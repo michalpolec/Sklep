@@ -31,7 +31,7 @@ public class ControllerOfModifyScreen {
     boolean AddOrEdit;
     public Image imageFromFile;
 
-    ObservableList<restOfElements> room =  FXCollections.observableArrayList();
+    ObservableList<restOfElements> manufacturers =  FXCollections.observableArrayList();
     ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
     ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
     ObservableList<Subcategory>  subcategory = FXCollections.observableArrayList();
@@ -103,7 +103,7 @@ public class ControllerOfModifyScreen {
        priceField.setText(String.valueOf(selectedProduct.getPrice()));
        descriptionField.setText(selectedProduct.getDescription());
        stockField.setText(String.valueOf(selectedProduct.getStock()));
-       manufacturerBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getManufacturer(),getStringArray(room)));
+       manufacturerBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getManufacturer(),getStringArray(manufacturers)));
        categoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getCategory(), getStringArray(categories)));
        setCorrectSubcategories();
         subcategoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getSubcategory(), getStringArray(subcategory)));
@@ -140,7 +140,7 @@ public class ControllerOfModifyScreen {
            productName = nameField.getText();
            productPrice = Double.parseDouble(priceField.getText());
            productDescription = descriptionField.getText();
-           roomID = getIDofElement(manufacturerBox.getValue().toString(), room);
+           roomID = getIDofElement(manufacturerBox.getValue().toString(), manufacturers);
            subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategory);
            colorID = getIDofElement(colorBox.getValue().toString(), colors);
            materialID = getIDofElement(materialBox.getValue().toString(), materials);
@@ -610,7 +610,7 @@ public class ControllerOfModifyScreen {
     //Metoda ustawiająca dane w comboboxach
     public void getDataToArrays() throws SQLException, ClassNotFoundException {
         //czyszczenie
-        room.clear();
+        manufacturers.clear();
         categories.clear();
         subcategories.clear();
         colors.clear();
@@ -619,7 +619,7 @@ public class ControllerOfModifyScreen {
         positions.clear();
 
         //pobieranie danych
-        getChosenDataFromDB("IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", room);
+        getChosenDataFromDB("IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", manufacturers);
         getChosenDataFromDB("IDKategorii","NazwaKategorii", "kategoria", categories);
         getSubcategoryData();
         getChosenDataFromDB("IDKoloru", "NazwaKoloru", "kolor", colors);
@@ -628,7 +628,7 @@ public class ControllerOfModifyScreen {
         getPositionData();
 
         //ustawianie danych
-        manufacturerBox.setItems(room);
+        manufacturerBox.setItems(manufacturers);
         categoryBox.setItems(categories);
         subcategoryBox.setItems(subcategory);
         colorBox.setItems(colors);
