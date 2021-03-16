@@ -10,14 +10,13 @@
         <TableView fx:id="tableOfDB" editable="true" layoutX="8.0" layoutY="33.0" prefHeight="460.0" prefWidth="1174.0">
             <columns>
                 <TableColumn fx:id="IDproduct" prefWidth="74.0" text="IDproduktu" />
-                <TableColumn fx:id="NameProduct" prefWidth="105.0" text="Nazwa Produktu" />
+                <TableColumn fx:id="NameProduct" prefWidth="115.99996948242188" text="Nazwa Produktu" />
+                <TableColumn fx:id="manufacturer" minWidth="0.0" prefWidth="44.800018310546875" text="Producent" />
                 <TableColumn fx:id="PriceProduct" minWidth="3.0" prefWidth="52.0" text="Cena" />
                 <TableColumn fx:id="Descrpition" prefWidth="186.0" text="Opis" />
-                <TableColumn fx:id="room" minWidth="0.0" prefWidth="98.0" text="Pomieszczenie" />
                 <TableColumn fx:id="Category" prefWidth="72.0" text="Kategoria" />
                 <TableColumn fx:id="Subcategory" prefWidth="86.0" text="Podkategoria" />
                 <TableColumn fx:id="color" prefWidth="45.0" text="Kolor" />
-                <TableColumn fx:id="material" prefWidth="56.0" text="Materiał" />
                 <TableColumn fx:id="width" prefWidth="69.0" text="Szerokość" />
                 <TableColumn fx:id="height" prefWidth="76.0" text="Wysokość" />
                 <TableColumn fx:id="length" prefWidth="58.0" text="Długość" />

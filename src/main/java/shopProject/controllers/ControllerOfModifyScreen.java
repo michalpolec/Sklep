@@ -6,7 +6,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -15,18 +14,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.*;
 
 public class ControllerOfModifyScreen {
 
-    // Incjalizacja zmiennych
     private Product selectedProduct;
     boolean AddOrEdit;
     public Image imageFromFile;
@@ -59,7 +54,6 @@ public class ControllerOfModifyScreen {
     public Button subcategoryButton;
     public Button categoryButton;
     public Button colorButton;
-    public Button materialButton;
     public Button dimensionsButton;
     public Button positionButton;
     public Button addProductToDB;
@@ -73,30 +67,24 @@ public class ControllerOfModifyScreen {
 
        subcategoryBox.setDisable(true);
        getDataToArrays();
-
-       priceField.textProperty().addListener(new ChangeListener<String>() {
-           @Override
-           public void changed(ObservableValue<? extends String> observable, String oldValue,
-                               String newValue) {
-               if (!newValue.matches("\\d*")) {
-                   priceField.setText(newValue.replaceAll("[^\\d]", ""));
-               }
-           }
-       });
-
-       stockField.textProperty().addListener(new ChangeListener<String>() {
-           @Override
-           public void changed(ObservableValue<? extends String> observable, String oldValue,
-                               String newValue) {
-               if (!newValue.matches("\\d*")) {
-                   stockField.setText(newValue.replaceAll("[^\\d]", ""));
-               }
-           }
-       });
+       setTextAsOnlyNumbers(priceField);
+       setTextAsOnlyNumbers(stockField);
 
    }
 
-   //Inicjalizowanie wybranymi danymi podczas edycji produktu
+    private void setTextAsOnlyNumbers(TextField textField) {
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    textField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+    }
+
+    //Inicjalizowanie wybranymi danymi podczas edycji produktu
     public void initializeData() throws SQLException, ClassNotFoundException, IOException {
 
        nameField.setText(selectedProduct.getNameOfProduct());
@@ -114,7 +102,7 @@ public class ControllerOfModifyScreen {
 
     }
 
-    //Metoda działające na przycisk 'anuluj'
+
     public void onCancelAction(){
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
@@ -126,75 +114,66 @@ public class ControllerOfModifyScreen {
        String productName = "";
        double productPrice = 0.0;
        String productDescription = "";
-       int roomID = 0;
+       int manufacturerID = 0;
        int subcategoryID = 0;
        int colorID = 0;
-       int materialID = 0;
        int dimensionID = 0;
        int positionID = 0;
        int productStock = 0;
-       InputStream image = null;
        boolean Continue = true;
 
        try {
            productName = nameField.getText();
            productPrice = Double.parseDouble(priceField.getText());
            productDescription = descriptionField.getText();
-           roomID = getIDofElement(manufacturerBox.getValue().toString(), manufacturers);
+           manufacturerID = getIDofElement(manufacturerBox.getValue().toString(), manufacturers);
            subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategory);
            colorID = getIDofElement(colorBox.getValue().toString(), colors);
-           materialID = getIDofElement(materialBox.getValue().toString(), materials);
            dimensionID = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
            positionID = getIDofElementForPosition(positionBox.getValue().toString(), positions);
            productStock = Integer.parseInt(stockField.getText());
 
-
-           BufferedImage bImage = SwingFXUtils.fromFXImage(imageView.getImage(), null);
-           ByteArrayOutputStream s = new ByteArrayOutputStream();
-           ImageIO.write(bImage, "png", s);
-           byte[] res  = s.toByteArray();
-           image = new ByteArrayInputStream(res);
        }
        catch (Exception e){
-         Alert("Błąd wprowadzania danych", "Wprowadzono niepoprawne dane lub nie wprowadzono ich wcale.");
+         Alert("Błąd wprowadzania danych", "Wprowadzono niepoprawne dane lub nie wprowadzono ich wcale.", Alert.AlertType.ERROR).showAndWait();
          Continue = false;
        }
 
        if(AddOrEdit && Continue) {
 
            Class.forName("com.mysql.cj.jdbc.Driver");
-           Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+           Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
            Statement statement = connection.createStatement();
 
            boolean continueTypingData = true;
 
-           String sql_getIDfromProducts = "SELECT max(IDProduktu) FROM sklep.produkty";
+           String sql_getIDfromProducts = "SELECT max(productID) FROM hurtownia.product";
            int greatestIDofProducts = 0;
            ResultSet resultSet1 = statement.executeQuery(sql_getIDfromProducts);
            while(resultSet1.next()) {
-               greatestIDofProducts = resultSet1.getInt("max(IDProduktu)") + 1;
+               greatestIDofProducts = resultSet1.getInt("max(productID)") + 1;
            }
 
-           String sql_getIDfromDetails = "SELECT max(IDProduktu) FROM sklep.szczegoly";
+           String sql_getIDfromDetails = "SELECT max(productID) FROM hurtownia.product";
            int greatestIDofDetails = 0;
            ResultSet resultSet2 = statement.executeQuery(sql_getIDfromDetails);
            while(resultSet2.next()) {
-               greatestIDofDetails = resultSet2.getInt("max(IDProduktu)") + 1;
+               greatestIDofDetails = resultSet2.getInt("max(productID)") + 1;
            }
 
            if (greatestIDofProducts == greatestIDofDetails) {
 
-               String sql_increment1 = "ALTER TABLE `sklep`.`produkty` AUTO_INCREMENT = " + greatestIDofProducts + ";";
+               String sql_increment1 = "ALTER TABLE `hurtownia`.`product` AUTO_INCREMENT = " + greatestIDofProducts + ";";
                statement.executeUpdate(sql_increment1);
-               String sql_increment2 = "ALTER TABLE `sklep`.`szczegoly` AUTO_INCREMENT = " + greatestIDofDetails + ";";
+               String sql_increment2 = "ALTER TABLE `hurtownia`.`details` AUTO_INCREMENT = " + greatestIDofDetails + ";";
                statement.executeUpdate(sql_increment2);
 
                try {
 
-                   String sql_details = "INSERT INTO szczegoly ( IDPozycji, IDWymiarow, IDMaterialu, IDKoloru) VALUES ('" + positionID + "', '" + dimensionID + "', '" + materialID + "', '" + colorID + "');";
+                   String sql_details = "INSERT INTO details ( positionID, dimensionID, colorID) VALUES ('" + positionID + "', '" + dimensionID + "', '" + colorID + "');";
                    statement.executeUpdate(sql_details);
                } catch (SQLException e) {
-                   Alert("Błąd polecenia", "Błędne polecenie");
+                   Alert("Błąd polecenia", "Błędne polecenie", Alert.AlertType.ERROR).showAndWait();
                    continueTypingData = false;
                }
 
@@ -202,16 +181,15 @@ public class ControllerOfModifyScreen {
 
                    try {
 
-                       String sql_products = "INSERT INTO produkty (NazwaProduktu, CenaProduktu, OpisProduktu, IDPomieszczenia, IDPodkategorii, StanMagazynowy, Zdjecie) VALUES (?,?,?,?,?,?,?);";
+                       String sql_products = "INSERT INTO product (productName, productPrice, productPrice, manufacturerID, subcategoryID, stock) VALUES (?,?,?,?,?,?);";
 
                        PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
                        preparedStatement.setString(1, productName);
                        preparedStatement.setDouble(2, productPrice);
                        preparedStatement.setString(3, productDescription);
-                       preparedStatement.setInt(4, roomID);
+                       preparedStatement.setInt(4, manufacturerID);
                        preparedStatement.setInt(5, subcategoryID);
                        preparedStatement.setInt(6, productStock);
-                       preparedStatement.setBinaryStream(7, image);
 
                        preparedStatement.executeUpdate();
 
@@ -221,8 +199,8 @@ public class ControllerOfModifyScreen {
 
                    } catch (SQLException e) {
 
-                       Alert("Błąd bazy danych", "Niezgodność ID produktów");
-                       String sql_backroll_details = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '" + greatestIDofDetails + "')";
+                       Alert("Błąd bazy danych", "Niezgodność ID produktów", Alert.AlertType.ERROR).showAndWait();
+                       String sql_backroll_details = "DELETE FROM `hurtownia`.`szczegoly` WHERE (`IDProduktu` = '" + greatestIDofDetails + "')";
                        statement.executeUpdate(sql_backroll_details);
 
                        statement.close();
@@ -234,14 +212,14 @@ public class ControllerOfModifyScreen {
                statement.close();
                connection.close();
 
-               Info("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.");
+               Alert("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.", Alert.AlertType.INFORMATION).showAndWait();
 
                Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
                closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
                closeLoginStage.close();
            }
            else {
-               Alert("Błąd bazy danych", "Niezgodność tabel Produkty i Szczegóły");
+               Alert("Błąd bazy danych", "Niezgodność tabel Produkty i Szczegóły", Alert.AlertType.ERROR).showAndWait();
                Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
                closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
                closeLoginStage.close();
@@ -251,25 +229,24 @@ public class ControllerOfModifyScreen {
        else if (Continue){
 
            Class.forName("com.mysql.cj.jdbc.Driver");
-           Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+           Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
            Statement statement = connection.createStatement();
 
            int IDProduct = selectedProduct.getProductID();
 
-           String sql_details = "UPDATE `sklep`.`szczegoly` SET `IDPozycji` = '"+ positionID +"', `IDWymiarow` = '"+ dimensionID +"', `IDMaterialu` = '"+ materialID +"', `IDKoloru` = '"+ colorID +"' WHERE (`IDProduktu` = '"+ IDProduct +"');";
+           String sql_details = "UPDATE `hurtownia`.`details` SET `positionID` = '"+ positionID +"', `dimensionID` = '"+ dimensionID + "', `colorID` = '"+ colorID +"' WHERE (`productID` = '"+ IDProduct +"');";
            statement.executeUpdate(sql_details);
 
-           String sql_products = "UPDATE `sklep`.`produkty` SET NazwaProduktu = ?, CenaProduktu = ?, OpisProduktu = ?, IDPomieszczenia = ?, IDPodkategorii = ?, StanMagazynowy = ?, Zdjecie = ? WHERE (IDProduktu = ?);";
+           String sql_products = "UPDATE `hurtownia`.`product` SET productName = ?, productPrice = ?, productDescription = ?, manufacturerID = ?, subcategoryID = ?, stock = ? WHERE (productID = ?);";
            PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
 
            preparedStatement.setString(1,productName);
            preparedStatement.setDouble(2,productPrice);
            preparedStatement.setString(3, productDescription);
-           preparedStatement.setInt(4, roomID);
+           preparedStatement.setInt(4, manufacturerID);
            preparedStatement.setInt(5, subcategoryID);
            preparedStatement.setInt(6, productStock);
-           preparedStatement.setBinaryStream(7, image);
-           preparedStatement.setInt(8, IDProduct);
+           preparedStatement.setInt(7, IDProduct);
            preparedStatement.executeUpdate();
 
            setSelectedProductFromDB(IDProduct);
@@ -278,7 +255,7 @@ public class ControllerOfModifyScreen {
            statement.close();
            connection.close();
 
-           Info("Edytowano nowy produkt do bazy", "Poprawnie edytowno element.");
+           Alert("Edytowano nowy produkt do bazy", "Poprawnie edytowno element.", Alert.AlertType.INFORMATION).showAndWait();
 
            Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
            closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -289,9 +266,9 @@ public class ControllerOfModifyScreen {
    }
 
    //Metoda działająca na kliknięcie przycisku 'dodaj nowe' pomieszczenie - otwiera nowe okno
-   public void addRoom() throws IOException, SQLException, ClassNotFoundException {
+   public void addManufacturer() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowego pomieszczenia", "NazwaPomieszczenia", "pomieszczenie",  "Wpisz nowe pomieszczenie");
+       openElementScreen("Dodawanie nowego producenta", "manufacturerName", "manufacturer",  "Wpisz nowe pomieszczenie");
 
    }
 
@@ -301,13 +278,12 @@ public class ControllerOfModifyScreen {
        openElementScreen("Dodawanie nowej kategorii", "NazwaKategorii", "kategoria",  "Wpisz nową kategorie" );
    }
 
-    //Metoda działająca na kliknięcie przycisku 'dodaj nową' podkategorię - otwiera nowe okno
+
    public void addSubcategory() throws IOException, SQLException, ClassNotFoundException {
 
         openSubcategoryScreen();
    }
 
-   //Metoda ustawiająca podaktegorie w zależności od wybranej wcześniej kategorii
     public void chosenCategory() {
 
         setCorrectSubcategories();
@@ -338,39 +314,15 @@ public class ControllerOfModifyScreen {
        openPositionScreen();
     }
 
-    //Metoda działająca na kliknięcie przycisku 'dodaj obraz'- otwiera FileChoosera i jest możliwe wybranie obrazu png/jpg
-    public void getImageFromFile(ActionEvent actionEvent) throws FileNotFoundException {
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Wczytaj nowe zdjęcie");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Pliki obrazów", "*.jpg", "*.png")
-        );
-        Stage stage = (Stage) imageButton.getScene().getWindow();
-
-        File file = fileChooser.showOpenDialog(null);
-
-        FileInputStream in =  new FileInputStream(file.getPath());
-        imageFromFile = new Image(in);
-        imageView.setImage(imageFromFile);
-    }
-
-    //Ogólna Metoda otwierająca nowe okno w celu dodania nowych danych/szczegółów
    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
 
-       Stage addElement =  new Stage();
-       addElement.setTitle(nameOfStage);
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addElementScreen.fxml"));
-       Parent root = loader.load();
-       root.getStylesheets().add("Stylesheets/style.css");
-       addElement.setScene(new Scene(root));
-
-       addElementScreenController newController = loader.getController();
+       FXMLLoader loader = getFxmlLoader("AddElementScreen.fxml");
+       Parent root = getRoot(loader);
+       ControllerOfAddingNewElementToDB newController = loader.getController();
        newController.setOptionOfScreen(nameOfFirstColumn, nameOfTabel,  textOfLabel);
-
-       addElement.setResizable(false);
-       addElement.show();
-       addElement.setOnCloseRequest(new EventHandler<WindowEvent>() {
+       Stage newAddStage = CreateNewAddStage();
+       customizeStage(nameOfStage, root, newAddStage);
+       newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
            public void handle(WindowEvent we) {
                try {
                    getDataToArrays();
@@ -381,27 +333,18 @@ public class ControllerOfModifyScreen {
                }
            }
        });
-
-
    }
 
    //Metoda otwierająca nowe okno dodania podakategorii
    public void openSubcategoryScreen() throws IOException, SQLException, ClassNotFoundException {
 
-       Stage addSubcategory =  new Stage();
-       addSubcategory.setTitle("Dodawnie nowej podkategorii");
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addSubcategoryScreen.fxml"));
-       Parent root = loader.load();
-       root.getStylesheets().add("Stylesheets/style.css");
-       addSubcategory.setScene(new Scene(root));
-
-       addSubcategoryScreenController newController = loader.getController();
-       newController.setOptionOfSubcategoryScreen("NazwaPodkategorii", "IDKategorii", "podkategoria",  categories, "Wybierz kategorie oraz wpisz nową podkategorie");
-       newController.setCategoriesInComboBox();
-
-       addSubcategory.setResizable(false);
-       addSubcategory.show();
-       addSubcategory.setOnCloseRequest(new EventHandler<WindowEvent>() {
+       FXMLLoader loader = getFxmlLoader("AddSubcategoryScreen.fxml");
+       Parent root = getRoot(loader);
+       ControllerOFAddingNewSubcategoryToDB newController = loader.getController();
+       newController.setOptionOfSubcategoryScreen("subcategoryName", "categoryID",  "subcategory", categories, "Wybierz kategorie oraz wpisz nową podkategorie");
+       Stage newAddStage = CreateNewAddStage();
+       customizeStage("Dodawnie nowej podkategorii", root, newAddStage);
+       newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
            public void handle(WindowEvent we) {
                try {
                    getDataToArrays();
@@ -419,12 +362,12 @@ public class ControllerOfModifyScreen {
 
        Stage addDimension =  new Stage();
        addDimension.setTitle("Dodawnie nowego wymiaru");
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addDimensionScreen.fxml"));
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/AddDimensionScreen.fxml"));
        Parent root = loader.load();
        root.getStylesheets().add("Stylesheets/style.css");
        addDimension.setScene(new Scene(root));
 
-       addDimensionScreenController newController = loader.getController();
+       ControllerOfAddingNewDimensionToDB newController = loader.getController();
        newController.setOptionOfDimensionScreen("Szerokosc", "Wysokosc","Dlugosc", "wymiary",  "Wpisz szerokość, długość oraz wysokość produktu");
 
        addDimension.setResizable(false);
@@ -447,12 +390,12 @@ public class ControllerOfModifyScreen {
 
        Stage addPosition =  new Stage();
        addPosition.setTitle("Dodawnie nowej pozycji");
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/addPositionScreen.fxml"));
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("resources/AddPositionScreen.fxml"));
        Parent root = loader.load();
        root.getStylesheets().add("Stylesheets/style.css");
        addPosition.setScene(new Scene(root));
 
-       addPositionScreenController newController = loader.getController();
+       ControllerOfAddingNewPositionToDB newController = loader.getController();
        newController.setOptionOfPositionScreen( "Polka", "Regal", "pozycja", "Wpisz półkę oraz regał");
 
        addPosition.setResizable(false);
@@ -471,19 +414,45 @@ public class ControllerOfModifyScreen {
 
     }
 
+
+
+    private Stage CreateNewAddStage() throws IOException {
+        Stage newModifyStage = new Stage();
+        return newModifyStage;
+
+    }
+
+    private void customizeStage(String title, Parent root, Stage newModifyStage) {
+        newModifyStage.setTitle(title);
+        //root.getStylesheets().add("Stylesheets/style.css");
+        newModifyStage.setScene(new Scene(root));
+        newModifyStage.setResizable(false);
+        newModifyStage.show();
+    }
+
+    private Parent getRoot(FXMLLoader loader) throws IOException {
+        Parent root = loader.load();
+        return root;
+    }
+
+    private FXMLLoader getFxmlLoader(String resource) {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(resource));
+        return loader;
+    }
+
     //Metoda pobierająca wszystkie podkategorie z bazy danych
    public void getSubcategoryData() throws ClassNotFoundException, SQLException {
 
        Class.forName("com.mysql.cj.jdbc.Driver");
-       Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+       Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
        Statement statement = connection.createStatement();
 
 
-       String sql = "SELECT * FROM sklep.podkategoria";
+       String sql = "SELECT * FROM hurtownia.subcategory";
        ResultSet resultSet = statement.executeQuery(sql);
 
        while(resultSet.next()) {
-            Subcategory subcategory = new Subcategory(Integer.parseInt(resultSet.getString("IDPodkategorii")),resultSet.getString("NazwaPodkategorii"),Integer.parseInt(resultSet.getString("IDKategorii")));
+            Subcategory subcategory = new Subcategory(Integer.parseInt(resultSet.getString("subcategoryID")),resultSet.getString("subcategoryName"),Integer.parseInt(resultSet.getString("categoryID")));
             subcategories.add(subcategory);
        }
        statement.close();
@@ -494,10 +463,10 @@ public class ControllerOfModifyScreen {
     public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> litsOfData) throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
-        String sql = "SELECT * FROM sklep." + nameOfTable;
+        String sql = "SELECT * FROM hurtownia." + nameOfTable;
         ResultSet resultSet = statement.executeQuery(sql);
 
         while(resultSet.next()) {
@@ -514,16 +483,16 @@ public class ControllerOfModifyScreen {
     public void getDimensionData() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
-        String sql = "SELECT * FROM sklep.wymiary";
+        String sql = "SELECT * FROM hurtownia.dimension";
         ResultSet resultSet = statement.executeQuery(sql);
 
 
         while(resultSet.next()) {
 
-            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("IDWymiarow")), (int) Double.parseDouble(resultSet.getString("Szerokosc")), (int) Double.parseDouble(resultSet.getString("Wysokosc")), (int) Double.parseDouble(resultSet.getString("Dlugosc")));
+            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("dimensionID")), (int) Double.parseDouble(resultSet.getString("width")), (int) Double.parseDouble(resultSet.getString("height")), (int) Double.parseDouble(resultSet.getString("length")));
             dimensions.add(dimension);
         }
         statement.close();
@@ -534,15 +503,15 @@ public class ControllerOfModifyScreen {
     public void getPositionData() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
 
-        String sql = "SELECT * FROM sklep.pozycja";
+        String sql = "SELECT * FROM hurtownia.positions";
         ResultSet resultSet = statement.executeQuery(sql);
 
         while(resultSet.next()) {
 
-            Position position = new Position(Integer.parseInt(resultSet.getString("IDPozycji")), Integer.parseInt(resultSet.getString("Polka")), Integer.parseInt(resultSet.getString("Regal")));
+            Position position = new Position(Integer.parseInt(resultSet.getString("positionID")), Integer.parseInt(resultSet.getString("shelf")), Integer.parseInt(resultSet.getString("regal")));
             positions.add(position);
         }
 
@@ -619,11 +588,10 @@ public class ControllerOfModifyScreen {
         positions.clear();
 
         //pobieranie danych
-        getChosenDataFromDB("IDPomieszczenia", "NazwaPomieszczenia", "pomieszczenie", manufacturers);
-        getChosenDataFromDB("IDKategorii","NazwaKategorii", "kategoria", categories);
+        getChosenDataFromDB("manufacturerID", "manufacturerName", "manufacturer", manufacturers);
+        getChosenDataFromDB("categoryID","categoryName", "category", categories);
         getSubcategoryData();
-        getChosenDataFromDB("IDKoloru", "NazwaKoloru", "kolor", colors);
-        getChosenDataFromDB("IDMaterialu","NazwaMaterialu", "material", materials);
+        getChosenDataFromDB("colorID", "colorName", "color", colors);
         getDimensionData();
         getPositionData();
 
@@ -632,7 +600,6 @@ public class ControllerOfModifyScreen {
         categoryBox.setItems(categories);
         subcategoryBox.setItems(subcategory);
         colorBox.setItems(colors);
-        materialBox.setItems(materials);
         dimensionsBox.setItems(dimensions);
         positionBox.setItems(positions);
 
@@ -699,37 +666,35 @@ public class ControllerOfModifyScreen {
     //Metoda ustawiająca wybrany produkt od danym ID z bazy danych
     public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException, UnsupportedEncodingException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
         String sql_getID = "";
         if(AddOrEdit) {
 
-            sql_getID   = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
-                    "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
-                    " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
-                    "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
-                    "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
-                    "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
-                    "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
-                    "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
-                    "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
-                    "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
-                    "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji) WHERE produkty.IDProduktu = (SELECT MAX(produkty.IDProduktu) FROM produkty);";
+            sql_getID   = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
+                    "subcategory.subcategoryName, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "positions.shelf, positions.regal, stock\n" +
+                    "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
+                    "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
+                    "INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)\n" +
+                    "INNER JOIN category ON subcategory.categoryID = category.categoryID)\n" +
+                    "INNER JOIN color ON details.colorID = color.colorID)\n" +
+                    "INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)\n" +
+                    "INNER JOIN positions ON details.positionID = positions.positionID) WHERE produkty.IDProduktu = (SELECT MAX(produkty.IDProduktu) FROM produkty);";
 
         }
         else {
 
-            sql_getID = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
-                    "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
-                    " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
-                    "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
-                    "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
-                    "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
-                    "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
-                    "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
-                    "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
-                    "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
-                    "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji) WHERE produkty.IDProduktu = " + IDofProduct + ";";
+            sql_getID = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
+                    "subcategory.subcategoryName, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "positions.shelf, positions.regal, stock\n" +
+                    "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
+                    "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
+                    "INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)\n" +
+                    "INNER JOIN category ON subcategory.categoryID = category.categoryID)\n" +
+                    "INNER JOIN color ON details.colorID = color.colorID)\n" +
+                    "INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)\n" +
+                    "INNER JOIN positions ON details.positionID = positions.positionID) WHERE produkty.IDProduktu = " + IDofProduct + ";";
         }
 
         ResultSet resultSet = statement.executeQuery(sql_getID);
@@ -757,26 +722,15 @@ public class ControllerOfModifyScreen {
         connection.close();
     }
 
-    //Ogólna metoda informująca
-    public void Info(String titleOfInfo, String contentOfInfo){
-        javafx.scene.control.Alert nullData = new Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-        nullData.setTitle(titleOfInfo);
-        nullData.setHeaderText(null);
-        nullData.setContentText(contentOfInfo);
 
-        nullData.showAndWait();
+    private Alert Alert(String setTitle, String setContents, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(setTitle);
+        alert.setHeaderText(null);
+        alert.setContentText(setContents);
+
+        return alert;
     }
-
-    //Ogólna metoda ostrzegająca
-    void Alert(String setTitle, String setContents) {
-        Alert badClick = new Alert(Alert.AlertType.ERROR);
-        badClick.setTitle(setTitle);
-        badClick.setHeaderText(null);
-        badClick.setContentText(setContents);
-
-        badClick.showAndWait();
-    }
-
     //Metoda ustawiająca tytułowy label - edycja/dodawanie
     void setLabelINFO(String labelText)
     {

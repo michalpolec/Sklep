@@ -4,7 +4,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -36,14 +35,13 @@
             <Label id="productName" alignment="CENTER_RIGHT" text="Nazwa produktu:" />
             <Label id="price" text="Cena:" GridPane.rowIndex="1" />
             <Label id="description" prefHeight="22.0" prefWidth="27.0" text="Opis:" GridPane.rowIndex="3" />
-            <Label id="room" prefHeight="17.0" prefWidth="80.0" text="Pomieszczenie:" GridPane.rowIndex="4" />
+            <Label id="room" prefHeight="18.0" prefWidth="59.0" text="Producent:" GridPane.rowIndex="4" />
             <Label id="subcategory" text="Podkategoria:" GridPane.rowIndex="6" />
             <Label id="category" text="Kategoria:" GridPane.rowIndex="5" />
             <Label id="color" text="Kolor:" GridPane.rowIndex="7" />
-            <Label id="material" text="Materiał:" GridPane.rowIndex="8" />
-            <Label id="dimensions" text="Wymiary:" GridPane.rowIndex="9" />
-            <Label id="position" text="Pozycja:" GridPane.rowIndex="10" />
-            <Label id="stock" text="Stan na magazynie:" GridPane.rowIndex="11" />
+            <Label id="dimensions" text="Wymiary:" GridPane.rowIndex="8" />
+            <Label id="position" text="Pozycja:" GridPane.rowIndex="9" />
+            <Label id="stock" text="Stan na magazynie:" GridPane.rowIndex="10" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
                <children>
                   <TextField id="nameField" fx:id="nameField" alignment="TOP_LEFT" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="439.0" />
@@ -62,7 +60,7 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <children>
                   <ComboBox id="roomBox" fx:id="manufacturerBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="roomButton" fx:id="roomButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addRoom" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe" />
+                  <Button id="roomButton" fx:id="roomButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addManufacturer" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="138.0" layoutY="160.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
@@ -85,25 +83,18 @@
             </AnchorPane>
             <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
                <children>
-                  <ComboBox id="materialBoxs" fx:id="materialBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="materialButton" fx:id="materialButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addMaterial" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowy" />
+                  <Button fx:id="dimensionsButton" layoutX="302.0" layoutY="8.0" mnemonicParsing="false" onAction="#addDimensions" prefHeight="26.0" prefWidth="90.0" text="Dodaj nowe" />
+                  <ComboBox fx:id="dimensionsBox" layoutY="9.0" prefHeight="26.0" prefWidth="256.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
                <children>
-                  <ComboBox fx:id="dimensionsBox" layoutY="7.0" prefHeight="26.0" prefWidth="256.0" />
-                  <Button fx:id="dimensionsButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addDimensions" prefHeight="26.0" prefWidth="90.0" text="Dodaj nowe" />
-               </children>
-            </AnchorPane>
+                  <ComboBox fx:id="positionBox" layoutY="6.0" prefHeight="26.0" prefWidth="256.0" />
+                  <Button fx:id="positionButton" layoutX="310.0" layoutY="6.0" mnemonicParsing="false" onAction="#addPosition" prefHeight="26.0" prefWidth="90.0" text="Dodaj nową" />
+               </children></AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
                <children>
-                  <ComboBox fx:id="positionBox" layoutY="7.0" prefHeight="26.0" prefWidth="256.0" />
-                  <Button fx:id="positionButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addPosition" prefHeight="26.0" prefWidth="90.0" text="Dodaj nową" />
-               </children>
-            </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="11">
-               <children>
-                  <TextField id="stockField" fx:id="stockField" layoutY="8.0" prefHeight="25.0" prefWidth="103.0" />
+                  <TextField id="stockField" fx:id="stockField" layoutY="7.0" prefHeight="25.0" prefWidth="103.0" />
                </children>
             </AnchorPane>
          </children>
@@ -111,7 +102,5 @@
       <Label id="title" fx:id="labelINFO" layoutX="272.0" layoutY="45.0" text="" />
       <Button id="addButton" fx:id="addProductToDB" layoutX="254.0" layoutY="695.0" mnemonicParsing="false" onAction="#modifyDatabaseButtonPressed" text="Dodaj" />
       <Button fx:id="cancelButton" layoutX="379.0" layoutY="695.0" mnemonicParsing="false" onAction="#onCancelAction" text="Anuluj" />
-      <ImageView fx:id="imageView" fitHeight="101.0" fitWidth="156.0" layoutX="200.0" layoutY="581.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="imageButton" layoutX="494.0" layoutY="612.0" mnemonicParsing="false" onAction="#getImageFromFile" prefHeight="26.0" prefWidth="118.0" text="Wybierz obraz" />
    </children>
 </AnchorPane>

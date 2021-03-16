@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class addSubcategoryScreenController {
+public class ControllerOFAddingNewSubcategoryToDB {
 
     public Button addSubcategory;
     public Label titleLabel;

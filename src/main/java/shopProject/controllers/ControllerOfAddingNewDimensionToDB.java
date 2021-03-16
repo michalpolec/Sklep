@@ -14,7 +14,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class addDimensionScreenController {
+public class ControllerOfAddingNewDimensionToDB {
 
 
     public Label titleOfScreen;

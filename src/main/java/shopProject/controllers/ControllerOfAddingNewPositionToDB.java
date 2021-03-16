@@ -14,7 +14,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class addPositionScreenController {
+public class ControllerOfAddingNewPositionToDB {
 
 
     public Label titleOfScreen;
