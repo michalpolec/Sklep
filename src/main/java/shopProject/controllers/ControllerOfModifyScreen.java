@@ -47,7 +47,7 @@ public class ControllerOfModifyScreen {
     public TextField descriptionField;
     public TextField stockField;
 
-    public ComboBox roomBox;
+    public ComboBox manufacturerBox;
     public ComboBox subcategoryBox;
     public ComboBox categoryBox;
     public ComboBox colorBox;
@@ -103,12 +103,11 @@ public class ControllerOfModifyScreen {
        priceField.setText(String.valueOf(selectedProduct.getPrice()));
        descriptionField.setText(selectedProduct.getDescription());
        stockField.setText(String.valueOf(selectedProduct.getStock()));
-       roomBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getRoom(),getStringArray(room)));
+       manufacturerBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getManufacturer(),getStringArray(room)));
        categoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getCategory(), getStringArray(categories)));
        setCorrectSubcategories();
         subcategoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getSubcategory(), getStringArray(subcategory)));
        colorBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getColor(), getStringArray(colors)));
-       materialBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getMaterial(), getStringArray(materials)));
        dimensionsBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getWidth() + "cm x " + selectedProduct.getHeight() + "cm x " + selectedProduct.getLength() + "cm",getStringArray(dimensions)));
        positionBox.getSelectionModel().select(getIndexToComboBox("Półka: " + selectedProduct.getShelf() + ", Regał: " + selectedProduct.getRegal(), getStringArray(positions)));
 
@@ -141,7 +140,7 @@ public class ControllerOfModifyScreen {
            productName = nameField.getText();
            productPrice = Double.parseDouble(priceField.getText());
            productDescription = descriptionField.getText();
-           roomID = getIDofElement(roomBox.getValue().toString(), room);
+           roomID = getIDofElement(manufacturerBox.getValue().toString(), room);
            subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategory);
            colorID = getIDofElement(colorBox.getValue().toString(), colors);
            materialID = getIDofElement(materialBox.getValue().toString(), materials);
@@ -629,7 +628,7 @@ public class ControllerOfModifyScreen {
         getPositionData();
 
         //ustawianie danych
-        roomBox.setItems(room);
+        manufacturerBox.setItems(room);
         categoryBox.setItems(categories);
         subcategoryBox.setItems(subcategory);
         colorBox.setItems(colors);
@@ -737,22 +736,22 @@ public class ControllerOfModifyScreen {
 
 
         while(resultSet.next()) {
+
             selectedProduct = new Product(
-                    resultSet.getInt("IDProduktu"),
-                    resultSet.getString("NazwaProduktu"),
-                    resultSet.getDouble("CenaProduktu"),
-                    resultSet.getString("OpisProduktu"),
-                    resultSet.getString("NazwaPomieszczenia"),
-                    resultSet.getString("NazwaKategorii"),
-                    resultSet.getString("NazwaPodkategorii"),
-                    resultSet.getString("NazwaKoloru"),
-                    resultSet.getString("NazwaMaterialu"),
-                    resultSet.getDouble("Szerokosc"),
-                    resultSet.getDouble("Wysokosc"),
-                    resultSet.getDouble("Dlugosc"),
-                    resultSet.getInt("Polka"),
-                    resultSet.getInt("Regal"),
-                    resultSet.getInt("StanMagazynowy"));
+                    resultSet.getInt("productID"),
+                    resultSet.getString("productName"),
+                    resultSet.getDouble("productPrice"),
+                    resultSet.getString("productDescription"),
+                    resultSet.getString("manufacturerName"),
+                    resultSet.getString("categoryName"),
+                    resultSet.getString("subcategoryName"),
+                    resultSet.getString("colorName"),
+                    resultSet.getDouble("width"),
+                    resultSet.getDouble("height"),
+                    resultSet.getDouble("length"),
+                    resultSet.getInt("shelf"),
+                    resultSet.getInt("regal"),
+                    resultSet.getInt("stock"));
         }
         statement.close();
         connection.close();

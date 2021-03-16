@@ -61,7 +61,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <children>
-                  <ComboBox id="roomBox" fx:id="roomBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
+                  <ComboBox id="roomBox" fx:id="manufacturerBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
                   <Button id="roomButton" fx:id="roomButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addRoom" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe" />
                </children>
             </AnchorPane>

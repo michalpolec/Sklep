@@ -21,7 +21,7 @@ public class Main extends Application {
     public void start(Stage loginStage) throws Exception{
 
         getAllDataFromDB();
-        loginStage.setTitle("Baza danych sklepu");
+        loginStage.setTitle("Baza danych hurtowni");
         FXMLLoader loader = new FXMLLoader((getClass().getClassLoader().getResource("MainScreen.fxml")));
         Parent root = loader.load();
         loginStage.setScene(new Scene(root));
@@ -42,20 +42,19 @@ public class Main extends Application {
         try {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
             Statement statement = connection.createStatement();
 
-            String sql = "SELECT produkty.IDProduktu, NazwaProduktu, CenaProduktu, OpisProduktu, pomieszczenie.NazwaPomieszczenia, kategoria.NazwaKategorii, \n" +
-                    "podkategoria.NazwaPodkategorii, kolor.NazwaKoloru, material.NazwaMaterialu, wymiary.Szerokosc, wymiary.Wysokosc, wymiary.Dlugosc,\n" +
-                    " pozycja.Polka, pozycja.Regal, StanMagazynowy, Zdjecie\n" +
-                    "FROM ((((((((produkty INNER JOIN szczegoly ON produkty.IDProduktu = szczegoly.IDProduktu)\n" +
-                    "INNER JOIN pomieszczenie ON produkty.IDPomieszczenia = pomieszczenie.IDPomieszczenia)\n" +
-                    "INNER JOIN podkategoria ON produkty.IDPodkategorii = podkategoria.IDPodkategorii)\n" +
-                    "INNER JOIN kategoria ON podkategoria.IDKategorii = kategoria.IDKategorii)\n" +
-                    "INNER JOIN kolor ON szczegoly.IDKoloru = kolor.IDKoloru)\n" +
-                    "INNER JOIN material ON szczegoly.IDMaterialu = material.IDMaterialu)\n" +
-                    "INNER JOIN wymiary ON szczegoly.IDWymiarow = wymiary.IDWymiarow)\n" +
-                    "INNER JOIN pozycja ON szczegoly.IDPozycji = pozycja.IDPozycji);";
+            String sql = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
+                    "subcategory.subcategoryName, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "positions.shelf, positions.regal, stock\n" +
+                    "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
+                    "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
+                    "INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)\n" +
+                    "INNER JOIN category ON subcategory.categoryID = category.categoryID)\n" +
+                    "INNER JOIN color ON details.colorID = color.colorID)\n" +
+                    "INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)\n" +
+                    "INNER JOIN positions ON details.positionID = positions.positionID);";
 
             ResultSet resultSet = statement.executeQuery(sql);
 
@@ -64,21 +63,20 @@ public class Main extends Application {
 
 
                 Product newProduct = new Product(
-                        resultSet.getInt("IDProduktu"),
-                        resultSet.getString("NazwaProduktu"),
-                        resultSet.getDouble("CenaProduktu"),
-                        resultSet.getString("OpisProduktu"),
-                        resultSet.getString("NazwaPomieszczenia"),
-                        resultSet.getString("NazwaKategorii"),
-                        resultSet.getString("NazwaPodkategorii"),
-                        resultSet.getString("NazwaKoloru"),
-                        resultSet.getString("NazwaMaterialu"),
-                        resultSet.getDouble("Szerokosc"),
-                        resultSet.getDouble("Wysokosc"),
-                        resultSet.getDouble("Dlugosc"),
-                        resultSet.getInt("Polka"),
-                        resultSet.getInt("Regal"),
-                        resultSet.getInt("StanMagazynowy"));
+                        resultSet.getInt("productID"),
+                        resultSet.getString("productName"),
+                        resultSet.getDouble("productPrice"),
+                        resultSet.getString("productDescription"),
+                        resultSet.getString("manufacturerName"),
+                        resultSet.getString("categoryName"),
+                        resultSet.getString("subcategoryName"),
+                        resultSet.getString("colorName"),
+                        resultSet.getDouble("width"),
+                        resultSet.getDouble("height"),
+                        resultSet.getDouble("length"),
+                        resultSet.getInt("shelf"),
+                        resultSet.getInt("regal"),
+                        resultSet.getInt("stock"));
 
                 products.add(newProduct);
 

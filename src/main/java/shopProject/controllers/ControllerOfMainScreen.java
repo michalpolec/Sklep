@@ -153,11 +153,10 @@ public class ControllerOfMainScreen {
                 products.get(i).setNameOfProduct(product.getNameOfProduct());
                 products.get(i).setPrice(product.getPrice());
                 products.get(i).setDescription(product.getDescription());
-                products.get(i).setRoom(product.getRoom());
+                products.get(i).setManufacturer(product.getManufacturer());
                 products.get(i).setCategory(product.getCategory());
                 products.get(i).setSubcategory(product.getSubcategory());
                 products.get(i).setColor(product.getColor());
-                products.get(i).setMaterial(product.getMaterial());
                 products.get(i).setWidth(product.getWidth());
                 products.get(i).setHeight(product.getHeight());
                 products.get(i).setLength(product.getLength());
