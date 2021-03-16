@@ -1,6 +1,6 @@
 package shopProject.controllers;
 
-import shopProject.entity.restOfElements;
+import shopProject.entity.RestOfElements;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -18,10 +18,10 @@ public class ControllerOFAddingNewSubcategoryToDB {
     public TextField subcategoryField;
     public ComboBox categoryBox;
 
-    ObservableList<restOfElements>  categories;
+    ObservableList<RestOfElements>  categories;
 
     // Ustawienie zmiennyhc klasy
-    public void setOptionOfSubcategoryScreen(ObservableList<restOfElements> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfSubcategoryScreen(ObservableList<RestOfElements> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
 
         this.titleLabel.setText(textOfLabel);
         this.categories = categories;
@@ -46,7 +46,7 @@ public class ControllerOFAddingNewSubcategoryToDB {
 
         int idOfCategory = 0;
 
-        for(restOfElements cat : categories){
+        for(RestOfElements cat : categories){
             if(cat.getName().contains(categoryBox.getValue().toString())){
                 idOfCategory = cat.getID();
             }

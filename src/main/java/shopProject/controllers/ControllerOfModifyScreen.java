@@ -26,12 +26,12 @@ public class ControllerOfModifyScreen {
     boolean AddOrEdit;
     public Image imageFromFile;
 
-    ObservableList<restOfElements> manufacturers =  FXCollections.observableArrayList();
-    ObservableList<restOfElements>  categories = FXCollections.observableArrayList();
+    ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
+    ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
     ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
     ObservableList<Subcategory>  subcategory = FXCollections.observableArrayList();
-    ObservableList<restOfElements> colors =  FXCollections.observableArrayList();
-    ObservableList<restOfElements> materials =  FXCollections.observableArrayList();
+    ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
+    ObservableList<RestOfElements> materials =  FXCollections.observableArrayList();
     ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
     ObservableList<Position> positions = FXCollections.observableArrayList();
 
@@ -446,7 +446,7 @@ public class ControllerOfModifyScreen {
    }
 
    //Metoda pobierająca wybrane dane z bazy danych
-    public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<restOfElements> litsOfData) throws ClassNotFoundException, SQLException {
+    public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<RestOfElements> litsOfData) throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
@@ -456,7 +456,7 @@ public class ControllerOfModifyScreen {
         ResultSet resultSet = statement.executeQuery(sql);
 
         while(resultSet.next()) {
-            restOfElements table = new restOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
+            RestOfElements table = new RestOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
                     resultSet.getString(nameOfSecondColumn));
             litsOfData.add(table);
         }
@@ -521,10 +521,10 @@ public class ControllerOfModifyScreen {
     }
 
     //Ogólna Metoda wyszukująca ID restOfElements
-    public int getIDofElement(String nameOfElement, ObservableList<restOfElements> listsOfElements) {
+    public int getIDofElement(String nameOfElement, ObservableList<RestOfElements> listsOfElements) {
 
         int ID = 0;
-        for(restOfElements element : listsOfElements)
+        for(RestOfElements element : listsOfElements)
         {
             if(element.getName().equals(nameOfElement))
             {
