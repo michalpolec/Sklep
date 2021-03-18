@@ -130,7 +130,6 @@ public class ControllerOfModifyScreen {
        positionBox.getSelectionModel().select(getSelectedProduct().getPosition());
     }
 
-    //Metoda ustawiająca właściwe podkategorie w zależności od wybranej Kateogrii
     public void setCorrectSubcategoriesFromSelectedCategory(){
         subcategoriesFromSelectedCategory.clear();
         int IDofCategory = getIDofElement(categoryBox.getValue().toString(), categories);
