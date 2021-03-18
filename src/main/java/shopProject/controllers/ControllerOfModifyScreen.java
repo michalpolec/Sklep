@@ -12,8 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -22,16 +20,15 @@ import java.sql.*;
 
 public class ControllerOfModifyScreen {
 
-    private Product selectedProduct;
     boolean AddOrEdit;
 
-    ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
-    ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
-    ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
-    ObservableList<Subcategory>  subcategory = FXCollections.observableArrayList();
-    ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
-    ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
-    ObservableList<Position> positions = FXCollections.observableArrayList();
+    private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
+    private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
+    private ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
+    private ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
+    private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
+    private ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
+    private ObservableList<Position> positions = FXCollections.observableArrayList();
 
     public TextField nameField;
     public TextField priceField;
@@ -56,6 +53,16 @@ public class ControllerOfModifyScreen {
 
     public Label labelINFO;
 
+    private Product selectedProduct;
+
+    public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
+        this.selectedProduct = selectedProduct;
+    }
+
+    public Product getSelectedProduct(){
+        return selectedProduct;
+    }
+
    public void initialize() throws SQLException, ClassNotFoundException {
        subcategoryBox.setDisable(true);
        getDataToArrays();
@@ -79,18 +86,18 @@ public class ControllerOfModifyScreen {
     }
 
     private void getAllDataFromDBToLists() throws ClassNotFoundException, SQLException {
-        getChosenDataFromDB("manufacturerID", "manufacturerName", "manufacturer", manufacturers);
-        getChosenDataFromDB("categoryID","categoryName", "category", categories);
-        getSubcategoryData();
-        getChosenDataFromDB("colorID", "colorName", "color", colors);
-        getDimensionData();
-        getPositionData();
+        getChosenDataFromDatabase("manufacturerID", "manufacturerName", "manufacturer", manufacturers);
+        getChosenDataFromDatabase("categoryID","categoryName", "category", categories);
+        getChosenDataFromDatabase("colorID", "colorName", "color", colors);
+        getSubcategoryDataFromDatabase();
+        getDimensionDataFromDatabase();
+        getPositionDataFromDatabase();
     }
 
     private void setItemsToAllComboBoxes() {
         manufacturerBox.setItems(manufacturers);
         categoryBox.setItems(categories);
-        subcategoryBox.setItems(subcategory);
+        subcategoryBox.setItems(subcategoriesFromSelectedCategory);
         colorBox.setItems(colors);
         dimensionsBox.setItems(dimensions);
         positionBox.setItems(positions);
@@ -108,25 +115,34 @@ public class ControllerOfModifyScreen {
         });
     }
 
-    //Inicjalizowanie wybranymi danymi podczas edycji produktu
     public void initializeData() throws SQLException, ClassNotFoundException, IOException {
 
-       nameField.setText(selectedProduct.getNameOfProduct());
-       priceField.setText(String.valueOf(selectedProduct.getPrice()));
-       descriptionField.setText(selectedProduct.getDescription());
-       stockField.setText(String.valueOf(selectedProduct.getStock()));
-       manufacturerBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getManufacturer(),getStringArray(manufacturers)));
-       categoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getCategory(), getStringArray(categories)));
-       setCorrectSubcategories();
-        subcategoryBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getSubcategory(), getStringArray(subcategory)));
-       colorBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getColor(), getStringArray(colors)));
-       dimensionsBox.getSelectionModel().select(getIndexToComboBox(selectedProduct.getWidth() + "cm x " + selectedProduct.getHeight() + "cm x " + selectedProduct.getLength() + "cm",getStringArray(dimensions)));
-       positionBox.getSelectionModel().select(getIndexToComboBox("Półka: " + selectedProduct.getShelf() + ", Regał: " + selectedProduct.getRegal(), getStringArray(positions)));
-
-
+       nameField.setText(getSelectedProduct().getNameOfProduct());
+       priceField.setText(String.valueOf(getSelectedProduct().getPrice()));
+       descriptionField.setText(getSelectedProduct().getDescription());
+       stockField.setText(String.valueOf(getSelectedProduct().getStock()));
+       manufacturerBox.getSelectionModel().select(getSelectedProduct().getManufacturer());
+       categoryBox.getSelectionModel().select(getSelectedProduct().getCategory());
+       setCorrectSubcategoriesFromSelectedCategory();
+       subcategoryBox.getSelectionModel().select(getSelectedProduct().getSubcategory());
+       colorBox.getSelectionModel().select(getSelectedProduct().getColor());
+       dimensionsBox.getSelectionModel().select(getSelectedProduct().getDimension());
+       positionBox.getSelectionModel().select(getSelectedProduct().getPosition());
     }
 
+    //Metoda ustawiająca właściwe podkategorie w zależności od wybranej Kateogrii
+    public void setCorrectSubcategoriesFromSelectedCategory(){
+        subcategoriesFromSelectedCategory.clear();
+        int IDofCategory = getIDofElement(categoryBox.getValue().toString(), categories);
 
+        for(Subcategory subcategory : subcategories){
+            if(subcategory.getCategoryID() == IDofCategory){
+
+                subcategoriesFromSelectedCategory.add(subcategory);
+            }
+        }
+        subcategoryBox.setDisable(false);
+    }
 
     private Connection getConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -154,7 +170,7 @@ public class ControllerOfModifyScreen {
            productPrice = Double.parseDouble(priceField.getText());
            productDescription = descriptionField.getText();
            manufacturerID = getIDofElement(manufacturerBox.getValue().toString(), manufacturers);
-           subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategory);
+           subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategoriesFromSelectedCategory);
            colorID = getIDofElement(colorBox.getValue().toString(), colors);
            dimensionID = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
            positionID = getIDofElementForPosition(positionBox.getValue().toString(), positions);
@@ -212,11 +228,12 @@ public class ControllerOfModifyScreen {
        }
        else if (Continue){
 
+
            Connection connection = getConnection();
            Statement statement = connection.createStatement();
 
-           productID = selectedProduct.getProductID();
-           detailsID = selectedProduct.getDetailsID();
+           productID = getSelectedProduct().getProductID();
+           detailsID = getSelectedProduct().getDetailsID();
 
            String sql_details = "UPDATE `hurtownia`.`details` SET `positionID` = '"+ positionID +"', `dimensionID` = '"+ dimensionID + "', `colorID` = '"+ colorID +"' WHERE (`detailsID` = '"+ detailsID +"');";
            statement.executeUpdate(sql_details);
@@ -270,7 +287,7 @@ public class ControllerOfModifyScreen {
 
     public void chosenCategory() {
 
-        setCorrectSubcategories();
+        setCorrectSubcategoriesFromSelectedCategory();
 
     }
 
@@ -405,7 +422,7 @@ public class ControllerOfModifyScreen {
     }
 
     //Metoda pobierająca wszystkie podkategorie z bazy danych
-   public void getSubcategoryData() throws ClassNotFoundException, SQLException {
+   public void getSubcategoryDataFromDatabase() throws ClassNotFoundException, SQLException {
 
        Connection connection = getConnection();
        Statement statement = connection.createStatement();
@@ -423,7 +440,7 @@ public class ControllerOfModifyScreen {
    }
 
    //Metoda pobierająca wybrane dane z bazy danych
-    public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<RestOfElements> litsOfData) throws ClassNotFoundException, SQLException {
+    public void getChosenDataFromDatabase(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<RestOfElements> litsOfData) throws ClassNotFoundException, SQLException {
 
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
@@ -442,7 +459,7 @@ public class ControllerOfModifyScreen {
     }
 
     //Metoda pobierająca wszystkie wymiary z bazy danych
-    public void getDimensionData() throws ClassNotFoundException, SQLException {
+    public void getDimensionDataFromDatabase() throws ClassNotFoundException, SQLException {
 
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
@@ -461,7 +478,7 @@ public class ControllerOfModifyScreen {
     }
 
     //Metoda pobierająca wszystkie pozycje z bazy danych
-    public void getPositionData() throws ClassNotFoundException, SQLException {
+    public void getPositionDataFromDatabase() throws ClassNotFoundException, SQLException {
 
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
@@ -480,13 +497,12 @@ public class ControllerOfModifyScreen {
 
     }
 
-    //Metoda wyszukująca ID danej podkategorii
     public int getIDofElementForSubcategory(String nameOfElement, ObservableList<Subcategory> listsOfElements) {
 
        int ID = 0;
        for(Subcategory element : listsOfElements)
        {
-           if(element.getSubcategoryName().equals(nameOfElement))
+           if(element.toString().equals(nameOfElement))
            {
                ID =  element.getSubcategoryID();
            }
@@ -494,13 +510,12 @@ public class ControllerOfModifyScreen {
        return ID;
     }
 
-    //Ogólna Metoda wyszukująca ID restOfElements
     public int getIDofElement(String nameOfElement, ObservableList<RestOfElements> listsOfElements) {
 
         int ID = 0;
         for(RestOfElements element : listsOfElements)
         {
-            if(element.getName().equals(nameOfElement))
+            if(element.toString().equals(nameOfElement))
             {
                 ID =  element.getID();
             }
@@ -508,13 +523,12 @@ public class ControllerOfModifyScreen {
         return ID;
     }
 
-    //Metoda wyszukująca ID wymiaru
     public int getIDofElementForDimension(String nameOfElement, ObservableList<Dimension> listsOfElements) {
 
         int ID = 0;
         for(Dimension element : listsOfElements)
         {
-            if((element.getWidth()  + "cm x " + element.getHeight()  + "cm x " + element.getLenght()  + "cm").equals(nameOfElement))
+            if((element.toString().equals(nameOfElement)))
             {
                 ID =  element.getDimensionID();
             }
@@ -522,15 +536,14 @@ public class ControllerOfModifyScreen {
         return ID;
     }
 
-    //Metoda wyszukująca ID pozycji
     public int getIDofElementForPosition(String nameOfElement, ObservableList<Position> listsOfElements) {
 
         int ID = 0;
-        for(Position position : listsOfElements)
+        for(Position element : listsOfElements)
         {
-            if(("Półka: " + position.getShelf() + ", Regał: " + position.getRegal()).equals(nameOfElement))
+            if(element.toString().equals(nameOfElement))
             {
-                ID =  position.getPositionID();
+                ID =  element.getPositionID();
             }
         }
         return ID;
@@ -557,43 +570,6 @@ public class ControllerOfModifyScreen {
 
     }
 
-    //Metoda zwracająca indeks wybranej opcji comboBoxa
-    public int getIndexToComboBox(String object, ObservableList<String> objects) {
-        int i = 0;
-        for(String testObject: objects)
-        {
-            if(object.equals(testObject))
-            {
-                break;
-            }
-            i++;
-        }
-        return i;
-    }
-
-    //Metoda ustawiająca właściwe podkategorie w zależności od wybranej Kateogrii
-    public void setCorrectSubcategories(){
-        subcategory.clear();
-        int IDofCategory = getIDofElement(categoryBox.getValue().toString(), categories);
-
-        for(Subcategory sub : subcategories){
-            if(sub.getCategoryID() == IDofCategory){
-
-                subcategory.add(sub);
-            }
-        }
-        subcategoryBox.setDisable(false);
-    }
-
-    //Metoda ustawiająca wybrany produkt
-    public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
-        this.selectedProduct = selectedProduct;
-    }
-
-    //Metoda zwracająca wybrany produkt
-    public Product getSelectedProduct(){
-        return selectedProduct;
-    }
 
     //Metoda ustawiająca wybrany produkt od danym ID z bazy danych
     public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException, UnsupportedEncodingException {
@@ -633,12 +609,12 @@ public class ControllerOfModifyScreen {
 
         while(resultSet.next()) {
 
-            selectedProduct = new Product(
+            setSelectedProduct(new Product(
                     resultSet.getInt("productID"),
                     resultSet.getString("productName"),
                     resultSet.getDouble("productPrice"),
                     resultSet.getString("productDescription"),
-                    resultSet.getInt("manudacturerID"),
+                    resultSet.getInt("manufacturerID"),
                     resultSet.getString("manufacturerName"),
                     resultSet.getInt("categoryID"),
                     resultSet.getString("categoryName"),
@@ -654,7 +630,7 @@ public class ControllerOfModifyScreen {
                     resultSet.getInt("positionID"),
                     resultSet.getInt("shelf"),
                     resultSet.getInt("regal"),
-                    resultSet.getInt("stock"));
+                    resultSet.getInt("stock")));
         }
         statement.close();
         connection.close();

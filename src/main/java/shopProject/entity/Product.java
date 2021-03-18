@@ -53,5 +53,13 @@ public class Product {
         this.stock = stock;
     }
 
+    public String getDimension(){
+        return width + "cm x " + height + "cm x " + length + "cm";
+    }
+
+    public String getPosition(){
+        return "Półka: " + shelf + ", Regał: " + regal;
+    }
+
 
 }
