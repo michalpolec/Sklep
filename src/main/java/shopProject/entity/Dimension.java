@@ -1,10 +1,8 @@
 package shopProject.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class Dimension {
 
     private int dimensionID;

@@ -25,6 +25,7 @@ public class ControllerOFAddingNewSubcategoryToDB {
 
         this.titleLabel.setText(textOfLabel);
         this.categories = categories;
+        setCategoriesInComboBox();
 
     }
 

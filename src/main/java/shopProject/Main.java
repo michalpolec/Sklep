@@ -46,7 +46,7 @@ public class Main extends Application {
             Statement statement = connection.createStatement();
 
             String sql = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName, product.detailsID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
                     "positions.shelf, positions.regal, stock\n" +
                     "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
                     "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
@@ -67,14 +67,20 @@ public class Main extends Application {
                         resultSet.getString("productName"),
                         resultSet.getDouble("productPrice"),
                         resultSet.getString("productDescription"),
+                        resultSet.getInt("manufacturerID"),
                         resultSet.getString("manufacturerName"),
+                        resultSet.getInt("categoryID"),
                         resultSet.getString("categoryName"),
+                        resultSet.getInt("subcategoryID"),
                         resultSet.getString("subcategoryName"),
                         resultSet.getInt("detailsID"),
+                        resultSet.getInt("colorID"),
                         resultSet.getString("colorName"),
+                        resultSet.getInt("dimensionID"),
                         resultSet.getDouble("width"),
                         resultSet.getDouble("height"),
                         resultSet.getDouble("length"),
+                        resultSet.getInt("positionID"),
                         resultSet.getInt("shelf"),
                         resultSet.getInt("regal"),
                         resultSet.getInt("stock"));

@@ -24,18 +24,14 @@ public class ControllerOfModifyScreen {
 
     private Product selectedProduct;
     boolean AddOrEdit;
-    public Image imageFromFile;
 
     ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
     ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
     ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
     ObservableList<Subcategory>  subcategory = FXCollections.observableArrayList();
     ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
-    ObservableList<RestOfElements> materials =  FXCollections.observableArrayList();
     ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
     ObservableList<Position> positions = FXCollections.observableArrayList();
-
-    public ImageView imageView;
 
     public TextField nameField;
     public TextField priceField;
@@ -46,7 +42,6 @@ public class ControllerOfModifyScreen {
     public ComboBox subcategoryBox;
     public ComboBox categoryBox;
     public ComboBox colorBox;
-    public ComboBox materialBox;
     public ComboBox dimensionsBox;
     public ComboBox positionBox;
 
@@ -58,19 +53,48 @@ public class ControllerOfModifyScreen {
     public Button positionButton;
     public Button addProductToDB;
     public Button cancelButton;
-    public Button imageButton;
 
     public Label labelINFO;
 
-    //Inicjalizacja klasy - ustawienie odpowiednich textField'ow tak aby mozna bylo wpisywac tylko cyfry
    public void initialize() throws SQLException, ClassNotFoundException {
-
        subcategoryBox.setDisable(true);
        getDataToArrays();
        setTextAsOnlyNumbers(priceField);
        setTextAsOnlyNumbers(stockField);
-
    }
+
+    public void getDataToArrays() throws SQLException, ClassNotFoundException {
+        clearAllLists();
+        getAllDataFromDBToLists();
+        setItemsToAllComboBoxes();
+    }
+
+    private void clearAllLists() {
+        manufacturers.clear();
+        categories.clear();
+        subcategories.clear();
+        colors.clear();
+        dimensions.clear();
+        positions.clear();
+    }
+
+    private void getAllDataFromDBToLists() throws ClassNotFoundException, SQLException {
+        getChosenDataFromDB("manufacturerID", "manufacturerName", "manufacturer", manufacturers);
+        getChosenDataFromDB("categoryID","categoryName", "category", categories);
+        getSubcategoryData();
+        getChosenDataFromDB("colorID", "colorName", "color", colors);
+        getDimensionData();
+        getPositionData();
+    }
+
+    private void setItemsToAllComboBoxes() {
+        manufacturerBox.setItems(manufacturers);
+        categoryBox.setItems(categories);
+        subcategoryBox.setItems(subcategory);
+        colorBox.setItems(colors);
+        dimensionsBox.setItems(dimensions);
+        positionBox.setItems(positions);
+    }
 
     private void setTextAsOnlyNumbers(TextField textField) {
         textField.textProperty().addListener(new ChangeListener<String>() {
@@ -103,19 +127,22 @@ public class ControllerOfModifyScreen {
     }
 
 
-    public void onCancelAction(){
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
+
+    private Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
     }
 
     //Metoda umożliwiająca edytowanie/dodanie produktu - pobiera nowo-wpisane dane i odpowiednio edytuje bądź dodaje jako nowy produkt
    public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException, IOException {
 
+       int productID = 0;
        String productName = "";
        double productPrice = 0.0;
        String productDescription = "";
        int manufacturerID = 0;
        int subcategoryID = 0;
+       int detailsID = 0;
        int colorID = 0;
        int dimensionID = 0;
        int positionID = 0;
@@ -141,9 +168,8 @@ public class ControllerOfModifyScreen {
 
        if(AddOrEdit && Continue) {
 
-           Class.forName("com.mysql.cj.jdbc.Driver");
-           Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
-           Statement statement = connection.createStatement();
+           Connection connection = getConnection();
+           Statement statement = getConnection().createStatement();
 
            boolean continueTypingData = true;
 
@@ -186,12 +212,11 @@ public class ControllerOfModifyScreen {
        }
        else if (Continue){
 
-           Class.forName("com.mysql.cj.jdbc.Driver");
-           Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+           Connection connection = getConnection();
            Statement statement = connection.createStatement();
 
-           int detailsID = selectedProduct.getDetailsID();
-           int productID = selectedProduct.getProductID();
+           productID = selectedProduct.getProductID();
+           detailsID = selectedProduct.getDetailsID();
 
            String sql_details = "UPDATE `hurtownia`.`details` SET `positionID` = '"+ positionID +"', `dimensionID` = '"+ dimensionID + "', `colorID` = '"+ colorID +"' WHERE (`detailsID` = '"+ detailsID +"');";
            statement.executeUpdate(sql_details);
@@ -234,7 +259,7 @@ public class ControllerOfModifyScreen {
     //Metoda działająca na kliknięcie przycisku 'dodaj nową' ketgorię - otwiera nowe okno
    public void addCategory() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowej kategorii", "NazwaKategorii", "kategoria",  "Wpisz nową kategorie" );
+       openElementScreen("Dodawanie nowej kategorii", "categoryName", "category",  "Wpisz nową kategorie" );
    }
 
 
@@ -252,13 +277,7 @@ public class ControllerOfModifyScreen {
     //Metoda działająca na kliknięcie przycisku 'dodaj nowy' kolor - otwiera nowe okno
    public void addColor() throws IOException, SQLException, ClassNotFoundException {
 
-       openElementScreen("Dodawanie nowego koloru" , "NazwaKoloru", "kolor",  "Wpisz nowy kolor");
-   }
-
-    //Metoda działająca na kliknięcie przycisku 'dodaj nowy' materiał - otwiera nowe okno
-   public void addMaterial() throws IOException, SQLException, ClassNotFoundException {
-
-       openElementScreen("Dodawanie nowego materiału" ,  "NazwaMaterialu", "material", "Wpisz nowy materiał");
+       openElementScreen("Dodawanie nowego koloru" , "colorName", "color",  "Wpisz nowy kolor");
    }
 
     //Metoda działająca na kliknięcie przycisku 'dodaj nowe' wymiary - otwiera nowe okno
@@ -388,8 +407,7 @@ public class ControllerOfModifyScreen {
     //Metoda pobierająca wszystkie podkategorie z bazy danych
    public void getSubcategoryData() throws ClassNotFoundException, SQLException {
 
-       Class.forName("com.mysql.cj.jdbc.Driver");
-       Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+       Connection connection = getConnection();
        Statement statement = connection.createStatement();
 
 
@@ -407,8 +425,7 @@ public class ControllerOfModifyScreen {
    //Metoda pobierająca wybrane dane z bazy danych
     public void getChosenDataFromDB(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<RestOfElements> litsOfData) throws ClassNotFoundException, SQLException {
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
         String sql = "SELECT * FROM hurtownia." + nameOfTable;
@@ -427,8 +444,7 @@ public class ControllerOfModifyScreen {
     //Metoda pobierająca wszystkie wymiary z bazy danych
     public void getDimensionData() throws ClassNotFoundException, SQLException {
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
         String sql = "SELECT * FROM hurtownia.dimension";
@@ -447,8 +463,7 @@ public class ControllerOfModifyScreen {
     //Metoda pobierająca wszystkie pozycje z bazy danych
     public void getPositionData() throws ClassNotFoundException, SQLException {
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
         String sql = "SELECT * FROM hurtownia.positions";
@@ -521,34 +536,6 @@ public class ControllerOfModifyScreen {
         return ID;
     }
 
-    //Metoda ustawiająca dane w comboboxach
-    public void getDataToArrays() throws SQLException, ClassNotFoundException {
-        //czyszczenie
-        manufacturers.clear();
-        categories.clear();
-        subcategories.clear();
-        colors.clear();
-        materials.clear();
-        dimensions.clear();
-        positions.clear();
-
-        //pobieranie danych
-        getChosenDataFromDB("manufacturerID", "manufacturerName", "manufacturer", manufacturers);
-        getChosenDataFromDB("categoryID","categoryName", "category", categories);
-        getSubcategoryData();
-        getChosenDataFromDB("colorID", "colorName", "color", colors);
-        getDimensionData();
-        getPositionData();
-
-        //ustawianie danych
-        manufacturerBox.setItems(manufacturers);
-        categoryBox.setItems(categories);
-        subcategoryBox.setItems(subcategory);
-        colorBox.setItems(colors);
-        dimensionsBox.setItems(dimensions);
-        positionBox.setItems(positions);
-
-    }
 
     //Metoda decydująca o edycji lub dodawanius
     public void setAddOrEdit(boolean AddOrEdit){
@@ -610,14 +597,13 @@ public class ControllerOfModifyScreen {
 
     //Metoda ustawiająca wybrany produkt od danym ID z bazy danych
     public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException, UnsupportedEncodingException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = getConnection();
         Statement statement = connection.createStatement();
         String sql_getID = "";
         if(AddOrEdit) {
 
             sql_getID   = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName, product.detailsID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "subcategory.subcategoryName, subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
                     "positions.shelf, positions.regal, stock\n" +
                     "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
                     "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
@@ -631,7 +617,7 @@ public class ControllerOfModifyScreen {
         else {
 
             sql_getID = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName, product.detailsID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
                     "positions.shelf, positions.regal, stock\n" +
                     "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
                     "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
@@ -652,14 +638,20 @@ public class ControllerOfModifyScreen {
                     resultSet.getString("productName"),
                     resultSet.getDouble("productPrice"),
                     resultSet.getString("productDescription"),
+                    resultSet.getInt("manudacturerID"),
                     resultSet.getString("manufacturerName"),
+                    resultSet.getInt("categoryID"),
                     resultSet.getString("categoryName"),
+                    resultSet.getInt("subcategoryID"),
                     resultSet.getString("subcategoryName"),
                     resultSet.getInt("detailsID"),
+                    resultSet.getInt("colorID"),
                     resultSet.getString("colorName"),
+                    resultSet.getInt("dimensionID"),
                     resultSet.getDouble("width"),
                     resultSet.getDouble("height"),
                     resultSet.getDouble("length"),
+                    resultSet.getInt("positionID"),
                     resultSet.getInt("shelf"),
                     resultSet.getInt("regal"),
                     resultSet.getInt("stock"));
@@ -677,10 +669,15 @@ public class ControllerOfModifyScreen {
 
         return alert;
     }
-    //Metoda ustawiająca tytułowy label - edycja/dodawanie
+
     void setLabelINFO(String labelText)
     {
         labelINFO.setText(labelText);
+    }
+
+    public void onCancelAction(){
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 
 }

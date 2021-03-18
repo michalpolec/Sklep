@@ -10,32 +10,44 @@ public class Product {
     private String nameOfProduct;
     private double price;
     private String description;
+    private int manufacturerID;
     private String manufacturer;
+    private int categoryID;
     private String category;
+    private int subcategoryID;
     private String subcategory;
     private int detailsID;
+    private int colorID;
     private String color;
+    private int dimensionID;
     private double width;
     private double height;
     private double length;
+    private int positionID;
     private int shelf;
     private int regal;
     private int stock;
 
 
-    public Product(int productID, String nameOfProduct, double price, String description, String manufacturer, String category, String subcategory, int detailsID, String color, double width, double height, double length, int shelf, int regal, int stock) {
+    public Product(int productID, String nameOfProduct, double price, String description,int manufacturerID, String manufacturer,int categoryID, String category, int subcategoryID, String subcategory, int detailsID, int colorID, String color, int dimensionID, double width, double height, double length,int positionID, int shelf, int regal, int stock) {
         this.productID = productID;
         this.nameOfProduct = nameOfProduct;
         this.price = price;
         this.description = description;
+        this.manufacturerID = manufacturerID;
         this.manufacturer = manufacturer;
+        this.categoryID = categoryID;
         this.category = category;
+        this.subcategoryID = subcategoryID;
         this.subcategory = subcategory;
         this.detailsID = detailsID;
+        this.colorID = colorID;
         this.color = color;
+        this.dimensionID = dimensionID;
         this.width = width;
         this.height = height;
         this.length = length;
+        this.positionID = positionID;
         this.shelf = shelf;
         this.regal = regal;
         this.stock = stock;
