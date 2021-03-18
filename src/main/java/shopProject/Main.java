@@ -46,7 +46,7 @@ public class Main extends Application {
             Statement statement = connection.createStatement();
 
             String sql = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "subcategory.subcategoryName, product.detailsID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
                     "positions.shelf, positions.regal, stock\n" +
                     "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
                     "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
@@ -70,6 +70,7 @@ public class Main extends Application {
                         resultSet.getString("manufacturerName"),
                         resultSet.getString("categoryName"),
                         resultSet.getString("subcategoryName"),
+                        resultSet.getInt("detailsID"),
                         resultSet.getString("colorName"),
                         resultSet.getDouble("width"),
                         resultSet.getDouble("height"),

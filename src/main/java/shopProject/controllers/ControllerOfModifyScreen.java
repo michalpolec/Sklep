@@ -190,26 +190,17 @@ public class ControllerOfModifyScreen {
            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
            Statement statement = connection.createStatement();
 
-           int IDProduct = selectedProduct.getProductID();
+           int detailsID = selectedProduct.getDetailsID();
+           int productID = selectedProduct.getProductID();
 
-           String sql_details = "UPDATE `hurtownia`.`details` SET `positionID` = '"+ positionID +"', `dimensionID` = '"+ dimensionID + "', `colorID` = '"+ colorID +"' WHERE (`productID` = '"+ IDProduct +"');";
+           String sql_details = "UPDATE `hurtownia`.`details` SET `positionID` = '"+ positionID +"', `dimensionID` = '"+ dimensionID + "', `colorID` = '"+ colorID +"' WHERE (`detailsID` = '"+ detailsID +"');";
            statement.executeUpdate(sql_details);
 
-           String sql_products = "UPDATE `hurtownia`.`product` SET productName = ?, productPrice = ?, productDescription = ?, manufacturerID = ?, subcategoryID = ?, stock = ? WHERE (productID = ?);";
-           PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
+           String sql_products = "UPDATE `hurtownia`.`product` SET productName = '"+ productName +"', productPrice = '"+ productPrice +"', productDescription = '"+ productDescription +"', manufacturerID = '"+ manufacturerID +"', subcategoryID = '"+ subcategoryID +"', detailsID = '"+ detailsID +"', stock = '"+ productStock +"' WHERE (productID = '"+ productID +"');";
+           statement.executeUpdate(sql_products);
 
-           preparedStatement.setString(1,productName);
-           preparedStatement.setDouble(2,productPrice);
-           preparedStatement.setString(3, productDescription);
-           preparedStatement.setInt(4, manufacturerID);
-           preparedStatement.setInt(5, subcategoryID);
-           preparedStatement.setInt(6, productStock);
-           preparedStatement.setInt(7, IDProduct);
-           preparedStatement.executeUpdate();
+           setSelectedProductFromDB(productID);
 
-           setSelectedProductFromDB(IDProduct);
-
-           preparedStatement.close();
            statement.close();
            connection.close();
 
@@ -626,7 +617,7 @@ public class ControllerOfModifyScreen {
         if(AddOrEdit) {
 
             sql_getID   = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "subcategory.subcategoryName, product.detailsID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
                     "positions.shelf, positions.regal, stock\n" +
                     "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
                     "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
@@ -640,7 +631,7 @@ public class ControllerOfModifyScreen {
         else {
 
             sql_getID = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "subcategory.subcategoryName, product.detailsID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
                     "positions.shelf, positions.regal, stock\n" +
                     "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
                     "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
@@ -664,6 +655,7 @@ public class ControllerOfModifyScreen {
                     resultSet.getString("manufacturerName"),
                     resultSet.getString("categoryName"),
                     resultSet.getString("subcategoryName"),
+                    resultSet.getInt("detailsID"),
                     resultSet.getString("colorName"),
                     resultSet.getDouble("width"),
                     resultSet.getDouble("height"),

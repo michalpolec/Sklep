@@ -154,6 +154,7 @@ public class ControllerOfMainScreen {
                 products.get(i).setManufacturer(product.getManufacturer());
                 products.get(i).setCategory(product.getCategory());
                 products.get(i).setSubcategory(product.getSubcategory());
+                products.get(i).setDetailsID(product.getDetailsID());
                 products.get(i).setColor(product.getColor());
                 products.get(i).setWidth(product.getWidth());
                 products.get(i).setHeight(product.getHeight());
@@ -191,11 +192,11 @@ public class ControllerOfMainScreen {
 
     private void deleteElementFromDatabase() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Sklep?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
-        String sql = "DELETE FROM `sklep`.`produkty` WHERE (`IDProduktu` = '" + selectedProduct.getProductID() + "')";
+        String sql = "DELETE FROM `hurtownia`.`product` WHERE (`productID` = '" + selectedProduct.getProductID() + "')";
         statement.executeUpdate(sql);
-        sql = "DELETE FROM `sklep`.`szczegoly` WHERE (`IDProduktu` = '" + selectedProduct.getProductID() + "')";
+        sql = "DELETE FROM `hurtownia`.`details` WHERE (`detailsID` = '" + selectedProduct.getDetailsID() + "')";
         statement.executeUpdate(sql);
         statement.close();
         connection.close();

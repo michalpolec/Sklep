@@ -13,6 +13,7 @@ public class Product {
     private String manufacturer;
     private String category;
     private String subcategory;
+    private int detailsID;
     private String color;
     private double width;
     private double height;
@@ -22,7 +23,7 @@ public class Product {
     private int stock;
 
 
-    public Product(int productID, String nameOfProduct, double price, String description, String manufacturer, String category, String subcategory, String color, double width, double height, double length, int shelf, int regal, int stock) {
+    public Product(int productID, String nameOfProduct, double price, String description, String manufacturer, String category, String subcategory, int detailsID, String color, double width, double height, double length, int shelf, int regal, int stock) {
         this.productID = productID;
         this.nameOfProduct = nameOfProduct;
         this.price = price;
@@ -30,6 +31,7 @@ public class Product {
         this.manufacturer = manufacturer;
         this.category = category;
         this.subcategory = subcategory;
+        this.detailsID = detailsID;
         this.color = color;
         this.width = width;
         this.height = height;
