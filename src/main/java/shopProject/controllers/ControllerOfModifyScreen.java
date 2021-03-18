@@ -147,83 +147,41 @@ public class ControllerOfModifyScreen {
 
            boolean continueTypingData = true;
 
-           String sql_getIDfromProducts = "SELECT max(productID) FROM hurtownia.product";
-           int greatestIDofProducts = 0;
-           ResultSet resultSet1 = statement.executeQuery(sql_getIDfromProducts);
-           while(resultSet1.next()) {
-               greatestIDofProducts = resultSet1.getInt("max(productID)") + 1;
+
+           try {
+
+               String sql_details = "INSERT INTO details ( positionID, dimensionID, colorID) VALUES ('" + positionID + "', '" + dimensionID + "', '" + colorID + "');";
+               statement.executeUpdate(sql_details);
+           } catch (SQLException e) {
+               Alert("Błąd polecenia", "Błędne polecenie", Alert.AlertType.ERROR).showAndWait();
+               continueTypingData = false;
            }
 
-           String sql_getIDfromDetails = "SELECT max(productID) FROM hurtownia.product";
-           int greatestIDofDetails = 0;
-           ResultSet resultSet2 = statement.executeQuery(sql_getIDfromDetails);
-           while(resultSet2.next()) {
-               greatestIDofDetails = resultSet2.getInt("max(productID)") + 1;
-           }
-
-           if (greatestIDofProducts == greatestIDofDetails) {
-
-               String sql_increment1 = "ALTER TABLE `hurtownia`.`product` AUTO_INCREMENT = " + greatestIDofProducts + ";";
-               statement.executeUpdate(sql_increment1);
-               String sql_increment2 = "ALTER TABLE `hurtownia`.`details` AUTO_INCREMENT = " + greatestIDofDetails + ";";
-               statement.executeUpdate(sql_increment2);
+           if (continueTypingData) {
 
                try {
 
-                   String sql_details = "INSERT INTO details ( positionID, dimensionID, colorID) VALUES ('" + positionID + "', '" + dimensionID + "', '" + colorID + "');";
-                   statement.executeUpdate(sql_details);
+                   String sql_products = "INSERT INTO product (productName, productPrice, productDescription,subcategoryID, detailsID, manufacturerID, stock) VALUES ('" + productName+ "', '" + productPrice + "', '" + productDescription + "', '" + subcategoryID+  "', '" + getIDofDetails(statement) + "', '" + manufacturerID + "', '" + productStock + "');";
+                   statement.executeUpdate(sql_products);
+                   setSelectedProductFromDB(0);
+
                } catch (SQLException e) {
-                   Alert("Błąd polecenia", "Błędne polecenie", Alert.AlertType.ERROR).showAndWait();
-                   continueTypingData = false;
+
+                   System.out.println(e);
+                   Alert("Błąd bazy danych", "Niezgodność ID produktów", Alert.AlertType.ERROR).showAndWait();
+                   statement.close();
+                   connection.close();
                }
-
-               if (continueTypingData) {
-
-                   try {
-
-                       String sql_products = "INSERT INTO product (productName, productPrice, productPrice, manufacturerID, subcategoryID, stock) VALUES (?,?,?,?,?,?);";
-
-                       PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
-                       preparedStatement.setString(1, productName);
-                       preparedStatement.setDouble(2, productPrice);
-                       preparedStatement.setString(3, productDescription);
-                       preparedStatement.setInt(4, manufacturerID);
-                       preparedStatement.setInt(5, subcategoryID);
-                       preparedStatement.setInt(6, productStock);
-
-                       preparedStatement.executeUpdate();
-
-                       setSelectedProductFromDB(0); // Dodwanie do wyświetlanych produktów
-
-                       preparedStatement.close();
-
-                   } catch (SQLException e) {
-
-                       Alert("Błąd bazy danych", "Niezgodność ID produktów", Alert.AlertType.ERROR).showAndWait();
-                       String sql_backroll_details = "DELETE FROM `hurtownia`.`szczegoly` WHERE (`IDProduktu` = '" + greatestIDofDetails + "')";
-                       statement.executeUpdate(sql_backroll_details);
-
-                       statement.close();
-                       connection.close();
-
-
-                   }
-               }
-               statement.close();
-               connection.close();
-
-               Alert("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.", Alert.AlertType.INFORMATION).showAndWait();
-
-               Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
-               closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-               closeLoginStage.close();
            }
-           else {
-               Alert("Błąd bazy danych", "Niezgodność tabel Produkty i Szczegóły", Alert.AlertType.ERROR).showAndWait();
-               Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
-               closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
-               closeLoginStage.close();
-           }
+           statement.close();
+           connection.close();
+
+           Alert("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.", Alert.AlertType.INFORMATION).showAndWait();
+
+           Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
+           closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
+           closeLoginStage.close();
+
 
        }
        else if (Continue){
@@ -265,7 +223,17 @@ public class ControllerOfModifyScreen {
        }
    }
 
-   //Metoda działająca na kliknięcie przycisku 'dodaj nowe' pomieszczenie - otwiera nowe okno
+    private int getIDofDetails(Statement statement) throws SQLException {
+        int detailsID = 0;
+        String sql_getIDofDetails = "SELECT max(detailsID) FROM details";
+        ResultSet resultSet = statement.executeQuery(sql_getIDofDetails);
+        while(resultSet.next()) {
+            detailsID = resultSet.getInt("max(detailsID)");
+        }
+        return detailsID;
+    }
+
+    //Metoda działająca na kliknięcie przycisku 'dodaj nowe' pomieszczenie - otwiera nowe okno
    public void addManufacturer() throws IOException, SQLException, ClassNotFoundException {
 
        openElementScreen("Dodawanie nowego producenta", "manufacturerName", "manufacturer",  "Wpisz nowe pomieszczenie");
@@ -666,7 +634,7 @@ public class ControllerOfModifyScreen {
                     "INNER JOIN category ON subcategory.categoryID = category.categoryID)\n" +
                     "INNER JOIN color ON details.colorID = color.colorID)\n" +
                     "INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)\n" +
-                    "INNER JOIN positions ON details.positionID = positions.positionID) WHERE produkty.IDProduktu = (SELECT MAX(produkty.IDProduktu) FROM produkty);";
+                    "INNER JOIN positions ON details.positionID = positions.positionID) WHERE product.productID = (SELECT MAX(product.productID) FROM product);";
 
         }
         else {
@@ -680,7 +648,7 @@ public class ControllerOfModifyScreen {
                     "INNER JOIN category ON subcategory.categoryID = category.categoryID)\n" +
                     "INNER JOIN color ON details.colorID = color.colorID)\n" +
                     "INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)\n" +
-                    "INNER JOIN positions ON details.positionID = positions.positionID) WHERE produkty.IDProduktu = " + IDofProduct + ";";
+                    "INNER JOIN positions ON details.positionID = positions.positionID) WHERE product.productID = " + IDofProduct + ";";
         }
 
         ResultSet resultSet = statement.executeQuery(sql_getID);
