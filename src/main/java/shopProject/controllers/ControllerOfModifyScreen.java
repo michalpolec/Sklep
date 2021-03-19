@@ -86,12 +86,105 @@ public class ControllerOfModifyScreen {
     }
 
     private void getAllDataFromDBToLists() throws ClassNotFoundException, SQLException {
-        getChosenDataFromDatabase("manufacturerID", "manufacturerName", "manufacturer", manufacturers);
-        getChosenDataFromDatabase("categoryID","categoryName", "category", categories);
-        getChosenDataFromDatabase("colorID", "colorName", "color", colors);
+
+        getRegularDataFromDatabase();
         getSubcategoryDataFromDatabase();
         getDimensionDataFromDatabase();
         getPositionDataFromDatabase();
+    }
+
+    public void getRegularDataFromDatabase() throws ClassNotFoundException, SQLException {
+
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+
+        manufacturers = getElementsFromDatabase(getResultSet(statement, "manufacturerID"), "manufacturerName", "manufacturer");
+        categories = getElementsFromDatabase(getResultSet(statement, "categoryID"), "categoryName", "category");
+        colors = getElementsFromDatabase(getResultSet(statement, "colorID"),  "colorName", "color");
+
+        statement.close();
+        connection.close();
+
+    }
+
+    private ObservableList<RestOfElements> getElementsFromDatabase(ResultSet resultSet, String nameOfFirstColumn, String nameOfSecondColumn) throws SQLException {
+        ObservableList<RestOfElements> elements =  FXCollections.observableArrayList();
+        while(resultSet.next()) {
+            RestOfElements singleElement = new RestOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
+                    resultSet.getString(nameOfSecondColumn));
+            elements.add(singleElement);
+        }
+
+        return elements;
+    }
+
+    private ResultSet getResultSet(Statement statement, String nameOfTable) throws SQLException {
+        ResultSet resultSet = statement.executeQuery(getSQLQuery(nameOfTable));
+        return resultSet;
+    }
+
+    private String getSQLQuery(String nameOfTable) {
+        String sql = "SELECT * FROM hurtownia." + nameOfTable;
+        return sql;
+    }
+
+    public void getSubcategoryDataFromDatabase() throws ClassNotFoundException, SQLException {
+
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM hurtownia.subcategory";
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while(resultSet.next()) {
+            Subcategory subcategory = new Subcategory(Integer.parseInt(resultSet.getString("subcategoryID")),
+                                                        resultSet.getString("subcategoryName"),
+                                                        Integer.parseInt(resultSet.getString("categoryID")));
+            subcategories.add(subcategory);
+        }
+        statement.close();
+        connection.close();
+    }
+
+    public void getDimensionDataFromDatabase() throws ClassNotFoundException, SQLException {
+
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM hurtownia.dimension";
+        ResultSet resultSet = statement.executeQuery(sql);
+        while(resultSet.next()) {
+
+            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("dimensionID")),
+                                                (int) Double.parseDouble(resultSet.getString("width")),
+                                                (int) Double.parseDouble(resultSet.getString("height")),
+                                                (int) Double.parseDouble(resultSet.getString("length")));
+            dimensions.add(dimension);
+        }
+        statement.close();
+        connection.close();
+
+    }
+
+    public void getPositionDataFromDatabase() throws ClassNotFoundException, SQLException {
+
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM hurtownia.positions";
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while(resultSet.next()) {
+
+            Position position = new Position(Integer.parseInt(resultSet.getString("positionID")),
+                                                Integer.parseInt(resultSet.getString("shelf")),
+                                                Integer.parseInt(resultSet.getString("regal")));
+            positions.add(position);
+        }
+
+        statement.close();
+        connection.close();
+
     }
 
     private void setItemsToAllComboBoxes() {
@@ -143,10 +236,6 @@ public class ControllerOfModifyScreen {
         subcategoryBox.setDisable(false);
     }
 
-    private Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
-    }
 
     //Metoda umożliwiająca edytowanie/dodanie produktu - pobiera nowo-wpisane dane i odpowiednio edytuje bądź dodaje jako nowy produkt
    public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException, IOException {
@@ -183,8 +272,8 @@ public class ControllerOfModifyScreen {
 
        if(AddOrEdit && Continue) {
 
-           Connection connection = getConnection();
-           Statement statement = getConnection().createStatement();
+           Connection connection = createConnection();
+           Statement statement = connection.createStatement();
 
            boolean continueTypingData = true;
 
@@ -228,7 +317,7 @@ public class ControllerOfModifyScreen {
        else if (Continue){
 
 
-           Connection connection = getConnection();
+           Connection connection = createConnection();
            Statement statement = connection.createStatement();
 
            productID = getSelectedProduct().getProductID();
@@ -254,6 +343,12 @@ public class ControllerOfModifyScreen {
 
        }
    }
+
+    private Connection createConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+    }
+
 
     private int getIDofDetails(Statement statement) throws SQLException {
         int detailsID = 0;
@@ -420,81 +515,8 @@ public class ControllerOfModifyScreen {
         return loader;
     }
 
-    //Metoda pobierająca wszystkie podkategorie z bazy danych
-   public void getSubcategoryDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-       Connection connection = getConnection();
-       Statement statement = connection.createStatement();
 
 
-       String sql = "SELECT * FROM hurtownia.subcategory";
-       ResultSet resultSet = statement.executeQuery(sql);
-
-       while(resultSet.next()) {
-            Subcategory subcategory = new Subcategory(Integer.parseInt(resultSet.getString("subcategoryID")),resultSet.getString("subcategoryName"),Integer.parseInt(resultSet.getString("categoryID")));
-            subcategories.add(subcategory);
-       }
-       statement.close();
-       connection.close();
-   }
-
-   //Metoda pobierająca wybrane dane z bazy danych
-    public void getChosenDataFromDatabase(String nameOfFirstColumn, String nameOfSecondColumn, String nameOfTable, ObservableList<RestOfElements> litsOfData) throws ClassNotFoundException, SQLException {
-
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM hurtownia." + nameOfTable;
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while(resultSet.next()) {
-            RestOfElements table = new RestOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
-                    resultSet.getString(nameOfSecondColumn));
-            litsOfData.add(table);
-        }
-        statement.close();
-        connection.close();
-
-    }
-
-    //Metoda pobierająca wszystkie wymiary z bazy danych
-    public void getDimensionDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM hurtownia.dimension";
-        ResultSet resultSet = statement.executeQuery(sql);
-
-
-        while(resultSet.next()) {
-
-            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("dimensionID")), (int) Double.parseDouble(resultSet.getString("width")), (int) Double.parseDouble(resultSet.getString("height")), (int) Double.parseDouble(resultSet.getString("length")));
-            dimensions.add(dimension);
-        }
-        statement.close();
-        connection.close();
-    }
-
-    //Metoda pobierająca wszystkie pozycje z bazy danych
-    public void getPositionDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM hurtownia.positions";
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while(resultSet.next()) {
-
-            Position position = new Position(Integer.parseInt(resultSet.getString("positionID")), Integer.parseInt(resultSet.getString("shelf")), Integer.parseInt(resultSet.getString("regal")));
-            positions.add(position);
-        }
-
-        statement.close();
-        connection.close();
-
-    }
 
     public int getIDofElementForSubcategory(String nameOfElement, ObservableList<Subcategory> listsOfElements) {
 
@@ -572,7 +594,7 @@ public class ControllerOfModifyScreen {
 
     //Metoda ustawiająca wybrany produkt od danym ID z bazy danych
     public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException, UnsupportedEncodingException {
-        Connection connection = getConnection();
+        Connection connection = createConnection();
         Statement statement = connection.createStatement();
         String sql_getID = "";
         if(AddOrEdit) {
