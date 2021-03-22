@@ -98,9 +98,9 @@ public class ControllerOfModifyScreen {
         Connection connection = createConnection();
         Statement statement = connection.createStatement();
 
-        manufacturers = getElementsFromDatabase(getResultSet(statement, "manufacturerID"), "manufacturerName", "manufacturer");
-        categories = getElementsFromDatabase(getResultSet(statement, "categoryID"), "categoryName", "category");
-        colors = getElementsFromDatabase(getResultSet(statement, "colorID"),  "colorName", "color");
+        manufacturers = getElementsFromDatabase(getResultSet(statement, "manufacturer"), "manufacturerID", "manufacturerName" );
+        categories = getElementsFromDatabase(getResultSet(statement, "category"), "categoryID", "categoryName");
+        colors = getElementsFromDatabase(getResultSet(statement, "color"),  "colorID", "colorName" );
 
         statement.close();
         connection.close();
