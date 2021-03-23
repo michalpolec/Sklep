@@ -24,11 +24,11 @@ public class ControllerOfModifyScreen {
 
     private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
     private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
-    private ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
-    private ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
     private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
-    private ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
-    private ObservableList<Position> positions = FXCollections.observableArrayList();
+    private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
+    private final ObservableList<Position> positions = FXCollections.observableArrayList();
 
     public TextField nameField;
     public TextField priceField;
@@ -55,7 +55,7 @@ public class ControllerOfModifyScreen {
 
     private Product selectedProduct;
 
-    public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
+    public void setSelectedProduct(Product selectedProduct) {
         this.selectedProduct = selectedProduct;
     }
 
