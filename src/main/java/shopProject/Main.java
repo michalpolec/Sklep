@@ -45,16 +45,17 @@ public class Main extends Application {
             Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
             Statement statement = connection.createStatement();
 
-            String sql = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
-                    "positions.shelf, positions.regal, stock\n" +
-                    "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
-                    "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
-                    "INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)\n" +
-                    "INNER JOIN category ON subcategory.categoryID = category.categoryID)\n" +
-                    "INNER JOIN color ON details.colorID = color.colorID)\n" +
-                    "INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)\n" +
-                    "INNER JOIN positions ON details.positionID = positions.positionID);";
+            String sql = """
+                    SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName,\s
+                    subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,
+                    positions.shelf, positions.regal, stock
+                    FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)
+                    INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)
+                    INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)
+                    INNER JOIN category ON subcategory.categoryID = category.categoryID)
+                    INNER JOIN color ON details.colorID = color.colorID)
+                    INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)
+                    INNER JOIN positions ON details.positionID = positions.positionID);""";
 
             ResultSet resultSet = statement.executeQuery(sql);
 
@@ -96,6 +97,4 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-
-/// COS NOWY BRANCH
 }

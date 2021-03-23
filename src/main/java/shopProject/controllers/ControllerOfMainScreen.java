@@ -21,8 +21,11 @@ import java.util.Optional;
 
 public class ControllerOfMainScreen {
 
-    private ObservableList<Product> products =  FXCollections.observableArrayList();
+    public Button addButton;
     public Button editionButton;
+    public Button deleteButton;
+    private ObservableList<Product> products =  FXCollections.observableArrayList();
+
     public TableView<Product> tableOfDB;
     public TableColumn<Product, Integer> IDproduct;
     public TableColumn<Product, String> NameProduct;

@@ -22,7 +22,7 @@ public class ControllerOfAddingNewElementToDB {
     String nameOfFirstColumn;
 
     // Ustawienie zmiennych
-    public void setOptionOfScreen(String nameOfFirstColumn, String nameOfTable,  String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfScreen(String nameOfFirstColumn, String nameOfTable,  String textOfLabel) {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
         this.nameOfTable = nameOfTable;

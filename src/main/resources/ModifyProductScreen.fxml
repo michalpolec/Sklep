@@ -9,98 +9,95 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="addAnchorPane" prefHeight="754.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfModifyScreen">
-   <children>
-      <GridPane layoutX="72.0" layoutY="104.0" prefHeight="470.0" prefWidth="578.0">
+<AnchorPane prefHeight="754.0" prefWidth="703.0" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfModifyScreen">
+    <GridPane layoutX="72.0" layoutY="104.0" prefHeight="470.0" prefWidth="578.0">
         <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="131.0" minWidth="10.0" prefWidth="123.0" />
-          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="0.0" minWidth="10.0" prefWidth="10.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="450.0" minWidth="450.0" prefWidth="450.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="131.0" minWidth="10.0" prefWidth="123.0"/>
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="0.0" minWidth="10.0" prefWidth="10.0"/>
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="450.0" minWidth="450.0" prefWidth="450.0"/>
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="2.0" minHeight="2.0" prefHeight="2.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="106.0" minHeight="56.0" prefHeight="59.0" valignment="TOP" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="2.0" minHeight="2.0" prefHeight="2.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="106.0" minHeight="56.0" prefHeight="59.0" valignment="TOP" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
         </rowConstraints>
-         <children>
-            <Label id="productName" alignment="CENTER_RIGHT" text="Nazwa produktu:" />
-            <Label id="price" text="Cena:" GridPane.rowIndex="1" />
-            <Label id="description" prefHeight="22.0" prefWidth="27.0" text="Opis:" GridPane.rowIndex="3" />
-            <Label id="room" prefHeight="18.0" prefWidth="59.0" text="Producent:" GridPane.rowIndex="4" />
-            <Label id="subcategory" text="Podkategoria:" GridPane.rowIndex="6" />
-            <Label id="category" text="Kategoria:" GridPane.rowIndex="5" />
-            <Label id="color" text="Kolor:" GridPane.rowIndex="7" />
-            <Label id="dimensions" text="Wymiary:" GridPane.rowIndex="8" />
-            <Label id="position" text="Pozycja:" GridPane.rowIndex="9" />
-            <Label id="stock" text="Stan na magazynie:" GridPane.rowIndex="10" />
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
-               <children>
-                  <TextField id="nameField" fx:id="nameField" alignment="TOP_LEFT" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="439.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <children>
-                  <TextField id="priceField" fx:id="priceField" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="103.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
-               <children>
-                  <TextField id="descriptionField" fx:id="descriptionField" alignment="TOP_LEFT" layoutY="6.0" prefHeight="51.0" prefWidth="439.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
-               <children>
-                  <ComboBox id="roomBox" fx:id="manufacturerBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="roomButton" fx:id="roomButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addManufacturer" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="138.0" layoutY="160.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
-               <children>
-                  <ComboBox id="categoryBox" fx:id="categoryBox" layoutY="8.0" onAction="#chosenCategory" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="categoryButton" fx:id="categoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="138.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
-               <children>
-                  <ComboBox id="subcategoryBox" fx:id="subcategoryBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="subcategoryButton" fx:id="subcategoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addSubcategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
-               <children>
-                  <ComboBox id="colorBox" fx:id="colorBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button id="colorButton" fx:id="colorButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addColor" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowy" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
-               <children>
-                  <Button fx:id="dimensionsButton" layoutX="302.0" layoutY="8.0" mnemonicParsing="false" onAction="#addDimensions" prefHeight="26.0" prefWidth="90.0" text="Dodaj nowe" />
-                  <ComboBox fx:id="dimensionsBox" layoutY="9.0" prefHeight="26.0" prefWidth="256.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
-               <children>
-                  <ComboBox fx:id="positionBox" layoutY="6.0" prefHeight="26.0" prefWidth="256.0" />
-                  <Button fx:id="positionButton" layoutX="310.0" layoutY="6.0" mnemonicParsing="false" onAction="#addPosition" prefHeight="26.0" prefWidth="90.0" text="Dodaj nową" />
-               </children></AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
-               <children>
-                  <TextField id="stockField" fx:id="stockField" layoutY="7.0" prefHeight="25.0" prefWidth="103.0" />
-               </children>
-            </AnchorPane>
-         </children>
-      </GridPane>
-      <Label id="title" fx:id="labelINFO" layoutX="272.0" layoutY="45.0" text="" />
-      <Button id="addButton" fx:id="addProductToDB" layoutX="254.0" layoutY="695.0" mnemonicParsing="false" onAction="#modifyDatabaseButtonPressed" text="Dodaj" />
-      <Button fx:id="cancelButton" layoutX="379.0" layoutY="695.0" mnemonicParsing="false" onAction="#onCancelAction" text="Anuluj" />
-   </children>
+        <Label id="productName" alignment="CENTER_RIGHT" text="Nazwa produktu:"/>
+        <Label id="price" text="Cena:" GridPane.rowIndex="1"/>
+        <Label id="description" prefHeight="22.0" prefWidth="27.0" text="Opis:" GridPane.rowIndex="3"/>
+        <Label id="room" prefHeight="18.0" prefWidth="59.0" text="Producent:" GridPane.rowIndex="4"/>
+        <Label id="subcategory" text="Podkategoria:" GridPane.rowIndex="6"/>
+        <Label id="category" text="Kategoria:" GridPane.rowIndex="5"/>
+        <Label id="color" text="Kolor:" GridPane.rowIndex="7"/>
+        <Label id="dimensions" text="Wymiary:" GridPane.rowIndex="8"/>
+        <Label id="position" text="Pozycja:" GridPane.rowIndex="9"/>
+        <Label id="stock" text="Stan na magazynie:" GridPane.rowIndex="10"/>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+            <TextField id="nameField" fx:id="nameField" alignment="TOP_LEFT" layoutY="8.0" maxHeight="-Infinity"
+                       maxWidth="-Infinity" prefHeight="25.0" prefWidth="439.0"/>
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <TextField id="priceField" fx:id="priceField" layoutY="8.0" maxHeight="-Infinity"
+                       maxWidth="-Infinity" prefHeight="25.0" prefWidth="103.0"/>
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <TextField id="descriptionField" fx:id="descriptionField" alignment="TOP_LEFT" layoutY="6.0"
+                       prefHeight="51.0" prefWidth="439.0"/>
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+            <ComboBox id="roomBox" fx:id="manufacturerBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0"/>
+            <Button id="roomButton" fx:id="roomButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false"
+                    onAction="#addManufacturer" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe"/>
+        </AnchorPane>
+        <AnchorPane layoutX="138.0" layoutY="160.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
+                    GridPane.rowIndex="5">
+            <ComboBox id="categoryBox" fx:id="categoryBox" layoutY="8.0" onAction="#chosenCategory"
+                      prefHeight="25.0" prefWidth="256.0"/>
+            <Button id="categoryButton" fx:id="categoryButton" layoutX="307.0" layoutY="8.0"
+                    mnemonicParsing="false" onAction="#addCategory" prefHeight="25.0" prefWidth="91.0"
+                    text="Dodaj nową"/>
+        </AnchorPane>
+        <AnchorPane layoutX="138.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
+                    GridPane.rowIndex="6">
+            <ComboBox id="subcategoryBox" fx:id="subcategoryBox" layoutY="8.0" prefHeight="25.0"
+                      prefWidth="256.0"/>
+            <Button id="subcategoryButton" fx:id="subcategoryButton" layoutX="307.0" layoutY="8.0"
+                    mnemonicParsing="false" onAction="#addSubcategory" prefHeight="25.0" prefWidth="91.0"
+                    text="Dodaj nową"/>
+        </AnchorPane>
+        <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
+                    GridPane.rowIndex="7">
+            <ComboBox id="colorBox" fx:id="colorBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0"/>
+            <Button id="colorButton" fx:id="colorButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false"
+                    onAction="#addColor" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowy"/>
+        </AnchorPane>
+        <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
+                    GridPane.rowIndex="8">
+            <Button fx:id="dimensionsButton" layoutX="302.0" layoutY="8.0" mnemonicParsing="false"
+                    onAction="#addDimensions" prefHeight="26.0" prefWidth="90.0" text="Dodaj nowe"/>
+            <ComboBox fx:id="dimensionsBox" layoutY="9.0" prefHeight="26.0" prefWidth="256.0"/>
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
+            <ComboBox fx:id="positionBox" layoutY="6.0" prefHeight="26.0" prefWidth="256.0"/>
+            <Button fx:id="positionButton" layoutX="310.0" layoutY="6.0" mnemonicParsing="false"
+                    onAction="#addPosition" prefHeight="26.0" prefWidth="90.0" text="Dodaj nową"/>
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
+            <TextField id="stockField" fx:id="stockField" layoutY="7.0" prefHeight="25.0" prefWidth="103.0"/>
+        </AnchorPane>
+    </GridPane>
+    <Label id="title" fx:id="labelINFO" layoutX="272.0" layoutY="45.0"/>
+    <Button id="addButton" fx:id="addProductToDB" layoutX="254.0" layoutY="695.0" mnemonicParsing="false"
+            onAction="#modifyDatabaseButtonPressed" text="Dodaj"/>
+    <Button fx:id="cancelButton" layoutX="379.0" layoutY="695.0" mnemonicParsing="false" onAction="#onCancelAction"
+            text="Anuluj"/>
 </AnchorPane>
