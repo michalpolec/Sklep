@@ -1,6 +1,5 @@
 package shopProject.controllers;
 
-import shopProject.entity.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import shopProject.entity.Product;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,6 +24,9 @@ public class ControllerOfMainScreen {
     public Button addButton;
     public Button editionButton;
     public Button deleteButton;
+    public TextField researchField;
+    public Button researchButton;
+    public Button clearButton;
     private ObservableList<Product> products =  FXCollections.observableArrayList();
 
     public TableView<Product> tableOfDB;
@@ -224,5 +227,35 @@ public class ControllerOfMainScreen {
         alert.setContentText(setContents);
 
         return alert;
+    }
+
+    public ObservableList<Product> researchItmes(String key)
+    {
+        ObservableList<Product> currentProducts = FXCollections.observableArrayList();
+        String keyword = key.toLowerCase();
+        String name, desc, subcategory, category, manufacture;
+        for(Product p: products){
+            name = p.getNameOfProduct().toLowerCase();
+            desc = p.getDescription().toLowerCase();
+            subcategory = p.getSubcategory().toLowerCase();
+            category = p.getCategory().toLowerCase();
+            manufacture = p.getManufacturer().toLowerCase();
+
+            if(name.contains(keyword) || desc.contains(keyword) || subcategory.contains(keyword) || category.contains(keyword) || manufacture.contains(keyword)){
+                currentProducts.add(p);
+            }
+        }
+        return currentProducts;
+    }
+
+    public void onResearchButtonClicked() {
+        String keyword = researchField.getText();
+        tableOfDB.setItems(researchItmes(keyword));
+        tableOfDB.refresh();
+    }
+
+    public void onClearButtonClicked() {
+        tableOfDB.setItems(products);
+        tableOfDB.refresh();
     }
 }

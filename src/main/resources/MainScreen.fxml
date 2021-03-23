@@ -32,6 +32,6 @@
     <Button fx:id="deleteButton" layoutX="687.0" layoutY="516.0" mnemonicParsing="false" onAction="#onDeleteButtonPressed" prefHeight="56.0" prefWidth="95.0" text="Usuń" />
     <Button fx:id="addButton" layoutX="404.0" layoutY="516.0" mnemonicParsing="false" onAction="#onAddButtonPressed" prefHeight="56.0" prefWidth="95.0" text="Dodaj" />
    <TextField fx:id="researchField" layoutX="594.0" layoutY="22.0" prefHeight="25.0" prefWidth="303.0" promptText="szukaj" />
-   <Button fx:id="researchButton" layoutX="913.0" layoutY="22.0" mnemonicParsing="false" text="Szukaj" />
-   <Button fx:id="clearButton" layoutX="1114.0" layoutY="22.0" mnemonicParsing="false" text="Czyść" />
+   <Button fx:id="researchButton" layoutX="913.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#onResearchButtonClicked" text="Szukaj" />
+   <Button fx:id="clearButton" layoutX="1114.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#onClearButtonClicked" text="Czyść" />
 </AnchorPane>
