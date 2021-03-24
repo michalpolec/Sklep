@@ -2,6 +2,7 @@ package shopProject.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,7 +28,8 @@ public class ControllerOfMainScreen {
     public TextField researchField;
     public Button researchButton;
     public Button clearButton;
-    private ObservableList<Product> products =  FXCollections.observableArrayList();
+    private final ObservableList<Product> allproducts =  FXCollections.observableArrayList();
+    private ObservableList<Product> currentproducts = FXCollections.observableArrayList();
 
     public TableView<Product> tableOfDB;
     public TableColumn<Product, Integer> IDproduct;
@@ -71,11 +73,11 @@ public class ControllerOfMainScreen {
     }
 
     public void getAllData(ObservableList<Product> products) {
-        this.products.setAll(products);
+        this.allproducts.setAll(products);
     }
 
     void initializeTable() {
-        tableOfDB.setItems(products);
+        tableOfDB.setItems(allproducts);
     }
 
     @FXML
@@ -87,7 +89,7 @@ public class ControllerOfMainScreen {
         Stage newModifyStage = CreateNewModifyStage();
         customizeStage("Dodawanie nowego elementu", root, newModifyStage);
        newModifyStage.setOnCloseRequest(we -> {
-            products.add(newController.getSelectedProduct());
+            allproducts.add(newController.getSelectedProduct());
             tableOfDB.refresh();
         });
     }
@@ -151,23 +153,23 @@ public class ControllerOfMainScreen {
     void changeProductInTable(Product product){
         int IDproduktu = product.getProductID();
 
-        for(int i = 0; i < products.size(); i++)
+        for(int i = 0; i < allproducts.size(); i++)
         {
-            if(IDproduktu == products.get(i).getProductID()){
-                products.get(i).setNameOfProduct(product.getNameOfProduct());
-                products.get(i).setPrice(product.getPrice());
-                products.get(i).setDescription(product.getDescription());
-                products.get(i).setManufacturer(product.getManufacturer());
-                products.get(i).setCategory(product.getCategory());
-                products.get(i).setSubcategory(product.getSubcategory());
-                products.get(i).setDetailsID(product.getDetailsID());
-                products.get(i).setColor(product.getColor());
-                products.get(i).setWidth(product.getWidth());
-                products.get(i).setHeight(product.getHeight());
-                products.get(i).setLength(product.getLength());
-                products.get(i).setShelf(product.getShelf());
-                products.get(i).setRegal(product.getRegal());
-                products.get(i).setStock(product.getStock());
+            if(IDproduktu == allproducts.get(i).getProductID()){
+                allproducts.get(i).setNameOfProduct(product.getNameOfProduct());
+                allproducts.get(i).setPrice(product.getPrice());
+                allproducts.get(i).setDescription(product.getDescription());
+                allproducts.get(i).setManufacturer(product.getManufacturer());
+                allproducts.get(i).setCategory(product.getCategory());
+                allproducts.get(i).setSubcategory(product.getSubcategory());
+                allproducts.get(i).setDetailsID(product.getDetailsID());
+                allproducts.get(i).setColor(product.getColor());
+                allproducts.get(i).setWidth(product.getWidth());
+                allproducts.get(i).setHeight(product.getHeight());
+                allproducts.get(i).setLength(product.getLength());
+                allproducts.get(i).setShelf(product.getShelf());
+                allproducts.get(i).setRegal(product.getRegal());
+                allproducts.get(i).setStock(product.getStock());
                 break;
             }
         }
@@ -188,9 +190,9 @@ public class ControllerOfMainScreen {
     }
 
     private void deleteElementFromList() {
-        for (Product product : products) {
+        for (Product product : allproducts) {
             if (product.getProductID() == selectedProduct.getProductID()) {
-                products.remove(product);
+                allproducts.remove(product);
                 break;
             }
         }
@@ -229,35 +231,60 @@ public class ControllerOfMainScreen {
         return alert;
     }
 
-    public ObservableList<Product> researchItmes(String key)
+    public void researchItmes(String key)
     {
-        ObservableList<Product> currentProducts = FXCollections.observableArrayList();
+        currentproducts.clear();
         String keyword = key.toLowerCase();
-        String name, desc, subcategory, category, manufacture;
-        for(Product p: products){
-            name = p.getNameOfProduct().toLowerCase();
-            desc = p.getDescription().toLowerCase();
-            subcategory = p.getSubcategory().toLowerCase();
-            category = p.getCategory().toLowerCase();
-            manufacture = p.getManufacturer().toLowerCase();
+        String [] keys = keyword.split(" ");
+        String name, desc, subcategory, manufacture, ID, color;
 
-            if(name.contains(keyword) || desc.contains(keyword) || subcategory.contains(keyword) || category.contains(keyword) || manufacture.contains(keyword)){
-                currentProducts.add(p);
+        //after split string - check all string in keyword
+        for(String k: keys){
+            if(k.equals("") || k.equals(",") || k.equals("."))
+            {
+                //do nothing
+            }
+            else{
+                for(Product p: allproducts){
+                    ID = String.valueOf(p.getProductID()).toLowerCase();
+                    name = p.getNameOfProduct().toLowerCase();
+                    desc = p.getDescription().toLowerCase();
+                    subcategory = p.getSubcategory().toLowerCase();
+                    manufacture = p.getManufacturer().toLowerCase();
+                    color = p.getColor().toLowerCase();
+
+                    if(ID.contains(k) || name.contains(k) || desc.contains(k) || subcategory.contains(k)  || manufacture.contains(k) || color.contains(k)){
+                        currentproducts.add(p);
+                    }
+                }
             }
         }
-        return currentProducts;
     }
 
     public void onResearchButtonClicked() {
         String keyword = researchField.getText();
-        tableOfDB.setItems(researchItmes(keyword));
+        researchItmes(keyword);
+        tableOfDB.setItems(removeDuplicates(currentproducts));
         tableOfDB.refresh();
     }
 
     public void onClearButtonClicked() {
-        tableOfDB.setItems(products);
+        tableOfDB.setItems(allproducts);
         tableOfDB.refresh();
         researchField.clear();
         researchField.setPromptText("szukaj");
     }
+
+    ObservableList<Product> removeDuplicates(ObservableList<Product> products){
+        ObservableSet<Product> productsSet = FXCollections.observableSet();
+        productsSet.addAll(products);
+        ObservableList<Product> returnList = FXCollections.observableArrayList();
+        for(Product p: productsSet){
+            returnList.add(p);
+        }
+
+        return returnList;
+    }
+
+
 }
