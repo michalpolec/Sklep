@@ -257,5 +257,7 @@ public class ControllerOfMainScreen {
     public void onClearButtonClicked() {
         tableOfDB.setItems(products);
         tableOfDB.refresh();
+        researchField.clear();
+        researchField.setPromptText("szukaj");
     }
 }

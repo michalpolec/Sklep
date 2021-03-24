@@ -11,18 +11,18 @@
         <columns>
             <TableColumn fx:id="IDproduct" prefWidth="74.0" text="IDproduktu" />
             <TableColumn fx:id="NameProduct" prefWidth="115.99996948242188" text="Nazwa Produktu" />
-            <TableColumn fx:id="manufacturer" minWidth="0.0" prefWidth="44.800018310546875" text="Producent" />
-            <TableColumn fx:id="PriceProduct" minWidth="3.0" prefWidth="52.0" text="Cena" />
-            <TableColumn fx:id="Descrpition" prefWidth="186.0" text="Opis" />
-            <TableColumn fx:id="Category" prefWidth="72.0" text="Kategoria" />
-            <TableColumn fx:id="Subcategory" prefWidth="86.0" text="Podkategoria" />
-            <TableColumn fx:id="color" prefWidth="45.0" text="Kolor" />
-            <TableColumn fx:id="width" prefWidth="69.0" text="Szerokość" />
-            <TableColumn fx:id="height" prefWidth="76.0" text="Wysokość" />
+            <TableColumn fx:id="manufacturer" minWidth="0.0" prefWidth="66.0" text="Producent" />
+            <TableColumn fx:id="PriceProduct" minWidth="3.0" prefWidth="53.0" text="Cena" />
+            <TableColumn fx:id="Descrpition" prefWidth="211.0" text="Opis" />
+            <TableColumn fx:id="Category" prefWidth="99.0" text="Kategoria" />
+            <TableColumn fx:id="Subcategory" prefWidth="87.0" text="Podkategoria" />
+            <TableColumn fx:id="color" prefWidth="50.0" text="Kolor" />
+            <TableColumn fx:id="width" prefWidth="76.0" text="Szerokość" />
+            <TableColumn fx:id="height" prefWidth="74.0" text="Wysokość" />
             <TableColumn fx:id="length" prefWidth="58.0" text="Długość" />
-            <TableColumn fx:id="shelf" prefWidth="46.0" text="Półka" />
-            <TableColumn fx:id="regal" prefWidth="50.0" text="Regał" />
-            <TableColumn fx:id="stock" prefWidth="100.0" text="Stan Magazynu" />
+            <TableColumn fx:id="shelf" prefWidth="63.0" text="Półka" />
+            <TableColumn fx:id="regal" prefWidth="54.0" text="Regał" />
+            <TableColumn fx:id="stock" prefWidth="92.0" text="Stan Magazynu" />
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
