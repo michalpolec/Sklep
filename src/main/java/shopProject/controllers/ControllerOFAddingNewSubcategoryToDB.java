@@ -21,7 +21,7 @@ public class ControllerOFAddingNewSubcategoryToDB {
     ObservableList<RestOfElements>  categories;
 
     // Ustawienie zmiennyhc klasy
-    public void setOptionOfSubcategoryScreen(ObservableList<RestOfElements> categories, String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfSubcategoryScreen(ObservableList<RestOfElements> categories, String textOfLabel) {
 
         this.titleLabel.setText(textOfLabel);
         this.categories = categories;

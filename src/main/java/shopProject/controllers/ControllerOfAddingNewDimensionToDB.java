@@ -1,7 +1,5 @@
 package shopProject.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,7 +31,7 @@ public class ControllerOfAddingNewDimensionToDB {
     }
 
     // Ustawienie zmiennych
-    public void setOptionOfDimensionScreen(String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfDimensionScreen(String textOfLabel) {
 
         this.titleOfScreen.setText(textOfLabel);
 
@@ -50,7 +48,7 @@ public class ControllerOfAddingNewDimensionToDB {
         String height = heightField.getText();
         String lenght = lenghtField.getText();
 
-        if (widthField.equals("") || heightField.equals("")  || lenghtField.equals("")  )
+        if (width.equals("") || height.equals("") || lenght.equals("") || width.equals(" ") || lenght.equals(" ") || height.equals(" ") )
         {
             Alert();
         }
@@ -86,13 +84,9 @@ public class ControllerOfAddingNewDimensionToDB {
 
     private void OnlyNumbersInTextField(TextField textfield){
 
-        textfield.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d{0,4}([\\.]\\d{0,2})?")) {
-                    textfield.setText(oldValue);
-                }
+        textfield.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d{0,4}([\\.]\\d{0,2})?")) {
+                textfield.setText(oldValue);
             }
         });
     }

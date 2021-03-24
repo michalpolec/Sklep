@@ -1,7 +1,5 @@
 package shopProject.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,7 +31,7 @@ public class ControllerOfAddingNewPositionToDB {
     }
 
     //Ustawienie zmiennych klasy
-    public void setOptionOfPositionScreen(String textOfLabel) throws ClassNotFoundException, SQLException {
+    public void setOptionOfPositionScreen(String textOfLabel) {
 
         this.titleOfScreen.setText(textOfLabel);
 
@@ -86,13 +84,9 @@ public class ControllerOfAddingNewPositionToDB {
     // Funkcja ustawiające pole TextField aby przyjmował wartości int
     public void OnlyNumbersInTextField(TextField textfield){
 
-        textfield.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    textfield.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+        textfield.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textfield.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
     }

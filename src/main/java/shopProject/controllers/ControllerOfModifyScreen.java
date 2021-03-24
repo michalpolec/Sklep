@@ -1,21 +1,20 @@
 package shopProject.controllers;
 
 
-import shopProject.entity.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import shopProject.entity.*;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 
 public class ControllerOfModifyScreen {
@@ -24,11 +23,11 @@ public class ControllerOfModifyScreen {
 
     private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
     private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
-    private ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
-    private ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
     private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
-    private ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
-    private ObservableList<Position> positions = FXCollections.observableArrayList();
+    private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
+    private final ObservableList<Position> positions = FXCollections.observableArrayList();
 
     public TextField nameField;
     public TextField priceField;
@@ -55,7 +54,7 @@ public class ControllerOfModifyScreen {
 
     private Product selectedProduct;
 
-    public void setSelectedProduct(Product selectedProduct) throws SQLException, ClassNotFoundException {
+    public void setSelectedProduct(Product selectedProduct) {
         this.selectedProduct = selectedProduct;
     }
 
@@ -97,11 +96,9 @@ public class ControllerOfModifyScreen {
 
         Connection connection = createConnection();
         Statement statement = connection.createStatement();
-
         manufacturers = getElementsFromDatabase(getResultSet(statement, "manufacturer"), "manufacturerID", "manufacturerName" );
         categories = getElementsFromDatabase(getResultSet(statement, "category"), "categoryID", "categoryName");
         colors = getElementsFromDatabase(getResultSet(statement, "color"),  "colorID", "colorName" );
-
         statement.close();
         connection.close();
 
@@ -119,13 +116,11 @@ public class ControllerOfModifyScreen {
     }
 
     private ResultSet getResultSet(Statement statement, String nameOfTable) throws SQLException {
-        ResultSet resultSet = statement.executeQuery(getSQLQuery(nameOfTable));
-        return resultSet;
+        return statement.executeQuery(getSQLQuery(nameOfTable));
     }
 
     private String getSQLQuery(String nameOfTable) {
-        String sql = "SELECT * FROM hurtownia." + nameOfTable;
-        return sql;
+        return "SELECT * FROM hurtownia." + nameOfTable;
     }
 
     public void getSubcategoryDataFromDatabase() throws ClassNotFoundException, SQLException {
@@ -208,7 +203,7 @@ public class ControllerOfModifyScreen {
         });
     }
 
-    public void initializeData() throws SQLException, ClassNotFoundException, IOException {
+    public void initializeData() {
 
        nameField.setText(getSelectedProduct().getNameOfProduct());
        priceField.setText(String.valueOf(getSelectedProduct().getPrice()));
@@ -296,6 +291,7 @@ public class ControllerOfModifyScreen {
                    setSelectedProductFromDB(0);
 
                } catch (SQLException e) {
+
 
                    System.out.println(e);
                    Alert("Błąd bazy danych", "Niezgodność ID produktów", Alert.AlertType.ERROR).showAndWait();
@@ -392,14 +388,13 @@ public class ControllerOfModifyScreen {
    }
 
     //Metoda działająca na kliknięcie przycisku 'dodaj nowe' wymiary - otwiera nowe okno
-    public void addDimensions(ActionEvent actionEvent) throws SQLException, IOException, ClassNotFoundException {
+    public void addDimensions() throws SQLException, IOException, ClassNotFoundException {
 
         openDimensionScreen();
     }
 
     //Metoda działająca na kliknięcie przycisku 'dodaj nową' pozycję na magazynie - otwiera nowe okno
     public void addPosition() throws IOException, SQLException, ClassNotFoundException {
-
        openPositionScreen();
     }
 
@@ -411,15 +406,11 @@ public class ControllerOfModifyScreen {
        newController.setOptionOfScreen(nameOfFirstColumn, nameOfTabel,  textOfLabel);
        Stage newAddStage = CreateNewAddStage();
        customizeStage(nameOfStage, root, newAddStage);
-       newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-           public void handle(WindowEvent we) {
-               try {
-                   getDataToArrays();
-               } catch (SQLException throwables) {
-                   throwables.printStackTrace();
-               } catch (ClassNotFoundException e) {
-                   e.printStackTrace();
-               }
+       newAddStage.setOnCloseRequest(we -> {
+           try {
+               getDataToArrays();
+           } catch (SQLException | ClassNotFoundException throwables) {
+               throwables.printStackTrace();
            }
        });
    }
@@ -433,15 +424,11 @@ public class ControllerOfModifyScreen {
        newController.setOptionOfSubcategoryScreen( categories, "Wybierz kategorie oraz wpisz nową podkategorie");
        Stage newAddStage = CreateNewAddStage();
        customizeStage("Dodawnie nowej podkategorii", root, newAddStage);
-       newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-           public void handle(WindowEvent we) {
-               try {
-                   getDataToArrays();
-               } catch (SQLException throwables) {
-                   throwables.printStackTrace();
-               } catch (ClassNotFoundException e) {
-                   e.printStackTrace();
-               }
+       newAddStage.setOnCloseRequest(we -> {
+           try {
+               getDataToArrays();
+           } catch (SQLException | ClassNotFoundException throwables) {
+               throwables.printStackTrace();
            }
        });
    }
@@ -455,15 +442,11 @@ public class ControllerOfModifyScreen {
        newController.setOptionOfDimensionScreen("Wpisz szerokość, długość oraz wysokość produktu");
        Stage newAddStage = CreateNewAddStage();
        customizeStage("Dodawnie nowego wymiaru", root, newAddStage);
-       newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-           public void handle(WindowEvent we) {
-               try {
-                   getDataToArrays();
-               } catch (SQLException throwables) {
-                   throwables.printStackTrace();
-               } catch (ClassNotFoundException e) {
-                   e.printStackTrace();
-               }
+       newAddStage.setOnCloseRequest(we -> {
+           try {
+               getDataToArrays();
+           } catch (SQLException | ClassNotFoundException throwables) {
+               throwables.printStackTrace();
            }
        });
    }
@@ -477,23 +460,18 @@ public class ControllerOfModifyScreen {
        newController.setOptionOfPositionScreen("Wpisz półkę oraz regał");
        Stage newAddStage = CreateNewAddStage();
        customizeStage("Dodawnie nowej pozycji", root, newAddStage);
-       newAddStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-           public void handle(WindowEvent we) {
-               try {
-                   getDataToArrays();
-               } catch (SQLException throwables) {
-                   throwables.printStackTrace();
-               } catch (ClassNotFoundException e) {
-                   e.printStackTrace();
-               }
+       newAddStage.setOnCloseRequest(we -> {
+           try {
+               getDataToArrays();
+           } catch (SQLException | ClassNotFoundException throwables) {
+               throwables.printStackTrace();
            }
        });
 
     }
 
-    private Stage CreateNewAddStage() throws IOException {
-        Stage newModifyStage = new Stage();
-        return newModifyStage;
+    private Stage CreateNewAddStage() {
+        return new Stage();
 
     }
 
@@ -506,13 +484,11 @@ public class ControllerOfModifyScreen {
     }
 
     private Parent getRoot(FXMLLoader loader) throws IOException {
-        Parent root = loader.load();
-        return root;
+        return loader.load();
     }
 
     private FXMLLoader getFxmlLoader(String resource) {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(resource));
-        return loader;
+        return new FXMLLoader(getClass().getClassLoader().getResource(resource));
     }
 
 
@@ -596,19 +572,20 @@ public class ControllerOfModifyScreen {
     public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException, UnsupportedEncodingException {
         Connection connection = createConnection();
         Statement statement = connection.createStatement();
-        String sql_getID = "";
+        String sql_getID;
         if(AddOrEdit) {
 
-            sql_getID   = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName, subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
-                    "positions.shelf, positions.regal, stock\n" +
-                    "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
-                    "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
-                    "INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)\n" +
-                    "INNER JOIN category ON subcategory.categoryID = category.categoryID)\n" +
-                    "INNER JOIN color ON details.colorID = color.colorID)\n" +
-                    "INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)\n" +
-                    "INNER JOIN positions ON details.positionID = positions.positionID) WHERE product.productID = (SELECT MAX(product.productID) FROM product);";
+            sql_getID   = """
+                    SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName,\s
+                    subcategory.subcategoryName, subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,
+                    positions.shelf, positions.regal, stock
+                    FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)
+                    INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)
+                    INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)
+                    INNER JOIN category ON subcategory.categoryID = category.categoryID)
+                    INNER JOIN color ON details.colorID = color.colorID)
+                    INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)
+                    INNER JOIN positions ON details.positionID = positions.positionID) WHERE product.productID = (SELECT MAX(product.productID) FROM product);""";
 
         }
         else {
