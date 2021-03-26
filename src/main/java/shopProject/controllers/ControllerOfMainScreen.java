@@ -421,31 +421,20 @@ public class ControllerOfMainScreen {
 
     public void onApplyButtonClicked(){
 
-        filtrationProductsByCriteria(colorComboBox.getValue().toString(),
-                manufacturerComboBox.getValue().toString(),
-                categoryComboBox.getValue().toString(),
-                subcategoryComboBox.getValue().toString(),
-                Double.parseDouble(lowerPriceLimit.getText()),
-                Double.parseDouble(upperPriceLimit.getText()));
+        currentproducts = allproducts;
+
+      try{ updateCurrentProducts(manufacturerComboBox.getValue().toString().toLowerCase(), 1);}  catch(Exception e){}
+      try{ updateCurrentProducts(categoryComboBox.getValue().toString().toLowerCase(), 2);}  catch(Exception e){}
+      try{ updateCurrentProducts(subcategoryComboBox.getValue().toString().toLowerCase(), 3);}  catch(Exception e){}
+      try{ updateCurrentProducts(colorComboBox.getValue().toString().toLowerCase(), 4);}  catch(Exception e){}
+
+      checkIfElementHasCorrectPrice(Double.parseDouble(lowerPriceLimit.getText()), Double.parseDouble(upperPriceLimit.getText()));
+
 
         tableOfDB.setItems(removeDuplicates(currentproducts));
         tableOfDB.refresh();
     }
 
-    private void filtrationProductsByCriteria(String color, String manufacturer, String category, String subcategory, double lowerLimit, double upperLimit) {
-
-        currentproducts = allproducts;
-        String lowerColor = color.toLowerCase();
-        String lowerManufacturer = manufacturer.toLowerCase();
-        String lowerCategory = category.toLowerCase();
-        String lowerSubcategory = subcategory.toLowerCase();
-
-        updateCurrentProducts(lowerColor, 1);
-        updateCurrentProducts(lowerManufacturer, 2);
-        updateCurrentProducts(lowerCategory, 3);
-        updateCurrentProducts(lowerSubcategory, 4);
-        checkIfElementHasCorrectPrice(lowerLimit, upperLimit);
-    }
 
 
     private void updateCurrentProducts(String element, int whichElement) {
@@ -454,13 +443,13 @@ public class ControllerOfMainScreen {
             String checkElement = "";
 
                 if (whichElement == 1) {
-                    checkElement = product.getColor().toLowerCase();
-                } else if (whichElement == 2) {
                     checkElement = product.getManufacturer().toLowerCase();
-                } else if (whichElement == 3) {
+                } else if (whichElement == 2) {
                     checkElement = product.getCategory().toLowerCase();
-                } else if (whichElement == 4) {
+                } else if (whichElement == 3) {
                     checkElement = product.getSubcategory().toLowerCase();
+                } else if (whichElement == 4) {
+                    checkElement = product.getColor().toLowerCase();
                 }
                 else{
                     Alert("Błędnie wybrany element", "Wybrano nieporawny element", Alert.AlertType.ERROR);
