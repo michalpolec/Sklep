@@ -442,13 +442,13 @@ public class ControllerOfMainScreen {
 
     private double getTheHighestPrice(ObservableList<Product> allproducts) {
         double theHighestPrice = 0;
-        double actualHighestPrice;
+        double actualTheHighestPrice;
 
         for(Product product: currentproducts) {
 
-            actualHighestPrice = product.getPrice();
-            if(actualHighestPrice > theHighestPrice){
-                theHighestPrice = actualHighestPrice;
+            actualTheHighestPrice = product.getPrice();
+            if(actualTheHighestPrice > theHighestPrice){
+                theHighestPrice = actualTheHighestPrice;
             }
         }
         return theHighestPrice;
