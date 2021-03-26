@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="categoryComboBox" prefHeight="637.0" prefWidth="1188.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfMainScreen">
+<AnchorPane prefHeight="637.0" prefWidth="1188.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfMainScreen">
     <TableView fx:id="tableOfDB" editable="true" layoutX="7.0" layoutY="79.0" prefHeight="431.0" prefWidth="1174.0">
         <columns>
             <TableColumn fx:id="IDproduct" prefWidth="74.0" text="IDproduktu" />
@@ -46,7 +46,7 @@
      </content>
    </TitledPane>
    <ComboBox fx:id="manufacturerComboBox" layoutX="24.0" layoutY="32.0" prefWidth="150.0" />
-   <ComboBox layoutX="213.0" layoutY="32.0" prefWidth="150.0" />
+   <ComboBox fx:id="categoryComboBox" layoutX="213.0" layoutY="32.0" onAction="#chosenCategory" prefWidth="150.0" />
    <ComboBox fx:id="subcategoryComboBox" layoutX="394.0" layoutY="32.0" prefWidth="150.0" />
    <ComboBox fx:id="colorComboBox" layoutX="579.0" layoutY="32.0" prefWidth="150.0" />
    <TextField fx:id="lowerPriceLimit" layoutX="820.0" layoutY="32.0" prefHeight="26.0" prefWidth="82.0" />

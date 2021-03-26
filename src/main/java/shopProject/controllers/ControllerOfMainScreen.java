@@ -67,6 +67,7 @@ public class ControllerOfMainScreen {
     private Product selectedProduct;
 
     public void initialize() throws SQLException, ClassNotFoundException {
+        subcategoryComboBox.setDisable(true);
         getDataToArrays();
         setTextAsOnlyNumbers(lowerPriceLimit);
         setTextAsOnlyNumbers(higherPriceLimit);
@@ -193,6 +194,39 @@ public class ControllerOfMainScreen {
         categoryComboBox.setItems(categories);
         subcategoryComboBox.setItems(subcategoriesFromSelectedCategory);
         colorComboBox.setItems(colors);
+    }
+
+    public void chosenCategory() {
+
+        setCorrectSubcategoriesFromSelectedCategory();
+
+    }
+
+    public void setCorrectSubcategoriesFromSelectedCategory(){
+        subcategoriesFromSelectedCategory.clear();
+        int IDofCategory = getIDofElement(categoryComboBox.getValue().toString(), categories);
+
+        for(Subcategory subcategory : subcategories){
+            if(subcategory.getCategoryID() == IDofCategory){
+
+                subcategoriesFromSelectedCategory.add(subcategory);
+            }
+        }
+        subcategoryComboBox.setDisable(false);
+    }
+
+
+    public int getIDofElement(String nameOfElement, ObservableList<RestOfElements> listsOfElements) {
+
+        int ID = 0;
+        for(RestOfElements element : listsOfElements)
+        {
+            if(element.toString().equals(nameOfElement))
+            {
+                ID =  element.getID();
+            }
+        }
+        return ID;
     }
 
     private void fillCellsWithData() {
