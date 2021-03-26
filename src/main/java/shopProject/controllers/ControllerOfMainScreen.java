@@ -424,15 +424,15 @@ public class ControllerOfMainScreen {
         filtrationProductsByCriteria(colorComboBox.getValue().toString(),
                 manufacturerComboBox.getValue().toString(),
                 categoryComboBox.getValue().toString(),
-                subcategoryComboBox.getValue().toString());/*,
-                Integer.parseInt(lowerPriceLimit.getText()),
-                Integer.parseInt(upperPriceLimit.getText()));*/
+                subcategoryComboBox.getValue().toString(),
+                Double.parseDouble(lowerPriceLimit.getText()),
+                Double.parseDouble(upperPriceLimit.getText()));
 
         tableOfDB.setItems(removeDuplicates(currentproducts));
         tableOfDB.refresh();
     }
 
-    private void filtrationProductsByCriteria(String color, String manufacturer, String category, String subcategory) {
+    private void filtrationProductsByCriteria(String color, String manufacturer, String category, String subcategory, double lowerLimit, double upperLimit) {
 
         currentproducts = allproducts;
         String lowerColor = color.toLowerCase();
@@ -440,15 +440,36 @@ public class ControllerOfMainScreen {
         String lowerCategory = category.toLowerCase();
         String lowerSubcategory = subcategory.toLowerCase();
 
+        updateCurrentProducts(lowerColor, 1);
+        updateCurrentProducts(lowerManufacturer, 2);
+        updateCurrentProducts(lowerCategory, 3);
+        updateCurrentProducts(lowerSubcategory, 4);
+        checkIfElementHasCorrectPrice(lowerLimit, upperLimit);
+    }
+
+
+    private void updateCurrentProducts(String element, int whichElement) {
         ObservableList<Product> productsToDelete = FXCollections.observableArrayList();
         for(Product product: currentproducts){
+            String checkElement = "";
 
-            String checkColor = product.getColor().toLowerCase();
+                if (whichElement == 1) {
+                    checkElement = product.getColor().toLowerCase();
+                } else if (whichElement == 2) {
+                    checkElement = product.getManufacturer().toLowerCase();
+                } else if (whichElement == 3) {
+                    checkElement = product.getCategory().toLowerCase();
+                } else if (whichElement == 4) {
+                    checkElement = product.getSubcategory().toLowerCase();
+                }
+                else{
+                    Alert("Błędnie wybrany element", "Wybrano nieporawny element", Alert.AlertType.ERROR);
+                    break;
+                }
 
-            if(!checkColor.contains(lowerColor)){
-                productsToDelete.add(product);
-            }
-
+                if (!checkElement.contains(element)) {
+                    productsToDelete.add(product);
+                }
         }
 
         for(Product productToDelete: productsToDelete)
@@ -456,34 +477,24 @@ public class ControllerOfMainScreen {
             currentproducts.remove(productToDelete);
         }
         productsToDelete.clear();
+    }
 
 
+    private void checkIfElementHasCorrectPrice(double lowerLimit, double upperLimit) {
+
+        ObservableList<Product> productsToDelete = FXCollections.observableArrayList();
+        double price;
         for(Product product: currentproducts){
-
-            String checkManufacturer = product.getManufacturer().toLowerCase();
-
-            if(!checkManufacturer.contains(lowerManufacturer)){
-                currentproducts.remove(product);
+            price = product.getPrice();
+            if(!(price >= lowerLimit && price <= upperLimit)){
+                productsToDelete.add(product);
             }
         }
-        for(Product product: currentproducts){
-
-            String checkSubcategory = product.getSubcategory().toLowerCase();
-
-            if(!checkSubcategory.contains(lowerCategory)){
-                currentproducts.remove(product);
-            }
+        for(Product productToDelete: productsToDelete)
+        {
+            currentproducts.remove(productToDelete);
         }
-        for(Product product: currentproducts){
-
-            String checkCategory = product.getSubcategory().toLowerCase();
-
-            if(!checkCategory.contains(lowerSubcategory)){
-                currentproducts.remove(product);
-            }
-        }
-
-
+        productsToDelete.clear();
     }
 
 
