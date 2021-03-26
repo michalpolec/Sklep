@@ -1,5 +1,7 @@
 package shopProject.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -10,26 +12,41 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import shopProject.entity.Product;
+import shopProject.entity.*;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Optional;
 
 
 public class ControllerOfMainScreen {
 
+    public ComboBox manufacturerComboBox;
+    public ComboBox categoryComboBox;
+    public ComboBox subcategoryComboBox;
+    public ComboBox colorComboBox;
+
+    public TextField lowerPriceLimit;
+    public TextField higherPriceLimit;
+    public TextField researchField;
+
     public Button addButton;
     public Button editionButton;
     public Button deleteButton;
-    public TextField researchField;
     public Button researchButton;
     public Button clearButton;
+    public Button applyButton;
+
     private final ObservableList<Product> allproducts =  FXCollections.observableArrayList();
     private ObservableList<Product> currentproducts = FXCollections.observableArrayList();
+    private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
+    private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
+    private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
+    private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
+    private final ObservableList<Position> positions = FXCollections.observableArrayList();
+
 
     public TableView<Product> tableOfDB;
     public TableColumn<Product, Integer> IDproduct;
@@ -49,9 +66,133 @@ public class ControllerOfMainScreen {
 
     private Product selectedProduct;
 
-    public void initialize() {
+    public void initialize() throws SQLException, ClassNotFoundException {
+        getDataToArrays();
+        setTextAsOnlyNumbers(lowerPriceLimit);
+        setTextAsOnlyNumbers(higherPriceLimit);
         fillCellsWithData();
         initializeTable();
+    }
+
+
+    public void getDataToArrays() throws SQLException, ClassNotFoundException {
+        clearAllLists();
+        getAllDataFromDBToLists();
+        setItemsToAllComboBoxes();
+    }
+
+    private void clearAllLists() {
+        manufacturers.clear();
+        categories.clear();
+        subcategories.clear();
+        colors.clear();
+        dimensions.clear();
+        positions.clear();
+    }
+
+    private void getAllDataFromDBToLists() throws ClassNotFoundException, SQLException {
+
+        getRegularDataFromDatabase();
+        getSubcategoryDataFromDatabase();
+        getDimensionDataFromDatabase();
+        getPositionDataFromDatabase();
+    }
+
+    public void getRegularDataFromDatabase() throws ClassNotFoundException, SQLException {
+
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+        manufacturers = getElementsFromDatabase(getResultSet(statement, "manufacturer"), "manufacturerID", "manufacturerName" );
+        categories = getElementsFromDatabase(getResultSet(statement, "category"), "categoryID", "categoryName");
+        colors = getElementsFromDatabase(getResultSet(statement, "color"),  "colorID", "colorName" );
+        statement.close();
+        connection.close();
+
+    }
+
+    private ObservableList<RestOfElements> getElementsFromDatabase(ResultSet resultSet, String nameOfFirstColumn, String nameOfSecondColumn) throws SQLException {
+        ObservableList<RestOfElements> elements =  FXCollections.observableArrayList();
+        while(resultSet.next()) {
+            RestOfElements singleElement = new RestOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
+                    resultSet.getString(nameOfSecondColumn));
+            elements.add(singleElement);
+        }
+
+        return elements;
+    }
+
+    private ResultSet getResultSet(Statement statement, String nameOfTable) throws SQLException {
+        return statement.executeQuery(getSQLQuery(nameOfTable));
+    }
+
+    private String getSQLQuery(String nameOfTable) {
+        return "SELECT * FROM hurtownia." + nameOfTable;
+    }
+
+    public void getSubcategoryDataFromDatabase() throws ClassNotFoundException, SQLException {
+
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM hurtownia.subcategory";
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while(resultSet.next()) {
+            Subcategory subcategory = new Subcategory(Integer.parseInt(resultSet.getString("subcategoryID")),
+                    resultSet.getString("subcategoryName"),
+                    Integer.parseInt(resultSet.getString("categoryID")));
+            subcategories.add(subcategory);
+        }
+        statement.close();
+        connection.close();
+    }
+
+    public void getDimensionDataFromDatabase() throws ClassNotFoundException, SQLException {
+
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM hurtownia.dimension";
+        ResultSet resultSet = statement.executeQuery(sql);
+        while(resultSet.next()) {
+
+            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("dimensionID")),
+                    (int) Double.parseDouble(resultSet.getString("width")),
+                    (int) Double.parseDouble(resultSet.getString("height")),
+                    (int) Double.parseDouble(resultSet.getString("length")));
+            dimensions.add(dimension);
+        }
+        statement.close();
+        connection.close();
+
+    }
+
+    public void getPositionDataFromDatabase() throws ClassNotFoundException, SQLException {
+
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM hurtownia.positions";
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while(resultSet.next()) {
+
+            Position position = new Position(Integer.parseInt(resultSet.getString("positionID")),
+                    Integer.parseInt(resultSet.getString("shelf")),
+                    Integer.parseInt(resultSet.getString("regal")));
+            positions.add(position);
+        }
+
+        statement.close();
+        connection.close();
+
+    }
+
+    private void setItemsToAllComboBoxes() {
+        manufacturerComboBox.setItems(manufacturers);
+        categoryComboBox.setItems(categories);
+        subcategoryComboBox.setItems(subcategoriesFromSelectedCategory);
+        colorComboBox.setItems(colors);
     }
 
     private void fillCellsWithData() {
@@ -284,6 +425,23 @@ public class ControllerOfMainScreen {
         }
 
         return returnList;
+    }
+
+    private Connection createConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+    }
+
+    private void setTextAsOnlyNumbers(TextField textField) {
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    textField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     }
 
 

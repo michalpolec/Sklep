@@ -21,14 +21,6 @@ public class ControllerOfModifyScreen {
 
     boolean AddOrEdit;
 
-    private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
-    private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
-    private final ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
-    private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
-    private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
-    private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
-    private final ObservableList<Position> positions = FXCollections.observableArrayList();
-
     public TextField nameField;
     public TextField priceField;
     public TextField descriptionField;
@@ -54,6 +46,14 @@ public class ControllerOfModifyScreen {
 
     private Product selectedProduct;
 
+    private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
+    private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
+    private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
+    private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
+    private final ObservableList<Position> positions = FXCollections.observableArrayList();
+
     public void setSelectedProduct(Product selectedProduct) {
         this.selectedProduct = selectedProduct;
     }
@@ -64,132 +64,10 @@ public class ControllerOfModifyScreen {
 
    public void initialize() throws SQLException, ClassNotFoundException {
        subcategoryBox.setDisable(true);
-       getDataToArrays();
        setTextAsOnlyNumbers(priceField);
        setTextAsOnlyNumbers(stockField);
    }
 
-    public void getDataToArrays() throws SQLException, ClassNotFoundException {
-        clearAllLists();
-        getAllDataFromDBToLists();
-        setItemsToAllComboBoxes();
-    }
-
-    private void clearAllLists() {
-        manufacturers.clear();
-        categories.clear();
-        subcategories.clear();
-        colors.clear();
-        dimensions.clear();
-        positions.clear();
-    }
-
-    private void getAllDataFromDBToLists() throws ClassNotFoundException, SQLException {
-
-        getRegularDataFromDatabase();
-        getSubcategoryDataFromDatabase();
-        getDimensionDataFromDatabase();
-        getPositionDataFromDatabase();
-    }
-
-    public void getRegularDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-        Connection connection = createConnection();
-        Statement statement = connection.createStatement();
-        manufacturers = getElementsFromDatabase(getResultSet(statement, "manufacturer"), "manufacturerID", "manufacturerName" );
-        categories = getElementsFromDatabase(getResultSet(statement, "category"), "categoryID", "categoryName");
-        colors = getElementsFromDatabase(getResultSet(statement, "color"),  "colorID", "colorName" );
-        statement.close();
-        connection.close();
-
-    }
-
-    private ObservableList<RestOfElements> getElementsFromDatabase(ResultSet resultSet, String nameOfFirstColumn, String nameOfSecondColumn) throws SQLException {
-        ObservableList<RestOfElements> elements =  FXCollections.observableArrayList();
-        while(resultSet.next()) {
-            RestOfElements singleElement = new RestOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
-                    resultSet.getString(nameOfSecondColumn));
-            elements.add(singleElement);
-        }
-
-        return elements;
-    }
-
-    private ResultSet getResultSet(Statement statement, String nameOfTable) throws SQLException {
-        return statement.executeQuery(getSQLQuery(nameOfTable));
-    }
-
-    private String getSQLQuery(String nameOfTable) {
-        return "SELECT * FROM hurtownia." + nameOfTable;
-    }
-
-    public void getSubcategoryDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-        Connection connection = createConnection();
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM hurtownia.subcategory";
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while(resultSet.next()) {
-            Subcategory subcategory = new Subcategory(Integer.parseInt(resultSet.getString("subcategoryID")),
-                                                        resultSet.getString("subcategoryName"),
-                                                        Integer.parseInt(resultSet.getString("categoryID")));
-            subcategories.add(subcategory);
-        }
-        statement.close();
-        connection.close();
-    }
-
-    public void getDimensionDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-        Connection connection = createConnection();
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM hurtownia.dimension";
-        ResultSet resultSet = statement.executeQuery(sql);
-        while(resultSet.next()) {
-
-            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("dimensionID")),
-                                                (int) Double.parseDouble(resultSet.getString("width")),
-                                                (int) Double.parseDouble(resultSet.getString("height")),
-                                                (int) Double.parseDouble(resultSet.getString("length")));
-            dimensions.add(dimension);
-        }
-        statement.close();
-        connection.close();
-
-    }
-
-    public void getPositionDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-        Connection connection = createConnection();
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM hurtownia.positions";
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while(resultSet.next()) {
-
-            Position position = new Position(Integer.parseInt(resultSet.getString("positionID")),
-                                                Integer.parseInt(resultSet.getString("shelf")),
-                                                Integer.parseInt(resultSet.getString("regal")));
-            positions.add(position);
-        }
-
-        statement.close();
-        connection.close();
-
-    }
-
-    private void setItemsToAllComboBoxes() {
-        manufacturerBox.setItems(manufacturers);
-        categoryBox.setItems(categories);
-        subcategoryBox.setItems(subcategoriesFromSelectedCategory);
-        colorBox.setItems(colors);
-        dimensionsBox.setItems(dimensions);
-        positionBox.setItems(positions);
-    }
 
     private void setTextAsOnlyNumbers(TextField textField) {
         textField.textProperty().addListener(new ChangeListener<String>() {
@@ -407,11 +285,11 @@ public class ControllerOfModifyScreen {
        Stage newAddStage = CreateNewAddStage();
        customizeStage(nameOfStage, root, newAddStage);
        newAddStage.setOnCloseRequest(we -> {
-           try {
+          /* try {
                getDataToArrays();
            } catch (SQLException | ClassNotFoundException throwables) {
                throwables.printStackTrace();
-           }
+           }*/
        });
    }
 
@@ -425,11 +303,11 @@ public class ControllerOfModifyScreen {
        Stage newAddStage = CreateNewAddStage();
        customizeStage("Dodawnie nowej podkategorii", root, newAddStage);
        newAddStage.setOnCloseRequest(we -> {
-           try {
+          /* try {
                getDataToArrays();
            } catch (SQLException | ClassNotFoundException throwables) {
                throwables.printStackTrace();
-           }
+           }*/
        });
    }
 
@@ -443,11 +321,11 @@ public class ControllerOfModifyScreen {
        Stage newAddStage = CreateNewAddStage();
        customizeStage("Dodawnie nowego wymiaru", root, newAddStage);
        newAddStage.setOnCloseRequest(we -> {
-           try {
+          /* try {
                getDataToArrays();
            } catch (SQLException | ClassNotFoundException throwables) {
                throwables.printStackTrace();
-           }
+           }*/
        });
    }
 
@@ -461,11 +339,11 @@ public class ControllerOfModifyScreen {
        Stage newAddStage = CreateNewAddStage();
        customizeStage("Dodawnie nowej pozycji", root, newAddStage);
        newAddStage.setOnCloseRequest(we -> {
-           try {
+          /* try {
                getDataToArrays();
            } catch (SQLException | ClassNotFoundException throwables) {
                throwables.printStackTrace();
-           }
+           }*/
        });
 
     }
