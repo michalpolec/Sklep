@@ -440,14 +440,24 @@ public class ControllerOfMainScreen {
         String lowerCategory = category.toLowerCase();
         String lowerSubcategory = subcategory.toLowerCase();
 
+        ObservableList<Product> productsToDelete = FXCollections.observableArrayList();
         for(Product product: currentproducts){
 
             String checkColor = product.getColor().toLowerCase();
 
             if(!checkColor.contains(lowerColor)){
-                currentproducts.remove(product);
+                productsToDelete.add(product);
             }
+
         }
+
+        for(Product productToDelete: productsToDelete)
+        {
+            currentproducts.remove(productToDelete);
+        }
+        productsToDelete.clear();
+
+
         for(Product product: currentproducts){
 
             String checkManufacturer = product.getManufacturer().toLowerCase();
