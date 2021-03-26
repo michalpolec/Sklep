@@ -421,21 +421,18 @@ public class ControllerOfMainScreen {
 
     public void onApplyButtonClicked(){
 
-        currentproducts = allproducts;
+        currentproducts.addAll(allproducts);
 
       try{ updateCurrentProducts(manufacturerComboBox.getValue().toString().toLowerCase(), 1);}  catch(Exception e){}
       try{ updateCurrentProducts(categoryComboBox.getValue().toString().toLowerCase(), 2);}  catch(Exception e){}
       try{ updateCurrentProducts(subcategoryComboBox.getValue().toString().toLowerCase(), 3);}  catch(Exception e){}
       try{ updateCurrentProducts(colorComboBox.getValue().toString().toLowerCase(), 4);}  catch(Exception e){}
 
-      checkIfElementHasCorrectPrice(Double.parseDouble(lowerPriceLimit.getText()), Double.parseDouble(upperPriceLimit.getText()));
-
+//      checkIfElementHasCorrectPrice(Double.parseDouble(lowerPriceLimit.getText()), Double.parseDouble(upperPriceLimit.getText()));
 
         tableOfDB.setItems(removeDuplicates(currentproducts));
         tableOfDB.refresh();
     }
-
-
 
     private void updateCurrentProducts(String element, int whichElement) {
         ObservableList<Product> productsToDelete = FXCollections.observableArrayList();
