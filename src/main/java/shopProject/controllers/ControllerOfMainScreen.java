@@ -428,10 +428,30 @@ public class ControllerOfMainScreen {
       try{ updateCurrentProducts(subcategoryComboBox.getValue().toString().toLowerCase(), 3);}  catch(Exception e){}
       try{ updateCurrentProducts(colorComboBox.getValue().toString().toLowerCase(), 4);}  catch(Exception e){}
 
-//      checkIfElementHasCorrectPrice(Double.parseDouble(lowerPriceLimit.getText()), Double.parseDouble(upperPriceLimit.getText()));
+      double theHighestPrice = getTheHighestPrice(allproducts);
+        double lowerLimit, upperLimit;
+      try{lowerLimit = Double.parseDouble(lowerPriceLimit.getText()); } catch (Exception e) { lowerLimit = 0; }
+      try{upperLimit = Double.parseDouble(upperPriceLimit.getText()); } catch (Exception e) { upperLimit = theHighestPrice; }
+
+
+      checkIfElementHasCorrectPrice(lowerLimit, upperLimit);
 
         tableOfDB.setItems(removeDuplicates(currentproducts));
         tableOfDB.refresh();
+    }
+
+    private double getTheHighestPrice(ObservableList<Product> allproducts) {
+        double theHighestPrice = 0;
+        double actualHighestPrice;
+
+        for(Product product: currentproducts) {
+
+            actualHighestPrice = product.getPrice();
+            if(actualHighestPrice > theHighestPrice){
+                theHighestPrice = actualHighestPrice;
+            }
+        }
+        return theHighestPrice;
     }
 
     private void updateCurrentProducts(String element, int whichElement) {
