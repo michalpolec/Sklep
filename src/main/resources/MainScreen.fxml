@@ -38,8 +38,8 @@
      <content>
        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="81.0" prefWidth="397.0">
             <children>
-                <Button fx:id="editionButton" layoutX="31.0" layoutY="21.0" mnemonicParsing="false" onAction="#onEditionButtonPressed" prefHeight="34.0" prefWidth="95.0" text="Edytuj" />
-                <Button fx:id="addButton" layoutX="166.0" layoutY="22.0" mnemonicParsing="false" onAction="#onAddButtonPressed" prefHeight="33.0" prefWidth="95.0" text="Dodaj" />
+                <Button fx:id="editionButton" layoutX="166.0" layoutY="23.0" mnemonicParsing="false" onAction="#onEditionButtonPressed" prefHeight="34.0" prefWidth="95.0" text="Edytuj" />
+                <Button fx:id="addButton" layoutX="34.0" layoutY="23.0" mnemonicParsing="false" onAction="#onAddButtonPressed" prefHeight="33.0" prefWidth="95.0" text="Dodaj" />
                 <Button fx:id="deleteButton" layoutX="300.0" layoutY="22.0" mnemonicParsing="false" onAction="#onDeleteButtonPressed" prefHeight="34.0" prefWidth="95.0" text="Usuń" />
             </children>
          </AnchorPane>
