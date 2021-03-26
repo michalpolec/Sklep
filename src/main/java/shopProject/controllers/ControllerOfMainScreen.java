@@ -406,6 +406,11 @@ public class ControllerOfMainScreen {
         tableOfDB.refresh();
         researchField.clear();
         researchField.setPromptText("szukaj");
+        manufacturerComboBox.setValue(null);
+        subcategoryComboBox.setValue(null);
+        subcategoryComboBox.setDisable(true);
+        categoryComboBox.setValue(null);
+        colorComboBox.setValue(null);
     }
 
     ObservableList<Product> removeDuplicates(ObservableList<Product> products){
