@@ -50,10 +50,10 @@
    <ComboBox fx:id="subcategoryComboBox" layoutX="394.0" layoutY="32.0" prefWidth="150.0" />
    <ComboBox fx:id="colorComboBox" layoutX="579.0" layoutY="32.0" prefWidth="150.0" />
    <TextField fx:id="lowerPriceLimit" layoutX="820.0" layoutY="32.0" prefHeight="26.0" prefWidth="82.0" />
-   <TextField fx:id="higherPriceLimit" layoutX="949.0" layoutY="32.0" prefHeight="26.0" prefWidth="82.0" />
+   <TextField fx:id="upperPriceLimit" layoutX="949.0" layoutY="32.0" prefHeight="26.0" prefWidth="82.0" />
    <Label layoutX="918.0" layoutY="36.0" text="do" />
    <Label layoutX="763.0" layoutY="36.0" text="Cena od" />
-   <Button fx:id="applyButton" layoutX="1057.0" layoutY="32.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="101.0" text="Zastosuj" />
+   <Button fx:id="applyButton" layoutX="1057.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#onApplyButtonClicked" prefHeight="26.0" prefWidth="101.0" text="Zastosuj" />
    <Label layoutX="72.0" layoutY="14.0" text="Producent" />
    <Label layoutX="263.0" layoutY="14.0" text="Kategoria" />
    <Label layoutX="434.0" layoutY="14.0" text="Podkategoria" />

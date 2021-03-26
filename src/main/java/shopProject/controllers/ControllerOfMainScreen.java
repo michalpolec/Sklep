@@ -27,7 +27,7 @@ public class ControllerOfMainScreen {
     public ComboBox colorComboBox;
 
     public TextField lowerPriceLimit;
-    public TextField higherPriceLimit;
+    public TextField upperPriceLimit;
     public TextField researchField;
 
     public Button addButton;
@@ -39,13 +39,12 @@ public class ControllerOfMainScreen {
 
     private final ObservableList<Product> allproducts =  FXCollections.observableArrayList();
     private ObservableList<Product> currentproducts = FXCollections.observableArrayList();
+
     private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
     private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
     private final ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
     private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
     private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
-    private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
-    private final ObservableList<Position> positions = FXCollections.observableArrayList();
 
 
     public TableView<Product> tableOfDB;
@@ -70,11 +69,15 @@ public class ControllerOfMainScreen {
         subcategoryComboBox.setDisable(true);
         getDataToArrays();
         setTextAsOnlyNumbers(lowerPriceLimit);
-        setTextAsOnlyNumbers(higherPriceLimit);
+        setTextAsOnlyNumbers(upperPriceLimit);
         fillCellsWithData();
         initializeTable();
     }
 
+    private Connection createConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+    }
 
     public void getDataToArrays() throws SQLException, ClassNotFoundException {
         clearAllLists();
@@ -87,16 +90,12 @@ public class ControllerOfMainScreen {
         categories.clear();
         subcategories.clear();
         colors.clear();
-        dimensions.clear();
-        positions.clear();
     }
 
     private void getAllDataFromDBToLists() throws ClassNotFoundException, SQLException {
 
         getRegularDataFromDatabase();
         getSubcategoryDataFromDatabase();
-        getDimensionDataFromDatabase();
-        getPositionDataFromDatabase();
     }
 
     public void getRegularDataFromDatabase() throws ClassNotFoundException, SQLException {
@@ -146,47 +145,6 @@ public class ControllerOfMainScreen {
         }
         statement.close();
         connection.close();
-    }
-
-    public void getDimensionDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-        Connection connection = createConnection();
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM hurtownia.dimension";
-        ResultSet resultSet = statement.executeQuery(sql);
-        while(resultSet.next()) {
-
-            Dimension dimension = new Dimension(Integer.parseInt(resultSet.getString("dimensionID")),
-                    (int) Double.parseDouble(resultSet.getString("width")),
-                    (int) Double.parseDouble(resultSet.getString("height")),
-                    (int) Double.parseDouble(resultSet.getString("length")));
-            dimensions.add(dimension);
-        }
-        statement.close();
-        connection.close();
-
-    }
-
-    public void getPositionDataFromDatabase() throws ClassNotFoundException, SQLException {
-
-        Connection connection = createConnection();
-        Statement statement = connection.createStatement();
-
-        String sql = "SELECT * FROM hurtownia.positions";
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while(resultSet.next()) {
-
-            Position position = new Position(Integer.parseInt(resultSet.getString("positionID")),
-                    Integer.parseInt(resultSet.getString("shelf")),
-                    Integer.parseInt(resultSet.getString("regal")));
-            positions.add(position);
-        }
-
-        statement.close();
-        connection.close();
-
     }
 
     private void setItemsToAllComboBoxes() {
@@ -411,7 +369,7 @@ public class ControllerOfMainScreen {
         currentproducts.clear();
         String keyword = key.toLowerCase();
         String [] keys = keyword.split(" ");
-        String name, desc, subcategory, manufacture, ID, color;
+        String name, desc,  subcategory, manufacturer, ID, color;
 
         //after split string - check all string in keyword
         for(String k: keys){
@@ -425,10 +383,10 @@ public class ControllerOfMainScreen {
                     name = p.getNameOfProduct().toLowerCase();
                     desc = p.getDescription().toLowerCase();
                     subcategory = p.getSubcategory().toLowerCase();
-                    manufacture = p.getManufacturer().toLowerCase();
+                    manufacturer = p.getManufacturer().toLowerCase();
                     color = p.getColor().toLowerCase();
 
-                    if(ID.contains(k) || name.contains(k) || desc.contains(k) || subcategory.contains(k)  || manufacture.contains(k) || color.contains(k)){
+                    if(ID.contains(k) || name.contains(k) || desc.contains(k) ||  subcategory.contains(k)  || manufacturer.contains(k) || color.contains(k)){
                         currentproducts.add(p);
                     }
                 }
@@ -461,10 +419,63 @@ public class ControllerOfMainScreen {
         return returnList;
     }
 
-    private Connection createConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+    public void onApplyButtonClicked(){
+
+        filtrationProductsByCriteria(colorComboBox.getValue().toString(),
+                manufacturerComboBox.getValue().toString(),
+                categoryComboBox.getValue().toString(),
+                subcategoryComboBox.getValue().toString());/*,
+                Integer.parseInt(lowerPriceLimit.getText()),
+                Integer.parseInt(upperPriceLimit.getText()));*/
+
+        tableOfDB.setItems(removeDuplicates(currentproducts));
+        tableOfDB.refresh();
     }
+
+    private void filtrationProductsByCriteria(String color, String manufacturer, String category, String subcategory) {
+
+        currentproducts = allproducts;
+        String lowerColor = color.toLowerCase();
+        String lowerManufacturer = manufacturer.toLowerCase();
+        String lowerCategory = category.toLowerCase();
+        String lowerSubcategory = subcategory.toLowerCase();
+
+        for(Product product: currentproducts){
+
+            String checkColor = product.getColor().toLowerCase();
+
+            if(!checkColor.contains(lowerColor)){
+                currentproducts.remove(product);
+            }
+        }
+        for(Product product: currentproducts){
+
+            String checkManufacturer = product.getManufacturer().toLowerCase();
+
+            if(!checkManufacturer.contains(lowerManufacturer)){
+                currentproducts.remove(product);
+            }
+        }
+        for(Product product: currentproducts){
+
+            String checkSubcategory = product.getSubcategory().toLowerCase();
+
+            if(!checkSubcategory.contains(lowerCategory)){
+                currentproducts.remove(product);
+            }
+        }
+        for(Product product: currentproducts){
+
+            String checkCategory = product.getSubcategory().toLowerCase();
+
+            if(!checkCategory.contains(lowerSubcategory)){
+                currentproducts.remove(product);
+            }
+        }
+
+
+    }
+
 
     private void setTextAsOnlyNumbers(TextField textField) {
         textField.textProperty().addListener(new ChangeListener<String>() {
