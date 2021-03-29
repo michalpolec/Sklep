@@ -482,11 +482,7 @@ public class ControllerOfMainScreen {
                     productsToDelete.add(product);
                 }
         }
-
-        for(Product productToDelete: productsToDelete)
-        {
-            currentproducts.remove(productToDelete);
-        }
+        currentproducts.removeAll(productsToDelete);
         productsToDelete.clear();
     }
 
