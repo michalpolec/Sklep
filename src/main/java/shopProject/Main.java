@@ -24,8 +24,9 @@ public class Main extends Application {
         loginStage.setTitle("Baza danych hurtowni");
         FXMLLoader loader = new FXMLLoader((getClass().getClassLoader().getResource("MainScreen.fxml")));
         Parent root = loader.load();
-        loginStage.setScene(new Scene(root));
-       // scene.getStylesheets().add("Stylesheets/style.css");
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("Stylesheets/mainStyle.css");
+        loginStage.setScene(scene);
         ControllerOfMainScreen newController = loader.getController();
         newController.getAllData(products);
         loginStage.setResizable(false);

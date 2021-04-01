@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="637.0" prefWidth="1188.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfMainScreen">
+<AnchorPane fx:id="mainAnchorPane" prefHeight="637.0" prefWidth="1188.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfMainScreen">
     <TableView fx:id="tableOfDB" editable="true" layoutX="7.0" layoutY="79.0" prefHeight="431.0" prefWidth="1174.0">
         <columns>
             <TableColumn fx:id="IDproduct" prefWidth="74.0" text="IDproduktu" />
@@ -34,7 +34,7 @@
    <TextField fx:id="researchField" layoutX="498.0" layoutY="559.0" prefHeight="26.0" prefWidth="392.0" promptText="szukaj" />
    <Button fx:id="researchButton" layoutX="927.0" layoutY="559.0" mnemonicParsing="false" onMouseClicked="#onResearchButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Szukaj" />
    <Button fx:id="clearButton" layoutX="1054.0" layoutY="559.0" mnemonicParsing="false" onMouseClicked="#onClearButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Czyść" />
-   <TitledPane animated="false" layoutX="7.0" layoutY="519.0" prefHeight="106.0" prefWidth="430.0" text="Modyfikacja produktów">
+   <TitledPane fx:id="titledPane" animated="false" layoutX="7.0" layoutY="519.0" prefHeight="106.0" prefWidth="430.0" text="Modyfikacja produktów">
      <content>
        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="81.0" prefWidth="397.0">
             <children>
@@ -45,10 +45,10 @@
          </AnchorPane>
      </content>
    </TitledPane>
-   <ComboBox fx:id="manufacturerComboBox" layoutX="24.0" layoutY="32.0" prefWidth="150.0" />
-   <ComboBox fx:id="categoryComboBox" layoutX="213.0" layoutY="32.0" onAction="#chosenCategory" prefWidth="150.0" />
-   <ComboBox fx:id="subcategoryComboBox" layoutX="394.0" layoutY="32.0" prefWidth="150.0" />
-   <ComboBox fx:id="colorComboBox" layoutX="579.0" layoutY="32.0" prefWidth="150.0" />
+   <ComboBox fx:id="manufacturerComboBox" layoutX="24.0" layoutY="32.0" prefWidth="150.0" promptText="Producent" />
+   <ComboBox fx:id="categoryComboBox" layoutX="213.0" layoutY="32.0" onAction="#chosenCategory" prefWidth="150.0" promptText="Kategoria" />
+   <ComboBox fx:id="subcategoryComboBox" layoutX="394.0" layoutY="32.0" prefWidth="150.0" promptText="Podkategoria" />
+   <ComboBox fx:id="colorComboBox" layoutX="579.0" layoutY="32.0" prefWidth="150.0" promptText="Kolor" />
    <TextField fx:id="lowerPriceLimit" layoutX="820.0" layoutY="32.0" prefHeight="26.0" prefWidth="82.0" />
    <TextField fx:id="upperPriceLimit" layoutX="949.0" layoutY="32.0" prefHeight="26.0" prefWidth="82.0" />
    <Label layoutX="918.0" layoutY="36.0" text="do" />
