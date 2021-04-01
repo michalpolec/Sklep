@@ -1,7 +1,5 @@
 package shopProject.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -12,7 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import shopProject.entity.*;
+import shopProject.entity.Product;
+import shopProject.entity.RestOfElements;
+import shopProject.entity.Subcategory;
 
 import java.io.IOException;
 import java.sql.*;
@@ -38,7 +38,7 @@ public class ControllerOfMainScreen {
     public Button applyButton;
 
     private final ObservableList<Product> allproducts =  FXCollections.observableArrayList();
-    private ObservableList<Product> currentproducts = FXCollections.observableArrayList();
+    private final ObservableList<Product> currentproducts = FXCollections.observableArrayList();
 
     private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
     private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
@@ -189,20 +189,20 @@ public class ControllerOfMainScreen {
 
     private void fillCellsWithData() {
 
-        IDproduct.setCellValueFactory(new PropertyValueFactory<Product, Integer>("productID"));
-        NameProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("nameOfProduct"));
-        PriceProduct.setCellValueFactory(new PropertyValueFactory<Product, Double>("price"));
-        Descrpition.setCellValueFactory(new PropertyValueFactory<Product, String>("description"));
-        manufacturer.setCellValueFactory(new PropertyValueFactory<Product, String>("manufacturer"));
-        Category.setCellValueFactory(new PropertyValueFactory<Product, String>("category"));
-        Subcategory.setCellValueFactory(new PropertyValueFactory<Product, String>("subcategory"));
-        color.setCellValueFactory(new PropertyValueFactory<Product, String>("color"));
-        width.setCellValueFactory(new PropertyValueFactory<Product, Double>("width"));
-        height.setCellValueFactory(new PropertyValueFactory<Product, Double>("height"));
-        length.setCellValueFactory(new PropertyValueFactory<Product, Double>("length"));
-        shelf.setCellValueFactory(new PropertyValueFactory<Product, Integer>("shelf"));
-        regal.setCellValueFactory(new PropertyValueFactory<Product, Integer>("regal"));
-        stock.setCellValueFactory(new PropertyValueFactory<Product, Integer>("stock"));
+        IDproduct.setCellValueFactory(new PropertyValueFactory<>("productID"));
+        NameProduct.setCellValueFactory(new PropertyValueFactory<>("nameOfProduct"));
+        PriceProduct.setCellValueFactory(new PropertyValueFactory<>("price"));
+        Descrpition.setCellValueFactory(new PropertyValueFactory<>("description"));
+        manufacturer.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
+        Category.setCellValueFactory(new PropertyValueFactory<>("category"));
+        Subcategory.setCellValueFactory(new PropertyValueFactory<>("subcategory"));
+        color.setCellValueFactory(new PropertyValueFactory<>("color"));
+        width.setCellValueFactory(new PropertyValueFactory<>("width"));
+        height.setCellValueFactory(new PropertyValueFactory<>("height"));
+        length.setCellValueFactory(new PropertyValueFactory<>("length"));
+        shelf.setCellValueFactory(new PropertyValueFactory<>("shelf"));
+        regal.setCellValueFactory(new PropertyValueFactory<>("regal"));
+        stock.setCellValueFactory(new PropertyValueFactory<>("stock"));
     }
 
     public void getAllData(ObservableList<Product> products) {
@@ -214,7 +214,7 @@ public class ControllerOfMainScreen {
     }
 
     @FXML
-    private void onAddButtonPressed() throws IOException, SQLException, ClassNotFoundException {
+    private void onAddButtonPressed() throws IOException {
 
        FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
        Parent root = getRoot(loader);
@@ -228,7 +228,7 @@ public class ControllerOfMainScreen {
     }
 
     @FXML
-    private void onEditionButtonPressed() throws IOException, SQLException, ClassNotFoundException {
+    private void onEditionButtonPressed() throws IOException {
         if(checkIfItemIsSelected()) {
             FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
             Parent root = getRoot(loader);
@@ -242,9 +242,8 @@ public class ControllerOfMainScreen {
         }
     }
 
-    private Stage CreateNewModifyStage() throws IOException {
-        Stage newModifyStage = new Stage();
-        return newModifyStage;
+    private Stage CreateNewModifyStage() {
+        return new Stage();
 
     }
 
@@ -257,16 +256,14 @@ public class ControllerOfMainScreen {
     }
 
     private Parent getRoot(FXMLLoader loader) throws IOException {
-        Parent root = loader.load();
-        return root;
+        return loader.load();
     }
 
     private FXMLLoader getFxmlLoader(String resource) {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(resource));
-        return loader;
+        return new FXMLLoader(getClass().getClassLoader().getResource(resource));
     }
 
-    private ControllerOfModifyScreen usingMethodsOfModifyScreen(String label, FXMLLoader loader, Boolean AddOrEdit) throws SQLException, ClassNotFoundException, IOException {
+    private ControllerOfModifyScreen usingMethodsOfModifyScreen(String label, FXMLLoader loader, Boolean AddOrEdit) {
 
         ControllerOfModifyScreen newController = loader.getController();
         if(AddOrEdit) {
@@ -286,30 +283,29 @@ public class ControllerOfMainScreen {
     void changeProductInTable(Product product){
         int IDproduktu = product.getProductID();
 
-        for(int i = 0; i < allproducts.size(); i++)
-        {
-            if(IDproduktu == allproducts.get(i).getProductID()){
-                allproducts.get(i).setNameOfProduct(product.getNameOfProduct());
-                allproducts.get(i).setPrice(product.getPrice());
-                allproducts.get(i).setDescription(product.getDescription());
-                allproducts.get(i).setManufacturer(product.getManufacturer());
-                allproducts.get(i).setCategory(product.getCategory());
-                allproducts.get(i).setSubcategory(product.getSubcategory());
-                allproducts.get(i).setDetailsID(product.getDetailsID());
-                allproducts.get(i).setColor(product.getColor());
-                allproducts.get(i).setWidth(product.getWidth());
-                allproducts.get(i).setHeight(product.getHeight());
-                allproducts.get(i).setLength(product.getLength());
-                allproducts.get(i).setShelf(product.getShelf());
-                allproducts.get(i).setRegal(product.getRegal());
-                allproducts.get(i).setStock(product.getStock());
+        for (Product allproduct : allproducts) {
+            if (IDproduktu == allproduct.getProductID()) {
+                allproduct.setNameOfProduct(product.getNameOfProduct());
+                allproduct.setPrice(product.getPrice());
+                allproduct.setDescription(product.getDescription());
+                allproduct.setManufacturer(product.getManufacturer());
+                allproduct.setCategory(product.getCategory());
+                allproduct.setSubcategory(product.getSubcategory());
+                allproduct.setDetailsID(product.getDetailsID());
+                allproduct.setColor(product.getColor());
+                allproduct.setWidth(product.getWidth());
+                allproduct.setHeight(product.getHeight());
+                allproduct.setLength(product.getLength());
+                allproduct.setShelf(product.getShelf());
+                allproduct.setRegal(product.getRegal());
+                allproduct.setStock(product.getStock());
                 break;
             }
         }
     }
 
     @FXML
-    private void onDeleteButtonPressed() throws SQLException, ClassNotFoundException, IOException {
+    private void onDeleteButtonPressed() throws SQLException, ClassNotFoundException {
         if(checkIfItemIsSelected()){
             Alert deleteClick = Alert( "Usuwanie elementu", "Czy na pewno usunąć element?", Alert.AlertType.CONFIRMATION);
             Optional<ButtonType> action = deleteClick.showAndWait();
@@ -343,7 +339,7 @@ public class ControllerOfMainScreen {
         connection.close();
     }
 
-    private boolean checkIfItemIsSelected() throws IOException, SQLException, ClassNotFoundException {
+    private boolean checkIfItemIsSelected() {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
         if(selectedProduct == null){
             Alert errorAlert = Alert("Błąd","Błąd Należy zaznaczyć odpowiedni wiersz do edycji." , Alert.AlertType.ERROR);
@@ -417,10 +413,7 @@ public class ControllerOfMainScreen {
         ObservableSet<Product> productsSet = FXCollections.observableSet();
         productsSet.addAll(products);
         ObservableList<Product> returnList = FXCollections.observableArrayList();
-        for(Product p: productsSet){
-            returnList.add(p);
-        }
-
+        returnList.addAll(productsSet);
         return returnList;
     }
 
@@ -497,25 +490,15 @@ public class ControllerOfMainScreen {
                 productsToDelete.add(product);
             }
         }
-        for(Product productToDelete: productsToDelete)
-        {
-            currentproducts.remove(productToDelete);
-        }
+        currentproducts.removeAll(productsToDelete);
         productsToDelete.clear();
     }
 
-
     private void setTextAsOnlyNumbers(TextField textField) {
-        textField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    textField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
     }
-
-
 }
