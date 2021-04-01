@@ -1,8 +1,6 @@
 package shopProject.controllers;
 
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +12,6 @@ import javafx.stage.WindowEvent;
 import shopProject.entity.*;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.*;
 
 public class ControllerOfModifyScreen {
@@ -192,13 +189,9 @@ public class ControllerOfModifyScreen {
     }
 
     private void setTextAsOnlyNumbers(TextField textField) {
-        textField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    textField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
     }
@@ -357,20 +350,20 @@ public class ControllerOfModifyScreen {
     }
 
     //Metoda działająca na kliknięcie przycisku 'dodaj nowe' pomieszczenie - otwiera nowe okno
-    public void addManufacturer() throws IOException, SQLException, ClassNotFoundException {
+    public void addManufacturer() throws IOException {
 
-        openElementScreen("Dodawanie nowego producenta", "manufacturerName", "manufacturer",  "Wpisz nowe pomieszczenie");
+        openElementScreen("Dodawanie nowego producenta", "manufacturerName", "manufacturer",  "Wpisz nowego producenta do bazy");
 
     }
 
     //Metoda działająca na kliknięcie przycisku 'dodaj nową' ketgorię - otwiera nowe okno
-    public void addCategory() throws IOException, SQLException, ClassNotFoundException {
+    public void addCategory() throws IOException {
 
         openElementScreen("Dodawanie nowej kategorii", "categoryName", "category",  "Wpisz nową kategorie" );
     }
 
 
-    public void addSubcategory() throws IOException, SQLException, ClassNotFoundException {
+    public void addSubcategory() throws IOException {
 
         openSubcategoryScreen();
     }
@@ -382,23 +375,23 @@ public class ControllerOfModifyScreen {
     }
 
     //Metoda działająca na kliknięcie przycisku 'dodaj nowy' kolor - otwiera nowe okno
-    public void addColor() throws IOException, SQLException, ClassNotFoundException {
+    public void addColor() throws IOException {
 
         openElementScreen("Dodawanie nowego koloru" , "colorName", "color",  "Wpisz nowy kolor");
     }
 
     //Metoda działająca na kliknięcie przycisku 'dodaj nowe' wymiary - otwiera nowe okno
-    public void addDimensions() throws SQLException, IOException, ClassNotFoundException {
+    public void addDimensions() throws IOException {
 
         openDimensionScreen();
     }
 
     //Metoda działająca na kliknięcie przycisku 'dodaj nową' pozycję na magazynie - otwiera nowe okno
-    public void addPosition() throws IOException, SQLException, ClassNotFoundException {
+    public void addPosition() throws IOException {
         openPositionScreen();
     }
 
-    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException, SQLException, ClassNotFoundException {
+    public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException {
 
         FXMLLoader loader = getFxmlLoader("AddElementScreen.fxml");
         Parent root = getRoot(loader);
@@ -416,7 +409,7 @@ public class ControllerOfModifyScreen {
     }
 
     //Metoda otwierająca nowe okno dodania podakategorii
-    public void openSubcategoryScreen() throws IOException, SQLException, ClassNotFoundException {
+    public void openSubcategoryScreen() throws IOException {
 
         FXMLLoader loader = getFxmlLoader("AddSubcategoryScreen.fxml");
         Parent root = getRoot(loader);
@@ -434,7 +427,7 @@ public class ControllerOfModifyScreen {
     }
 
     //Metoda otwierająca nowe okno dodania wymiarów
-    public void openDimensionScreen() throws IOException, SQLException, ClassNotFoundException {
+    public void openDimensionScreen() throws IOException {
 
         FXMLLoader loader = getFxmlLoader("AddDimensionScreen.fxml");
         Parent root = getRoot(loader);
@@ -452,7 +445,7 @@ public class ControllerOfModifyScreen {
     }
 
     //Metoda otwierająca nowe okno dodania pozycji w magazynie
-    public void openPositionScreen() throws IOException, SQLException, ClassNotFoundException {
+    public void openPositionScreen() throws IOException {
 
         FXMLLoader loader = getFxmlLoader("AddPositionScreen.fxml");
         Parent root = getRoot(loader);
@@ -569,7 +562,7 @@ public class ControllerOfModifyScreen {
 
 
     //Metoda ustawiająca wybrany produkt od danym ID z bazy danych
-    public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException, UnsupportedEncodingException {
+    public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException {
         Connection connection = createConnection();
         Statement statement = connection.createStatement();
         String sql_getID;

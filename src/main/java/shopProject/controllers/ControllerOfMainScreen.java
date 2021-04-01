@@ -155,9 +155,7 @@ public class ControllerOfMainScreen {
     }
 
     public void chosenCategory() {
-
         setCorrectSubcategoriesFromSelectedCategory();
-
     }
 
     public void setCorrectSubcategoriesFromSelectedCategory(){
@@ -244,7 +242,6 @@ public class ControllerOfMainScreen {
 
     private Stage CreateNewModifyStage() {
         return new Stage();
-
     }
 
     private void customizeStage(String title, Parent root, Stage newModifyStage) {
