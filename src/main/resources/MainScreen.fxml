@@ -31,7 +31,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
     </TableView>
-   <TextField fx:id="researchField" layoutX="498.0" layoutY="559.0" prefHeight="26.0" prefWidth="392.0" promptText="szukaj" />
+   <TextField fx:id="researchField" layoutX="498.0" layoutY="559.0" prefHeight="26.0" prefWidth="392.0" promptText="Szukaj" />
    <Button fx:id="researchButton" layoutX="927.0" layoutY="559.0" mnemonicParsing="false" onMouseClicked="#onResearchButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Szukaj" />
    <Button fx:id="clearButton" layoutX="1054.0" layoutY="559.0" mnemonicParsing="false" onMouseClicked="#onClearButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Czyść" />
    <TitledPane fx:id="titledPane" animated="false" layoutX="7.0" layoutY="519.0" prefHeight="106.0" prefWidth="430.0" text="Modyfikacja produktów">
@@ -45,10 +45,10 @@
          </AnchorPane>
      </content>
    </TitledPane>
-   <ComboBox fx:id="manufacturerComboBox" layoutX="24.0" layoutY="32.0" prefWidth="150.0" promptText="Producent" />
-   <ComboBox fx:id="categoryComboBox" layoutX="213.0" layoutY="32.0" onAction="#chosenCategory" prefWidth="150.0" promptText="Kategoria" />
-   <ComboBox fx:id="subcategoryComboBox" layoutX="394.0" layoutY="32.0" prefWidth="150.0" promptText="Podkategoria" />
-   <ComboBox fx:id="colorComboBox" layoutX="579.0" layoutY="32.0" prefWidth="150.0" promptText="Kolor" />
+   <ComboBox fx:id="manufacturerComboBox" layoutX="24.0" layoutY="32.0" prefWidth="150.0" promptText="Wybierz producenta" />
+   <ComboBox fx:id="categoryComboBox" layoutX="213.0" layoutY="32.0" onAction="#chosenCategory" prefWidth="150.0" promptText="Wybierz kategorię" />
+   <ComboBox fx:id="subcategoryComboBox" layoutX="394.0" layoutY="32.0" prefWidth="150.0" promptText="Wybierz podkategorię" />
+   <ComboBox fx:id="colorComboBox" layoutX="579.0" layoutY="32.0" prefWidth="150.0" promptText="Wybierz kolor" />
    <TextField fx:id="lowerPriceLimit" layoutX="820.0" layoutY="32.0" prefHeight="26.0" prefWidth="82.0" />
    <TextField fx:id="upperPriceLimit" layoutX="949.0" layoutY="32.0" prefHeight="26.0" prefWidth="82.0" />
    <Label layoutX="918.0" layoutY="36.0" text="do" />

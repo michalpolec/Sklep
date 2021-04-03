@@ -46,6 +46,8 @@ public class ControllerOfMainScreen {
     private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
     private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
 
+    private boolean clearComboBoxOrNot = false;
+
 
     public TableView<Product> tableOfDB;
     public TableColumn<Product, Integer> IDproduct;
@@ -155,7 +157,10 @@ public class ControllerOfMainScreen {
     }
 
     public void chosenCategory() {
-        setCorrectSubcategoriesFromSelectedCategory();
+        if(!clearComboBoxOrNot){
+        setCorrectSubcategoriesFromSelectedCategory();}
+
+        clearComboBoxOrNot = false;
     }
 
     public void setCorrectSubcategoriesFromSelectedCategory(){
@@ -398,12 +403,18 @@ public class ControllerOfMainScreen {
         tableOfDB.setItems(allproducts);
         tableOfDB.refresh();
         researchField.clear();
-        researchField.setPromptText("szukaj");
-        manufacturerComboBox.setValue(null);
-        subcategoryComboBox.setValue(null);
+        researchField.setPromptText("Szukaj");
+        clearComboBoxOrNot = true;
+        setDefaultValue();
         subcategoryComboBox.setDisable(true);
-        categoryComboBox.setValue(null);
-        colorComboBox.setValue(null);
+    }
+
+    private void setDefaultValue() {
+
+        manufacturerComboBox.getSelectionModel().clearSelection();
+        categoryComboBox.getSelectionModel().clearSelection();
+        subcategoryComboBox.getSelectionModel().clearSelection();
+        colorComboBox.getSelectionModel().clearSelection();
     }
 
     ObservableList<Product> removeDuplicates(ObservableList<Product> products){
