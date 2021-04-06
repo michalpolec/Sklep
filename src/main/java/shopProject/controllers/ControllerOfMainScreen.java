@@ -18,6 +18,7 @@ import shopProject.entity.RestOfElements;
 import shopProject.entity.Subcategory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Optional;
 
@@ -70,7 +71,7 @@ public class ControllerOfMainScreen {
     public TableColumn<Product, Integer> stock;
 
     private Product selectedProduct;
-    private ImageView actualImageView;
+    public ImageView imageView;
 
     public void initialize() throws SQLException, ClassNotFoundException {
         subcategoryComboBox.setDisable(true);
@@ -87,22 +88,16 @@ public class ControllerOfMainScreen {
                 final Product product = row.getItem();
 
                 if (row.isHover() && product != null) {
-                    mainAnchorPane.getChildren().remove(actualImageView);
-                    Image image = null;
                     try {
-                        image = new Image(product.getImage().getBinaryStream());
+                        InputStream input = product.getImage().getBinaryStream(1, (int) product.getImage().length());
+                        Image image = new Image(input);
+                        imageView = new ImageView(image);
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
-                    //Image image = new Image("testImages/4.jpg");
-                    actualImageView = new ImageView(image);
-                    actualImageView.setFitWidth(image.getWidth()/2);
-                    actualImageView.setFitHeight(image.getHeight()/2);
-                    mainAnchorPane.getChildren().add(actualImageView);
-                    actualImageView.setLayoutX(100);
-                    actualImageView.setLayoutY(100);
+
                 } else {
-                    mainAnchorPane.getChildren().remove(actualImageView);
+
                 }
             });
 
@@ -543,5 +538,16 @@ public class ControllerOfMainScreen {
                 textField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+    }
+
+
+    public void onRowClicked() throws SQLException {
+        selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
+
+        InputStream input = selectedProduct.getImage().getBinaryStream(1, (int) selectedProduct.getImage().length());
+        Image image = new Image(input);
+        imageView.setImage(image);
+
+
     }
 }

@@ -7,10 +7,11 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="mainAnchorPane" prefHeight="637.0" prefWidth="1188.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfMainScreen">
-    <TableView fx:id="tableOfDB" editable="true" layoutX="7.0" layoutY="79.0"  prefHeight="431.0" prefWidth="1174.0">
+<AnchorPane fx:id="mainAnchorPane" prefHeight="703.0" prefWidth="1189.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfMainScreen">
+    <TableView fx:id="tableOfDB" editable="true" layoutX="7.0" layoutY="79.0" onMouseClicked="#onRowClicked" prefHeight="433.0" prefWidth="1174.0">
         <columns>
             <TableColumn fx:id="IDproduct" prefWidth="74.0" text="IDproduktu" />
             <TableColumn fx:id="NameProduct" prefWidth="115.99996948242188" text="Nazwa Produktu" />
@@ -31,10 +32,10 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
     </TableView>
-   <TextField fx:id="researchField" layoutX="498.0" layoutY="559.0" prefHeight="26.0" prefWidth="392.0" promptText="Szukaj" />
-   <Button fx:id="researchButton" layoutX="927.0" layoutY="559.0" mnemonicParsing="false" onMouseClicked="#onResearchButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Szukaj" />
-   <Button fx:id="clearButton" layoutX="1054.0" layoutY="559.0" mnemonicParsing="false" onMouseClicked="#onClearButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Czyść" />
-   <TitledPane fx:id="titledPane" animated="false" layoutX="7.0" layoutY="519.0" prefHeight="106.0" prefWidth="430.0" text="Modyfikacja produktów">
+   <TextField fx:id="researchField" layoutX="824.0" layoutY="552.0" prefHeight="26.0" prefWidth="334.0" promptText="Szukaj" />
+   <Button fx:id="researchButton" layoutX="859.0" layoutY="620.0" mnemonicParsing="false" onMouseClicked="#onResearchButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Szukaj" />
+   <Button fx:id="clearButton" layoutX="1027.0" layoutY="620.0" mnemonicParsing="false" onMouseClicked="#onClearButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Czyść" />
+   <TitledPane fx:id="titledPane" animated="false" layoutX="14.0" layoutY="552.0" prefHeight="106.0" prefWidth="430.0" text="Modyfikacja produktów">
      <content>
        <AnchorPane fx:id="titledAnchor" minHeight="0.0" minWidth="0.0" prefHeight="81.0" prefWidth="397.0">
             <children>
@@ -59,4 +60,5 @@
    <Label layoutX="434.0" layoutY="14.0" text="Podkategoria" />
    <Label layoutX="640.0" layoutY="14.0" text="Kolor" />
    <Label layoutX="1016.0" layoutY="36.0" text="PLN" />
+   <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="243.0" layoutX="505.0" layoutY="530.0" pickOnBounds="true" preserveRatio="true" />
 </AnchorPane>
