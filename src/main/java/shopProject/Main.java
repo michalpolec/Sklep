@@ -48,7 +48,7 @@ public class Main extends Application {
 
             String sql = """
                     SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName,\s
-                    subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,
+                    subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionsID, color.colorName, dimension.width, dimension.height, dimension.length,
                     positions.shelf, positions.regal, stock
                     FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)
                     INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)
@@ -56,7 +56,7 @@ public class Main extends Application {
                     INNER JOIN category ON subcategory.categoryID = category.categoryID)
                     INNER JOIN color ON details.colorID = color.colorID)
                     INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)
-                    INNER JOIN positions ON details.positionID = positions.positionID);""";
+                    INNER JOIN positions ON details.positionsID = positions.positionsID);""";
 
             ResultSet resultSet = statement.executeQuery(sql);
 
@@ -82,7 +82,7 @@ public class Main extends Application {
                         resultSet.getDouble("width"),
                         resultSet.getDouble("height"),
                         resultSet.getDouble("length"),
-                        resultSet.getInt("positionID"),
+                        resultSet.getInt("positionsID"),
                         resultSet.getInt("shelf"),
                         resultSet.getInt("regal"),
                         resultSet.getInt("stock"));
