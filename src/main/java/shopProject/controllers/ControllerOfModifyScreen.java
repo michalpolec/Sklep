@@ -542,9 +542,6 @@ public class ControllerOfModifyScreen {
         return new FXMLLoader(getClass().getClassLoader().getResource(resource));
     }
 
-
-
-
     public int getIDofElementForSubcategory(String nameOfElement, ObservableList<Subcategory> listsOfElements) {
 
         int ID = 0;

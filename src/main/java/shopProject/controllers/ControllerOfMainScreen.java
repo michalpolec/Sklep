@@ -9,6 +9,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import shopProject.entity.Product;
 import shopProject.entity.RestOfElements;
@@ -39,6 +43,7 @@ public class ControllerOfMainScreen {
 
     private final ObservableList<Product> allproducts =  FXCollections.observableArrayList();
     private final ObservableList<Product> currentproducts = FXCollections.observableArrayList();
+    public AnchorPane mainAnchorPane;
 
     private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
     private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
@@ -66,6 +71,7 @@ public class ControllerOfMainScreen {
     public TableColumn<Product, Integer> stock;
 
     private Product selectedProduct;
+    private ImageView actualImageView;
 
     public void initialize() throws SQLException, ClassNotFoundException {
         subcategoryComboBox.setDisable(true);
@@ -508,5 +514,21 @@ public class ControllerOfMainScreen {
                 textField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+    }
+
+    //image display
+
+    public void onRowTableReleased(MouseEvent mouseEvent) {
+        mainAnchorPane.getChildren().remove(actualImageView);
+        selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
+        //Image image = new Image(selectedProduct.getImage().getBinaryStream());
+        // if (image != null)
+        Image image = new Image("testImages/4.jpg");
+        actualImageView = new ImageView(image);
+        double x = mouseEvent.getX();
+        double y = mouseEvent.getY();
+        mainAnchorPane.getChildren().add(actualImageView);
+        actualImageView.setLayoutX(x);
+        actualImageView.setLayoutY(y);
     }
 }
