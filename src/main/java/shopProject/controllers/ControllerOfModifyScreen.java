@@ -227,7 +227,6 @@ public class ControllerOfModifyScreen {
 
         InputStream input = selectedProduct.getImage().getBinaryStream(1, (int) selectedProduct.getImage().length());
         Image image = new Image(input);
-
         imageView.setImage(image);
     }
 
@@ -592,7 +591,9 @@ public class ControllerOfModifyScreen {
 
     private void customizeStage(String title, Parent root, Stage newModifyStage) {
         newModifyStage.setTitle(title);
-        newModifyStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("Stylesheets/mainStyle.css");
+        newModifyStage.setScene(scene);
         newModifyStage.setResizable(false);
         newModifyStage.show();
     }
