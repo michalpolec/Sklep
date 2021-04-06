@@ -223,7 +223,7 @@ public class ControllerOfMainScreen {
     }
 
     @FXML
-    private void onAddButtonPressed() throws IOException {
+    private void onAddButtonPressed() throws IOException, SQLException {
 
        FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
        Parent root = getRoot(loader);
@@ -237,7 +237,7 @@ public class ControllerOfMainScreen {
     }
 
     @FXML
-    private void onEditionButtonPressed() throws IOException {
+    private void onEditionButtonPressed() throws IOException, SQLException {
         if(checkIfItemIsSelected()) {
             FXMLLoader loader = getFxmlLoader("ModifyProductScreen.fxml");
             Parent root = getRoot(loader);
@@ -271,7 +271,7 @@ public class ControllerOfMainScreen {
         return new FXMLLoader(getClass().getClassLoader().getResource(resource));
     }
 
-    private ControllerOfModifyScreen usingMethodsOfModifyScreen(String label, FXMLLoader loader, Boolean AddOrEdit) {
+    private ControllerOfModifyScreen usingMethodsOfModifyScreen(String label, FXMLLoader loader, Boolean AddOrEdit) throws SQLException {
 
         ControllerOfModifyScreen newController = loader.getController();
         if(AddOrEdit) {
@@ -307,6 +307,7 @@ public class ControllerOfMainScreen {
                 allproduct.setShelf(product.getShelf());
                 allproduct.setRegal(product.getRegal());
                 allproduct.setStock(product.getStock());
+                allproduct.setImage(product.getImage());
                 break;
             }
         }

@@ -32,7 +32,7 @@ public class Product {
     private Blob image;
 
 
-    public Product(int productID, String nameOfProduct, double price, String description,int manufacturerID, String manufacturer,int categoryID, String category, int subcategoryID, String subcategory, int detailsID, int colorID, String color, int dimensionID, double width, double height, double length,int positionID, int shelf, int regal, int stock) {
+    public Product(int productID, String nameOfProduct, double price, String description,int manufacturerID, String manufacturer,int categoryID, String category, int subcategoryID, String subcategory, int detailsID, int colorID, String color, int dimensionID, double width, double height, double length,int positionID, int shelf, int regal, int stock, Blob image) {
         this.productID = productID;
         this.nameOfProduct = nameOfProduct;
         this.price = price;
@@ -54,6 +54,7 @@ public class Product {
         this.shelf = shelf;
         this.regal = regal;
         this.stock = stock;
+        this.image = image;
     }
 
     public Product(int productID, String nameOfProduct, double price, String description,int manufacturerID, String manufacturer,int categoryID, String category, int subcategoryID, String subcategory, int detailsID, int colorID, String color, int dimensionID, double width, double height, double length,int positionID, int shelf, int regal, int stock, Blob image) {

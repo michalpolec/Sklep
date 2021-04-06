@@ -49,7 +49,7 @@ public class Main extends Application {
             String sql = """
                     SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName,\s
                     subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionsID, color.colorName, dimension.width, dimension.height, dimension.length,
-                    positions.shelf, positions.regal, stock
+                    positions.shelf, positions.regal, stock, image
                     FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)
                     INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)
                     INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)
@@ -85,7 +85,8 @@ public class Main extends Application {
                         resultSet.getInt("positionsID"),
                         resultSet.getInt("shelf"),
                         resultSet.getInt("regal"),
-                        resultSet.getInt("stock"));
+                        resultSet.getInt("stock"),
+                        resultSet.getBlob("image"));
 
                 products.add(newProduct);
 
