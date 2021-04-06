@@ -38,7 +38,7 @@ public class ControllerOfModifyScreen {
     public ComboBox dimensionsBox;
     public ComboBox positionBox;
 
-    public Button roomButton;
+    public Button manufacturerButton;
     public Button subcategoryButton;
     public Button categoryButton;
     public Button colorButton;
@@ -168,7 +168,7 @@ public class ControllerOfModifyScreen {
 
         while(resultSet.next()) {
 
-            Position position = new Position(Integer.parseInt(resultSet.getString("positionID")),
+            Position position = new Position(Integer.parseInt(resultSet.getString("positionsID")),
                     Integer.parseInt(resultSet.getString("shelf")),
                     Integer.parseInt(resultSet.getString("regal")));
             positions.add(position);
@@ -224,8 +224,6 @@ public class ControllerOfModifyScreen {
         subcategoryBox.setDisable(false);
     }
 
-
-    //Metoda umożliwiająca edytowanie/dodanie produktu - pobiera nowo-wpisane dane i odpowiednio edytuje bądź dodaje jako nowy produkt
     public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException, IOException {
 
         int productID = 0;
@@ -338,7 +336,6 @@ public class ControllerOfModifyScreen {
         return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
     }
 
-
     private int getIDofDetails(Statement statement) throws SQLException {
         int detailsID = 0;
         String sql_getIDofDetails = "SELECT max(detailsID) FROM details";
@@ -349,19 +346,16 @@ public class ControllerOfModifyScreen {
         return detailsID;
     }
 
-    //Metoda działająca na kliknięcie przycisku 'dodaj nowe' pomieszczenie - otwiera nowe okno
     public void addManufacturer() throws IOException {
 
         openElementScreen("Dodawanie nowego producenta", "manufacturerName", "manufacturer",  "Wpisz nowego producenta do bazy");
 
     }
 
-    //Metoda działająca na kliknięcie przycisku 'dodaj nową' ketgorię - otwiera nowe okno
     public void addCategory() throws IOException {
 
         openElementScreen("Dodawanie nowej kategorii", "categoryName", "category",  "Wpisz nową kategorie" );
     }
-
 
     public void addSubcategory() throws IOException {
 
@@ -374,19 +368,16 @@ public class ControllerOfModifyScreen {
 
     }
 
-    //Metoda działająca na kliknięcie przycisku 'dodaj nowy' kolor - otwiera nowe okno
     public void addColor() throws IOException {
 
         openElementScreen("Dodawanie nowego koloru" , "colorName", "color",  "Wpisz nowy kolor");
     }
 
-    //Metoda działająca na kliknięcie przycisku 'dodaj nowe' wymiary - otwiera nowe okno
     public void addDimensions() throws IOException {
 
         openDimensionScreen();
     }
 
-    //Metoda działająca na kliknięcie przycisku 'dodaj nową' pozycję na magazynie - otwiera nowe okno
     public void addPosition() throws IOException {
         openPositionScreen();
     }
@@ -408,7 +399,6 @@ public class ControllerOfModifyScreen {
         });
     }
 
-    //Metoda otwierająca nowe okno dodania podakategorii
     public void openSubcategoryScreen() throws IOException {
 
         FXMLLoader loader = getFxmlLoader("AddSubcategoryScreen.fxml");
@@ -426,7 +416,6 @@ public class ControllerOfModifyScreen {
         });
     }
 
-    //Metoda otwierająca nowe okno dodania wymiarów
     public void openDimensionScreen() throws IOException {
 
         FXMLLoader loader = getFxmlLoader("AddDimensionScreen.fxml");
@@ -444,7 +433,6 @@ public class ControllerOfModifyScreen {
         });
     }
 
-    //Metoda otwierająca nowe okno dodania pozycji w magazynie
     public void openPositionScreen() throws IOException {
 
         FXMLLoader loader = getFxmlLoader("AddPositionScreen.fxml");
@@ -463,6 +451,49 @@ public class ControllerOfModifyScreen {
 
     }
 
+    public void deleteManufacturer() throws SQLException, ClassNotFoundException {
+
+        deleteElementFromDatabase(getIDofElement(manufacturerBox.getValue().toString(), manufacturers), "manufacturer");
+    }
+
+    public void deleteCategory() throws SQLException, ClassNotFoundException {
+
+        deleteElementFromDatabase(getIDofElement(categoryBox.getValue().toString(), categories), "category");
+    }
+
+    public void deleteSubcategory() throws SQLException, ClassNotFoundException {
+
+        deleteElementFromDatabase(getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategories), "subcategory");
+    }
+
+    public void deleteColor() throws SQLException, ClassNotFoundException {
+
+        deleteElementFromDatabase(getIDofElement(colorBox.getValue().toString(), colors), "color");
+    }
+
+    public void deleteDimension() throws SQLException, ClassNotFoundException {
+
+        deleteElementFromDatabase(getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions), "dimension");
+    }
+
+    public void deletePosition() throws SQLException, ClassNotFoundException {
+
+        deleteElementFromDatabase(getIDofElementForPosition(positionBox.getValue().toString(), positions), "positions") ;
+    }
+
+
+    private void deleteElementFromDatabase(int IDofElement, String nameOfTable) throws ClassNotFoundException, SQLException {
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+
+        String sql = "DELETE FROM `hurtownia`.`"+ nameOfTable +"` WHERE (`"+ nameOfTable +"ID` = '" + IDofElement + "')";
+        statement.executeUpdate(sql);
+
+        statement.close();
+        connection.close();
+    }
+
+
     private Stage CreateNewAddStage() {
         return new Stage();
 
@@ -470,7 +501,6 @@ public class ControllerOfModifyScreen {
 
     private void customizeStage(String title, Parent root, Stage newModifyStage) {
         newModifyStage.setTitle(title);
-        //root.getStylesheets().add("shopProject.Stylesheets/style.css");
         newModifyStage.setScene(new Scene(root));
         newModifyStage.setResizable(false);
         newModifyStage.show();
@@ -540,12 +570,10 @@ public class ControllerOfModifyScreen {
     }
 
 
-    //Metoda decydująca o edycji lub dodawanius
     public void setAddOrEdit(boolean AddOrEdit){
         this.AddOrEdit = AddOrEdit;
     }
 
-    //Metoda zwracająca listę stringów
     public ObservableList<String> getStringArray(ObservableList objects) {
 
         ObservableList<String> stringArray = FXCollections.observableArrayList();
@@ -560,8 +588,6 @@ public class ControllerOfModifyScreen {
 
     }
 
-
-    //Metoda ustawiająca wybrany produkt od danym ID z bazy danych
     public void setSelectedProductFromDB(int IDofProduct) throws SQLException, ClassNotFoundException {
         Connection connection = createConnection();
         Statement statement = connection.createStatement();

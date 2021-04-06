@@ -251,7 +251,6 @@ public class ControllerOfMainScreen {
 
     private void customizeStage(String title, Parent root, Stage newModifyStage) {
         newModifyStage.setTitle(title);
-        //root.getStylesheets().add("shopProject.Stylesheets/style.css");
         newModifyStage.setScene(new Scene(root));
         newModifyStage.setResizable(false);
         newModifyStage.show();
@@ -330,8 +329,7 @@ public class ControllerOfMainScreen {
     }
 
     private void deleteElementFromDatabase() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
+        Connection connection = createConnection();
         Statement statement = connection.createStatement();
         String sql = "DELETE FROM `hurtownia`.`product` WHERE (`productID` = '" + selectedProduct.getProductID() + "')";
         statement.executeUpdate(sql);
