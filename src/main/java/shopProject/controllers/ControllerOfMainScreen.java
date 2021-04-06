@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import shopProject.entity.Product;
@@ -71,7 +72,7 @@ public class ControllerOfMainScreen {
     public TableColumn<Product, Integer> stock;
 
     private Product selectedProduct;
-    public ImageView imageView;
+    private ImageView actualImageView;
 
     public void initialize() throws SQLException, ClassNotFoundException {
         subcategoryComboBox.setDisable(true);
@@ -80,29 +81,6 @@ public class ControllerOfMainScreen {
         setTextAsOnlyNumbers(upperPriceLimit);
         fillCellsWithData();
         initializeTable();
-
-        tableOfDB.setRowFactory(productTableView -> {
-            final TableRow<Product> row = new TableRow<>();
-
-            row.hoverProperty().addListener((observable) -> {
-                final Product product = row.getItem();
-
-                if (row.isHover() && product != null) {
-                    try {
-                        InputStream input = product.getImage().getBinaryStream(1, (int) product.getImage().length());
-                        Image image = new Image(input);
-                        imageView = new ImageView(image);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-
-                } else {
-
-                }
-            });
-
-            return row;
-        });
     }
 
     private Connection createConnection() throws ClassNotFoundException, SQLException {
@@ -540,14 +518,20 @@ public class ControllerOfMainScreen {
         });
     }
 
+    public void onRowTableReleased() throws SQLException {
 
-    public void onRowClicked() throws SQLException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
-
-        InputStream input = selectedProduct.getImage().getBinaryStream(1, (int) selectedProduct.getImage().length());
-        Image image = new Image(input);
-        imageView.setImage(image);
-
-
+        if(selectedProduct != null)
+        {
+            mainAnchorPane.getChildren().remove(actualImageView);
+            Image image = new Image(selectedProduct.getImage().getBinaryStream());
+            //Image image = new Image("testImages/4.jpg");
+            actualImageView = new ImageView(image);
+            actualImageView.setFitHeight(image.getHeight()/3);
+            actualImageView.setFitWidth(image.getWidth()/3);
+            mainAnchorPane.getChildren().add(actualImageView);
+            actualImageView.setLayoutX(503);
+            actualImageView.setLayoutY(530);
+        }
     }
 }
