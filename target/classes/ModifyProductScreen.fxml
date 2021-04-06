@@ -51,27 +51,33 @@
         </AnchorPane>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
             <ComboBox id="roomBox" fx:id="manufacturerBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-            <Button id="roomButton" fx:id="roomButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addManufacturer" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe" />
+            <Button id="roomButton" fx:id="manufacturerButton" layoutX="290.0" layoutY="7.0" mnemonicParsing="false" onAction="#addManufacturer" prefHeight="26.0" prefWidth="50.0" text="Dodaj" />
+         <Button fx:id="deleteManufacturerButton" layoutX="365.0" layoutY="8.0" mnemonicParsing="false" onAction="#deleteManufacturer" text="Usuń" />
         </AnchorPane>
         <AnchorPane layoutX="138.0" layoutY="160.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
             <ComboBox id="categoryBox" fx:id="categoryBox" layoutY="8.0" onAction="#chosenCategory" prefHeight="25.0" prefWidth="256.0" />
-            <Button id="categoryButton" fx:id="categoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
+            <Button id="categoryButton" fx:id="categoryButton" layoutX="289.0" layoutY="7.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="26.0" prefWidth="50.0" text="Dodaj" />
+         <Button fx:id="deleteCategoryButton" layoutX="366.0" layoutY="8.0" mnemonicParsing="false" onAction="#deleteCategory" text="Usuń" />
         </AnchorPane>
         <AnchorPane layoutX="138.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
             <ComboBox id="subcategoryBox" fx:id="subcategoryBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-            <Button id="subcategoryButton" fx:id="subcategoryButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addSubcategory" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
+            <Button id="subcategoryButton" fx:id="subcategoryButton" layoutX="290.0" layoutY="6.0" mnemonicParsing="false" onAction="#addSubcategory" prefHeight="26.0" prefWidth="50.0" text="Dodaj" />
+         <Button fx:id="deleteSubcategoryButton" layoutX="365.0" layoutY="7.0" mnemonicParsing="false" onAction="#deleteSubcategory" text="Usuń" />
         </AnchorPane>
         <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
             <ComboBox id="colorBox" fx:id="colorBox" layoutY="8.0" prefHeight="25.0" prefWidth="256.0" />
-            <Button id="colorButton" fx:id="colorButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addColor" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowy" />
+            <Button id="colorButton" fx:id="colorButton" layoutX="290.0" layoutY="7.0" mnemonicParsing="false" onAction="#addColor" prefHeight="26.0" prefWidth="50.0" text="Dodaj" />
+         <Button fx:id="deleteColorButton" layoutX="366.0" layoutY="8.0" mnemonicParsing="false" onAction="#deleteColor" text="Usuń" />
         </AnchorPane>
         <AnchorPane layoutX="-270.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
-            <Button fx:id="dimensionsButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addDimensions" prefHeight="25.0" prefWidth="91.0" text="Dodaj nowe" />
+            <Button fx:id="dimensionsButton" layoutX="289.0" layoutY="9.0" mnemonicParsing="false" onAction="#addDimensions" prefHeight="26.0" prefWidth="50.0" text="Dodaj" />
             <ComboBox fx:id="dimensionsBox" layoutY="9.0" prefHeight="26.0" prefWidth="256.0" />
+         <Button fx:id="deleteDimensionButton" layoutX="366.0" layoutY="7.0" mnemonicParsing="false" onAction="#deleteDimension" text="Usuń" />
         </AnchorPane>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="9">
             <ComboBox fx:id="positionBox" layoutY="6.0" prefHeight="26.0" prefWidth="256.0" />
-            <Button fx:id="positionButton" layoutX="307.0" layoutY="8.0" mnemonicParsing="false" onAction="#addPosition" prefHeight="25.0" prefWidth="91.0" text="Dodaj nową" />
+            <Button fx:id="positionButton" layoutX="290.0" layoutY="6.0" mnemonicParsing="false" onAction="#addPosition" prefHeight="26.0" prefWidth="50.0" text="Dodaj" />
+         <Button fx:id="deletePositionButton" layoutX="367.0" layoutY="7.0" mnemonicParsing="false" onAction="#deletePosition" text="Usuń" />
         </AnchorPane>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="10">
             <TextField id="stockField" fx:id="stockField" layoutY="7.0" prefHeight="25.0" prefWidth="103.0" />

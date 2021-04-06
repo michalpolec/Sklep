@@ -13,6 +13,7 @@ import shopProject.entity.*;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.Optional;
 
 public class ControllerOfModifyScreen {
 
@@ -50,6 +51,8 @@ public class ControllerOfModifyScreen {
     public Label labelINFO;
 
     private Product selectedProduct;
+
+    private boolean clearComboBoxOrNot = false;
 
     public void setSelectedProduct(Product selectedProduct) {
         this.selectedProduct = selectedProduct;
@@ -364,7 +367,10 @@ public class ControllerOfModifyScreen {
 
     public void chosenCategory() {
 
-        setCorrectSubcategoriesFromSelectedCategory();
+        if(!clearComboBoxOrNot){
+            setCorrectSubcategoriesFromSelectedCategory();}
+
+        clearComboBoxOrNot = false;
 
     }
 
@@ -406,6 +412,7 @@ public class ControllerOfModifyScreen {
         ControllerOFAddingNewSubcategoryToDB newController = loader.getController();
         newController.setOptionOfSubcategoryScreen( categories, "Wybierz kategorie oraz wpisz nową podkategorie");
         Stage newAddStage = CreateNewAddStage();
+        clearComboBoxOrNot = true;
         customizeStage("Dodawnie nowej podkategorii", root, newAddStage);
         newAddStage.setOnCloseRequest(we -> {
             try {
@@ -454,43 +461,64 @@ public class ControllerOfModifyScreen {
     public void deleteManufacturer() throws SQLException, ClassNotFoundException {
 
         deleteElementFromDatabase(getIDofElement(manufacturerBox.getValue().toString(), manufacturers), "manufacturer");
+        manufacturerBox.getSelectionModel().clearSelection();
+        getDataToArrays();
     }
 
     public void deleteCategory() throws SQLException, ClassNotFoundException {
 
         deleteElementFromDatabase(getIDofElement(categoryBox.getValue().toString(), categories), "category");
+        categoryBox.getSelectionModel().clearSelection();
+        getDataToArrays();
     }
 
     public void deleteSubcategory() throws SQLException, ClassNotFoundException {
 
         deleteElementFromDatabase(getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategories), "subcategory");
+        subcategoryBox.getSelectionModel().clearSelection();
+        clearComboBoxOrNot = true;
+        subcategoryBox.setDisable(true);
+        getDataToArrays();
     }
 
     public void deleteColor() throws SQLException, ClassNotFoundException {
 
         deleteElementFromDatabase(getIDofElement(colorBox.getValue().toString(), colors), "color");
+        colorBox.getSelectionModel().clearSelection();
+        getDataToArrays();
     }
 
     public void deleteDimension() throws SQLException, ClassNotFoundException {
 
         deleteElementFromDatabase(getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions), "dimension");
+        dimensionsBox.getSelectionModel().clearSelection();
+        getDataToArrays();
     }
 
     public void deletePosition() throws SQLException, ClassNotFoundException {
 
-        deleteElementFromDatabase(getIDofElementForPosition(positionBox.getValue().toString(), positions), "positions") ;
+        deleteElementFromDatabase(getIDofElementForPosition(positionBox.getValue().toString(), positions), "positions");
+        positionBox.getSelectionModel().clearSelection();
+        getDataToArrays();
     }
 
 
     private void deleteElementFromDatabase(int IDofElement, String nameOfTable) throws ClassNotFoundException, SQLException {
-        Connection connection = createConnection();
-        Statement statement = connection.createStatement();
 
-        String sql = "DELETE FROM `hurtownia`.`"+ nameOfTable +"` WHERE (`"+ nameOfTable +"ID` = '" + IDofElement + "')";
-        statement.executeUpdate(sql);
+        Alert deleteClick = Alert( "Usuwanie elementu", "Czy na pewno usunąć element?", Alert.AlertType.CONFIRMATION);
+        Optional<ButtonType> action = deleteClick.showAndWait();
+        if(action.get() == ButtonType.OK) {
 
-        statement.close();
-        connection.close();
+            Connection connection = createConnection();
+            Statement statement = connection.createStatement();
+
+            String sql = "DELETE FROM `hurtownia`.`" + nameOfTable + "` WHERE (`" + nameOfTable + "ID` = '" + IDofElement + "')";
+            statement.executeUpdate(sql);
+
+            statement.close();
+            connection.close();
+
+        }
     }
 
 
