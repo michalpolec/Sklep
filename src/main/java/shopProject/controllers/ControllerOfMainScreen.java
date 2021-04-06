@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import shopProject.entity.Product;
@@ -80,6 +79,35 @@ public class ControllerOfMainScreen {
         setTextAsOnlyNumbers(upperPriceLimit);
         fillCellsWithData();
         initializeTable();
+
+        tableOfDB.setRowFactory(productTableView -> {
+            final TableRow<Product> row = new TableRow<>();
+
+            row.hoverProperty().addListener((observable) -> {
+                final Product product = row.getItem();
+
+                if (row.isHover() && product != null) {
+                    mainAnchorPane.getChildren().remove(actualImageView);
+                    Image image = null;
+                    try {
+                        image = new Image(product.getImage().getBinaryStream());
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                    //Image image = new Image("testImages/4.jpg");
+                    actualImageView = new ImageView(image);
+                    actualImageView.setFitWidth(image.getWidth()/2);
+                    actualImageView.setFitHeight(image.getHeight()/2);
+                    mainAnchorPane.getChildren().add(actualImageView);
+                    actualImageView.setLayoutX(100);
+                    actualImageView.setLayoutY(100);
+                } else {
+                    mainAnchorPane.getChildren().remove(actualImageView);
+                }
+            });
+
+            return row;
+        });
     }
 
     private Connection createConnection() throws ClassNotFoundException, SQLException {
@@ -515,22 +543,5 @@ public class ControllerOfMainScreen {
                 textField.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
-    }
-
-    //image display
-    public void onRowTableReleased(MouseEvent mouseEvent) throws SQLException {
-        selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
-        if(selectedProduct != null)
-        {
-            mainAnchorPane.getChildren().remove(actualImageView);
-            Image image = new Image(selectedProduct.getImage().getBinaryStream());
-            //Image image = new Image("testImages/4.jpg");
-            actualImageView = new ImageView(image);
-            double x = mouseEvent.getX();
-            double y = mouseEvent.getY();
-            mainAnchorPane.getChildren().add(actualImageView);
-            actualImageView.setLayoutX(x);
-            actualImageView.setLayoutY(y);
-        }
     }
 }

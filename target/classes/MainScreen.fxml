@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="mainAnchorPane" prefHeight="637.0" prefWidth="1188.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shopProject.controllers.ControllerOfMainScreen">
-    <TableView fx:id="tableOfDB" editable="true" layoutX="7.0" layoutY="79.0" onMouseReleased="#onRowTableReleased" prefHeight="431.0" prefWidth="1174.0">
+    <TableView fx:id="tableOfDB" editable="true" layoutX="7.0" layoutY="79.0"  prefHeight="431.0" prefWidth="1174.0">
         <columns>
             <TableColumn fx:id="IDproduct" prefWidth="74.0" text="IDproduktu" />
             <TableColumn fx:id="NameProduct" prefWidth="115.99996948242188" text="Nazwa Produktu" />
