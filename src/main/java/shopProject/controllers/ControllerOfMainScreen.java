@@ -251,7 +251,7 @@ public class ControllerOfMainScreen {
 
     private void customizeStage(String title, Parent root, Stage newModifyStage) {
         newModifyStage.setTitle(title);
-        //root.getStylesheets().add("shopProject.Stylesheets/style.css");
+        root.getStylesheets().add("Stylesheets/mainStyle.css");
         newModifyStage.setScene(new Scene(root));
         newModifyStage.setResizable(false);
         newModifyStage.show();

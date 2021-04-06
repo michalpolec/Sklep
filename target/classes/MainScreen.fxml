@@ -36,7 +36,7 @@
    <Button fx:id="clearButton" layoutX="1054.0" layoutY="559.0" mnemonicParsing="false" onMouseClicked="#onClearButtonClicked" prefHeight="26.0" prefWidth="95.0" text="Czyść" />
    <TitledPane fx:id="titledPane" animated="false" layoutX="7.0" layoutY="519.0" prefHeight="106.0" prefWidth="430.0" text="Modyfikacja produktów">
      <content>
-       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="81.0" prefWidth="397.0">
+       <AnchorPane fx:id="titledAnchor" minHeight="0.0" minWidth="0.0" prefHeight="81.0" prefWidth="397.0">
             <children>
                 <Button fx:id="editionButton" layoutX="166.0" layoutY="23.0" mnemonicParsing="false" onAction="#onEditionButtonPressed" prefHeight="34.0" prefWidth="95.0" text="Edytuj" />
                 <Button fx:id="addButton" layoutX="34.0" layoutY="23.0" mnemonicParsing="false" onAction="#onAddButtonPressed" prefHeight="33.0" prefWidth="95.0" text="Dodaj" />

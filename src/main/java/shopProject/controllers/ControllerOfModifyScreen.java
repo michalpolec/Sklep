@@ -226,7 +226,7 @@ public class ControllerOfModifyScreen {
 
 
     //Metoda umożliwiająca edytowanie/dodanie produktu - pobiera nowo-wpisane dane i odpowiednio edytuje bądź dodaje jako nowy produkt
-    public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException, IOException {
+    public void modifyDatabaseButtonPressed() throws ClassNotFoundException, SQLException {
 
         int productID = 0;
         String productName = "";
@@ -470,8 +470,9 @@ public class ControllerOfModifyScreen {
 
     private void customizeStage(String title, Parent root, Stage newModifyStage) {
         newModifyStage.setTitle(title);
-        //root.getStylesheets().add("shopProject.Stylesheets/style.css");
-        newModifyStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("Stylesheets/mainStyle.css");
+        newModifyStage.setScene(scene);
         newModifyStage.setResizable(false);
         newModifyStage.show();
     }

@@ -3,6 +3,11 @@
     -fx-background-color: #1b1b1b;
 }
 
+#titledPane
+{
+    -fx-background-color: #1b1b1b;
+}
+
 .button
 {
     -fx-background-color: #2f2f2f;
@@ -131,7 +136,51 @@ table-view .virtual-flow .scroll-bar:vertical .thumb{
     -fx-background-color: #464545;
 }
 
-#titledPane
+.titled-pane
 {
+    -fx-text-fill:  #ff7518;
+    -fx-background-color: #1b1b1b;
+}
+.titled-pane:focused
+{
+    -fx-text-fill: white;
     -fx-background-color: #464545;
 }
+
+.titled-pane:focused > .title
+{
+    -fx-color: #464545;
+}
+
+.titled-pane .content
+{
+    -fx-background-color: #1b1b1b;
+}
+
+
+#dimensionAnchor
+{
+    -fx-background-color: #1b1b1b;
+}
+
+#elementAnchor
+{
+    -fx-background-color: #1b1b1b;
+}
+
+#positionAnchor
+{
+    -fx-background-color: #1b1b1b;
+}
+
+#subcategoryAnchor
+{
+    -fx-background-color: #1b1b1b;
+}
+
+#productAnchor
+{
+    -fx-background-color: #1b1b1b;
+}
+
+
