@@ -518,18 +518,19 @@ public class ControllerOfMainScreen {
     }
 
     //image display
-
-    public void onRowTableReleased(MouseEvent mouseEvent) {
-        mainAnchorPane.getChildren().remove(actualImageView);
+    public void onRowTableReleased(MouseEvent mouseEvent) throws SQLException {
         selectedProduct = tableOfDB.getSelectionModel().getSelectedItem();
-        //Image image = new Image(selectedProduct.getImage().getBinaryStream());
-        // if (image != null)
-        Image image = new Image("testImages/4.jpg");
-        actualImageView = new ImageView(image);
-        double x = mouseEvent.getX();
-        double y = mouseEvent.getY();
-        mainAnchorPane.getChildren().add(actualImageView);
-        actualImageView.setLayoutX(x);
-        actualImageView.setLayoutY(y);
+        if(selectedProduct != null)
+        {
+            mainAnchorPane.getChildren().remove(actualImageView);
+            Image image = new Image(selectedProduct.getImage().getBinaryStream());
+            //Image image = new Image("testImages/4.jpg");
+            actualImageView = new ImageView(image);
+            double x = mouseEvent.getX();
+            double y = mouseEvent.getY();
+            mainAnchorPane.getChildren().add(actualImageView);
+            actualImageView.setLayoutX(x);
+            actualImageView.setLayoutY(y);
+        }
     }
 }
