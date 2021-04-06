@@ -3,15 +3,22 @@ package shopProject.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import shopProject.entity.*;
 
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.*;
 import java.util.Optional;
 
@@ -26,6 +33,10 @@ public class ControllerOfModifyScreen {
     private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
     private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
     private final ObservableList<Position> positions = FXCollections.observableArrayList();
+
+    public ImageView imageView;
+
+    private Image imageFromFile;
 
     public TextField nameField;
     public TextField priceField;
@@ -47,6 +58,7 @@ public class ControllerOfModifyScreen {
     public Button positionButton;
     public Button addProductToDB;
     public Button cancelButton;
+    public Button imageButton;
 
     public Label labelINFO;
 
@@ -199,7 +211,7 @@ public class ControllerOfModifyScreen {
         });
     }
 
-    public void initializeData() {
+    public void initializeData() throws SQLException {
 
         nameField.setText(getSelectedProduct().getNameOfProduct());
         priceField.setText(String.valueOf(getSelectedProduct().getPrice()));
@@ -212,6 +224,11 @@ public class ControllerOfModifyScreen {
         colorBox.getSelectionModel().select(getSelectedProduct().getColor());
         dimensionsBox.getSelectionModel().select(getSelectedProduct().getDimension());
         positionBox.getSelectionModel().select(getSelectedProduct().getPosition());
+
+        InputStream input = selectedProduct.getImage().getBinaryStream(1, (int) selectedProduct.getImage().length());
+        Image image = new Image(input);
+
+        imageView.setImage(image);
     }
 
     public void setCorrectSubcategoriesFromSelectedCategory(){
@@ -238,8 +255,9 @@ public class ControllerOfModifyScreen {
         int detailsID = 0;
         int colorID = 0;
         int dimensionID = 0;
-        int positionID = 0;
+        int positionsID = 0;
         int productStock = 0;
+        InputStream image = null;
         boolean Continue = true;
 
         try {
@@ -250,8 +268,14 @@ public class ControllerOfModifyScreen {
             subcategoryID = getIDofElementForSubcategory(subcategoryBox.getValue().toString(), subcategoriesFromSelectedCategory);
             colorID = getIDofElement(colorBox.getValue().toString(), colors);
             dimensionID = getIDofElementForDimension(dimensionsBox.getValue().toString(), dimensions);
-            positionID = getIDofElementForPosition(positionBox.getValue().toString(), positions);
+            positionsID = getIDofElementForPosition(positionBox.getValue().toString(), positions);
             productStock = Integer.parseInt(stockField.getText());
+
+            BufferedImage bImage = SwingFXUtils.fromFXImage(imageView.getImage(), null);
+            ByteArrayOutputStream s = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "png", s);
+            byte[] res  = s.toByteArray();
+            image = new ByteArrayInputStream(res);
 
         }
         catch (Exception e){
@@ -269,7 +293,7 @@ public class ControllerOfModifyScreen {
 
             try {
 
-                String sql_details = "INSERT INTO details ( positionID, dimensionID, colorID) VALUES ('" + positionID + "', '" + dimensionID + "', '" + colorID + "');";
+                String sql_details = "INSERT INTO details ( positionsID, dimensionID, colorID) VALUES ('" + positionsID + "', '" + dimensionID + "', '" + colorID + "');";
                 statement.executeUpdate(sql_details);
             } catch (SQLException e) {
                 Alert("Błąd polecenia", "Błędne polecenie", Alert.AlertType.ERROR).showAndWait();
@@ -278,16 +302,26 @@ public class ControllerOfModifyScreen {
 
             if (continueTypingData) {
 
-                try {
+               try {
 
-                    String sql_products = "INSERT INTO product (productName, productPrice, productDescription,subcategoryID, detailsID, manufacturerID, stock) VALUES ('" + productName+ "', '" + productPrice + "', '" + productDescription + "', '" + subcategoryID+  "', '" + getIDofDetails(statement) + "', '" + manufacturerID + "', '" + productStock + "');";
-                    statement.executeUpdate(sql_products);
+                    String sql_products = "INSERT INTO `hurtownia`.`product` (productName, productPrice, productDescription,subcategoryID, detailsID, manufacturerID, stock, image) VALUES (?,?,?,?,?,?,?,?);";
+                    PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
+                    preparedStatement.setString(1, productName);
+                    preparedStatement.setDouble(2, productPrice);
+                    preparedStatement.setString(3, productDescription);
+                    preparedStatement.setInt(4, subcategoryID);
+                    preparedStatement.setInt(5, getIDofDetails(statement));
+                    preparedStatement.setInt(6, manufacturerID);
+                    preparedStatement.setInt(7, productStock);
+                    preparedStatement.setBinaryStream(8, image);
+
+                    preparedStatement.executeUpdate();
+                    preparedStatement.close();
+
                     setSelectedProductFromDB(0);
 
-                } catch (SQLException e) {
+               } catch (SQLException e) {
 
-
-                    System.out.println(e);
                     Alert("Błąd bazy danych", "Niezgodność ID produktów", Alert.AlertType.ERROR).showAndWait();
                     statement.close();
                     connection.close();
@@ -313,14 +347,27 @@ public class ControllerOfModifyScreen {
             productID = getSelectedProduct().getProductID();
             detailsID = getSelectedProduct().getDetailsID();
 
-            String sql_details = "UPDATE `hurtownia`.`details` SET `positionID` = '"+ positionID +"', `dimensionID` = '"+ dimensionID + "', `colorID` = '"+ colorID +"' WHERE (`detailsID` = '"+ detailsID +"');";
+            String sql_details = "UPDATE `hurtownia`.`details` SET `positionsID` = '"+ positionsID +"', `dimensionID` = '"+ dimensionID + "', `colorID` = '"+ colorID +"' WHERE (`detailsID` = '"+ detailsID +"');";
             statement.executeUpdate(sql_details);
 
-            String sql_products = "UPDATE `hurtownia`.`product` SET productName = '"+ productName +"', productPrice = '"+ productPrice +"', productDescription = '"+ productDescription +"', manufacturerID = '"+ manufacturerID +"', subcategoryID = '"+ subcategoryID +"', detailsID = '"+ detailsID +"', stock = '"+ productStock +"' WHERE (productID = '"+ productID +"');";
-            statement.executeUpdate(sql_products);
+            String sql_products = "UPDATE `hurtownia`.`product` SET productName = ?, productPrice = ?, productDescription = ?, manufacturerID = ?, subcategoryID = ?, detailsID = ?, stock = ?, image = ? WHERE (productID = '"+ productID +"');";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql_products);
+
+            preparedStatement.setString(1, productName);
+            preparedStatement.setDouble(2, productPrice);
+            preparedStatement.setString(3, productDescription);
+            preparedStatement.setInt(4, subcategoryID);
+            preparedStatement.setInt(5, getIDofDetails(statement));
+            preparedStatement.setInt(6, manufacturerID);
+            preparedStatement.setInt(7, productStock);
+            preparedStatement.setBinaryStream(8, image);
+
+            preparedStatement.executeUpdate();
 
             setSelectedProductFromDB(productID);
 
+            preparedStatement.close();
             statement.close();
             connection.close();
 
@@ -386,6 +433,22 @@ public class ControllerOfModifyScreen {
 
     public void addPosition() throws IOException {
         openPositionScreen();
+    }
+
+    public void getImageFromFile(ActionEvent actionEvent) throws FileNotFoundException {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Wczytaj nowe zdjęcie");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Pliki obrazów", "*.jpg", "*.png")
+        );
+        Stage stage = (Stage) imageButton.getScene().getWindow();
+
+        File file = fileChooser.showOpenDialog(null);
+
+        FileInputStream input =  new FileInputStream(file.getPath());
+        imageFromFile = new Image(input);
+        imageView.setImage(imageFromFile);
     }
 
     public void openElementScreen(String nameOfStage, String nameOfFirstColumn, String nameOfTabel, String textOfLabel) throws IOException {
@@ -624,29 +687,29 @@ public class ControllerOfModifyScreen {
 
             sql_getID   = """
                     SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName,\s
-                    subcategory.subcategoryName, subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,
-                    positions.shelf, positions.regal, stock
+                    subcategory.subcategoryName, subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionsID, color.colorName, dimension.width, dimension.height, dimension.length,
+                    positions.shelf, positions.regal, stock, image
                     FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)
                     INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)
                     INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)
                     INNER JOIN category ON subcategory.categoryID = category.categoryID)
                     INNER JOIN color ON details.colorID = color.colorID)
                     INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)
-                    INNER JOIN positions ON details.positionID = positions.positionID) WHERE product.productID = (SELECT MAX(product.productID) FROM product);""";
+                    INNER JOIN positions ON details.positionsID = positions.positionsID) WHERE product.productID = (SELECT MAX(product.productID) FROM product);""";
 
         }
         else {
 
             sql_getID = "SELECT productID, productName, productPrice, productDescription, manufacturer.manufacturerName, category.categoryName, \n" +
-                    "subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
-                    "positions.shelf, positions.regal, stock\n" +
+                    "subcategory.subcategoryName,  subcategory.categoryID, product.detailsID, product.manufacturerID, product.subcategoryID, details.colorID, details.dimensionID, details.positionsID, color.colorName, dimension.width, dimension.height, dimension.length,\n" +
+                    "positions.shelf, positions.regal, stock, image\n" +
                     "FROM (((((((product INNER JOIN details ON product.detailsID = details.detailsID)\n" +
                     "INNER JOIN manufacturer ON product.manufacturerID = manufacturer.manufacturerID)\n" +
                     "INNER JOIN subcategory ON product.subcategoryID = subcategory.subcategoryID)\n" +
                     "INNER JOIN category ON subcategory.categoryID = category.categoryID)\n" +
                     "INNER JOIN color ON details.colorID = color.colorID)\n" +
                     "INNER JOIN dimension ON details.dimensionID = dimension.dimensionID)\n" +
-                    "INNER JOIN positions ON details.positionID = positions.positionID) WHERE product.productID = " + IDofProduct + ";";
+                    "INNER JOIN positions ON details.positionsID = positions.positionsID) WHERE product.productID = " + IDofProduct + ";";
         }
 
         ResultSet resultSet = statement.executeQuery(sql_getID);
@@ -672,10 +735,11 @@ public class ControllerOfModifyScreen {
                     resultSet.getDouble("width"),
                     resultSet.getDouble("height"),
                     resultSet.getDouble("length"),
-                    resultSet.getInt("positionID"),
+                    resultSet.getInt("positionsID"),
                     resultSet.getInt("shelf"),
                     resultSet.getInt("regal"),
-                    resultSet.getInt("stock")));
+                    resultSet.getInt("stock"),
+                    resultSet.getBlob("image")));
         }
         statement.close();
         connection.close();
