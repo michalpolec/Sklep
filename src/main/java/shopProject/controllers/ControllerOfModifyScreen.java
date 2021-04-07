@@ -356,9 +356,9 @@ public class ControllerOfModifyScreen {
             preparedStatement.setString(1, productName);
             preparedStatement.setDouble(2, productPrice);
             preparedStatement.setString(3, productDescription);
-            preparedStatement.setInt(4, subcategoryID);
-            preparedStatement.setInt(5, getIDofDetails(statement));
-            preparedStatement.setInt(6, manufacturerID);
+            preparedStatement.setInt(4, manufacturerID);
+            preparedStatement.setInt(5, subcategoryID);
+            preparedStatement.setInt(6, getIDofDetails(statement));
             preparedStatement.setInt(7, productStock);
             preparedStatement.setBinaryStream(8, image);
 
