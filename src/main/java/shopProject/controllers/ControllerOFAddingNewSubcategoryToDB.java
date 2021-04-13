@@ -20,7 +20,6 @@ public class ControllerOFAddingNewSubcategoryToDB {
 
     ObservableList<RestOfElements>  categories;
 
-    // Ustawienie zmiennyhc klasy
     public void setOptionOfSubcategoryScreen(ObservableList<RestOfElements> categories, String textOfLabel) {
 
         this.titleLabel.setText(textOfLabel);
@@ -29,21 +28,17 @@ public class ControllerOFAddingNewSubcategoryToDB {
 
     }
 
-    // Dodanie do ComboBox'a wybranych kategorii
     public void setCategoriesInComboBox(){
 
         categoryBox.setItems(categories);
 
     }
 
-    // Dodanie nowej podkategorii do bazy danych
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hurtownia?serverTimezone=UTC", "root", "bazadanych1-1");
         Statement statement = connection.createStatement();
-
-
 
         int idOfCategory = 0;
 
@@ -79,7 +74,6 @@ public class ControllerOFAddingNewSubcategoryToDB {
 
     }
 
-    // Funkcja wyświetlająca błąd
     public void Alert(){
         Alert nullData = new Alert(Alert.AlertType.ERROR);
         nullData.setTitle("Błąd podczas wpisywania");

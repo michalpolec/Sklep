@@ -21,7 +21,6 @@ public class ControllerOfAddingNewElementToDB {
     String nameOfTable;
     String nameOfFirstColumn;
 
-    // Ustawienie zmiennych
     public void setOptionOfScreen(String nameOfFirstColumn, String nameOfTable,  String textOfLabel) {
 
         this.nameOfFirstColumn = nameOfFirstColumn;
@@ -30,7 +29,6 @@ public class ControllerOfAddingNewElementToDB {
 
     }
 
-    // Dodawanie elementu do bazy danych
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -63,7 +61,6 @@ public class ControllerOfAddingNewElementToDB {
 
     }
 
-    // Funkcja wyświetlająca błąd
     public void Alert(){
         Alert nullData = new Alert(Alert.AlertType.ERROR);
         nullData.setTitle("Błąd podczas wpisywania");

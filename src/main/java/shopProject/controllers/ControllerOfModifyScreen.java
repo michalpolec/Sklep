@@ -1,6 +1,5 @@
 package shopProject.controllers;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -26,11 +25,11 @@ public class ControllerOfModifyScreen {
 
     boolean AddOrEdit;
 
-    private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
+    private ObservableList<RestOfElements> manufacturers = FXCollections.observableArrayList();
     private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
-    private final ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
+    private final ObservableList<Subcategory> subcategories = FXCollections.observableArrayList();
     private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
-    private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
+    private ObservableList<RestOfElements> colors = FXCollections.observableArrayList();
     private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
     private final ObservableList<Position> positions = FXCollections.observableArrayList();
 
@@ -123,7 +122,6 @@ public class ControllerOfModifyScreen {
                     resultSet.getString(nameOfSecondColumn));
             elements.add(singleElement);
         }
-
         return elements;
     }
 
@@ -321,7 +319,7 @@ public class ControllerOfModifyScreen {
 
                } catch (SQLException e) {
 
-                    Alert("Błąd bazy danych", "Niezgodność ID produktów", Alert.AlertType.ERROR).showAndWait();
+                    Alert("Błąd bazy danych", "", Alert.AlertType.ERROR).showAndWait();
                     statement.close();
                     connection.close();
                 }
@@ -329,7 +327,7 @@ public class ControllerOfModifyScreen {
             statement.close();
             connection.close();
 
-            Alert("Wpisano nowy produkt do bazy", "Poprawnie dodano nowy element.", Alert.AlertType.INFORMATION).showAndWait();
+            Alert("Nowy produkt", "Poprawnie dodano nowy produkt do bazy danych.", Alert.AlertType.INFORMATION).showAndWait();
 
             Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
             closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -370,7 +368,7 @@ public class ControllerOfModifyScreen {
             statement.close();
             connection.close();
 
-            Alert("Edytowano nowy produkt do bazy", "Poprawnie edytowno element.", Alert.AlertType.INFORMATION).showAndWait();
+            Alert("Edycja produktu", "Poprawnie edytowano element.", Alert.AlertType.INFORMATION).showAndWait();
 
             Stage closeLoginStage = (Stage) positionBox.getScene().getWindow();
             closeLoginStage.getOnCloseRequest().handle(new WindowEvent(closeLoginStage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -397,13 +395,13 @@ public class ControllerOfModifyScreen {
 
     public void addManufacturer() throws IOException {
 
-        openElementScreen("Dodawanie nowego producenta", "manufacturerName", "manufacturer",  "Wpisz nowego producenta do bazy");
+        openElementScreen("Dodawanie nowego producenta", "manufacturerName", "manufacturer",  "Wpisz nowego producenta do bazy:");
 
     }
 
     public void addCategory() throws IOException {
 
-        openElementScreen("Dodawanie nowej kategorii", "categoryName", "category",  "Wpisz nową kategorie" );
+        openElementScreen("Dodawanie nowej kategorii", "categoryName", "category",  "Wpisz nową kategorie:" );
     }
 
     public void addSubcategory() throws IOException {
@@ -422,7 +420,7 @@ public class ControllerOfModifyScreen {
 
     public void addColor() throws IOException {
 
-        openElementScreen("Dodawanie nowego koloru" , "colorName", "color",  "Wpisz nowy kolor");
+        openElementScreen("Dodawanie nowego koloru" , "colorName", "color",  "Wpisz nowy kolor:");
     }
 
     public void addDimensions() throws IOException {
@@ -437,7 +435,7 @@ public class ControllerOfModifyScreen {
     public void getImageFromFile(ActionEvent actionEvent) throws FileNotFoundException {
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Wczytaj nowe zdjęcie");
+        fileChooser.setTitle("Wczytaj nowe zdjęcię");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Pliki obrazów", "*.jpg", "*.png")
         );

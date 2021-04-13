@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import shopProject.entity.Product;
@@ -19,7 +18,6 @@ import shopProject.entity.RestOfElements;
 import shopProject.entity.Subcategory;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.Optional;
 
@@ -377,7 +375,6 @@ public class ControllerOfMainScreen {
         String [] keys = keyword.split(" ");
         String name, desc,  subcategory, manufacturer, ID, color;
 
-        //after split string - check all string in keyword
         for(String k: keys){
             if(k.equals("") || k.equals(",") || k.equals("."))
             {

@@ -20,9 +20,6 @@ public class ControllerOfAddingNewPositionToDB {
     public TextField regalField;
     public Button addPosition;
 
-
-
-    //Inicjalizacja klasy
     public void initialize(){
 
         OnlyNumbersInTextField(shelfField);
@@ -30,14 +27,12 @@ public class ControllerOfAddingNewPositionToDB {
 
     }
 
-    //Ustawienie zmiennych klasy
     public void setOptionOfPositionScreen(String textOfLabel) {
 
         this.titleOfScreen.setText(textOfLabel);
 
     }
 
-    //Dodanie nowej pozycji do bazy danych
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -71,7 +66,6 @@ public class ControllerOfAddingNewPositionToDB {
 
     }
 
-    //Funkcja wyświetlająca błąd
     public void Alert(){
         Alert nullData = new Alert(Alert.AlertType.ERROR);
         nullData.setTitle("Błąd podczas wpisywania");
@@ -81,7 +75,6 @@ public class ControllerOfAddingNewPositionToDB {
         nullData.showAndWait();
     }
 
-    // Funkcja ustawiające pole TextField aby przyjmował wartości int
     public void OnlyNumbersInTextField(TextField textfield){
 
         textfield.textProperty().addListener((observable, oldValue, newValue) -> {
