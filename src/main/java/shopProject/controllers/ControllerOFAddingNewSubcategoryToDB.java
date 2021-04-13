@@ -1,6 +1,6 @@
 package shopProject.controllers;
 
-import shopProject.entity.RestOfElements;
+import shopProject.entity.Elements;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -18,9 +18,9 @@ public class ControllerOFAddingNewSubcategoryToDB {
     public TextField subcategoryField;
     public ComboBox categoryBox;
 
-    ObservableList<RestOfElements>  categories;
+    ObservableList<Elements>  categories;
 
-    public void setOptionOfSubcategoryScreen(ObservableList<RestOfElements> categories, String textOfLabel) {
+    public void setOptionOfSubcategoryScreen(ObservableList<Elements> categories, String textOfLabel) {
 
         this.titleLabel.setText(textOfLabel);
         this.categories = categories;
@@ -42,7 +42,7 @@ public class ControllerOFAddingNewSubcategoryToDB {
 
         int idOfCategory = 0;
 
-        for(RestOfElements cat : categories){
+        for(Elements cat : categories){
             if(cat.getName().contains(categoryBox.getValue().toString())){
                 idOfCategory = cat.getID();
             }

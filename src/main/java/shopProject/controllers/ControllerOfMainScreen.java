@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import shopProject.entity.Product;
-import shopProject.entity.RestOfElements;
+import shopProject.entity.Elements;
 import shopProject.entity.Subcategory;
 
 import java.io.IOException;
@@ -44,11 +44,11 @@ public class ControllerOfMainScreen {
     private final ObservableList<Product> currentproducts = FXCollections.observableArrayList();
     public AnchorPane mainAnchorPane;
 
-    private ObservableList<RestOfElements> manufacturers =  FXCollections.observableArrayList();
-    private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
+    private ObservableList<Elements> manufacturers =  FXCollections.observableArrayList();
+    private ObservableList<Elements>  categories = FXCollections.observableArrayList();
     private final ObservableList<Subcategory> subcategories =  FXCollections.observableArrayList();
     private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
-    private ObservableList<RestOfElements> colors =  FXCollections.observableArrayList();
+    private ObservableList<Elements> colors =  FXCollections.observableArrayList();
 
     private boolean clearComboBoxOrNot = false;
 
@@ -117,10 +117,10 @@ public class ControllerOfMainScreen {
 
     }
 
-    private ObservableList<RestOfElements> getElementsFromDatabase(ResultSet resultSet, String nameOfFirstColumn, String nameOfSecondColumn) throws SQLException {
-        ObservableList<RestOfElements> elements =  FXCollections.observableArrayList();
+    private ObservableList<Elements> getElementsFromDatabase(ResultSet resultSet, String nameOfFirstColumn, String nameOfSecondColumn) throws SQLException {
+        ObservableList<Elements> elements =  FXCollections.observableArrayList();
         while(resultSet.next()) {
-            RestOfElements singleElement = new RestOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
+            Elements singleElement = new Elements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
                     resultSet.getString(nameOfSecondColumn));
             elements.add(singleElement);
         }
@@ -182,10 +182,10 @@ public class ControllerOfMainScreen {
     }
 
 
-    public int getIDofElement(String nameOfElement, ObservableList<RestOfElements> listsOfElements) {
+    public int getIDofElement(String nameOfElement, ObservableList<Elements> listsOfElements) {
 
         int ID = 0;
-        for(RestOfElements element : listsOfElements)
+        for(Elements element : listsOfElements)
         {
             if(element.toString().equals(nameOfElement))
             {

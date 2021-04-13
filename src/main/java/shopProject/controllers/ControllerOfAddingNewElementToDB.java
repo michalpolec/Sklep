@@ -70,9 +70,4 @@ public class ControllerOfAddingNewElementToDB {
         nullData.showAndWait();
     }
 
-
-
-
-
-
 }

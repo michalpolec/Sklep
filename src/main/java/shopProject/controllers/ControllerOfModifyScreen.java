@@ -25,11 +25,11 @@ public class ControllerOfModifyScreen {
 
     boolean AddOrEdit;
 
-    private ObservableList<RestOfElements> manufacturers = FXCollections.observableArrayList();
-    private ObservableList<RestOfElements>  categories = FXCollections.observableArrayList();
+    private ObservableList<Elements> manufacturers = FXCollections.observableArrayList();
+    private ObservableList<Elements>  categories = FXCollections.observableArrayList();
     private final ObservableList<Subcategory> subcategories = FXCollections.observableArrayList();
     private final ObservableList<Subcategory> subcategoriesFromSelectedCategory = FXCollections.observableArrayList();
-    private ObservableList<RestOfElements> colors = FXCollections.observableArrayList();
+    private ObservableList<Elements> colors = FXCollections.observableArrayList();
     private final ObservableList<Dimension> dimensions = FXCollections.observableArrayList();
     private final ObservableList<Position> positions = FXCollections.observableArrayList();
 
@@ -115,10 +115,10 @@ public class ControllerOfModifyScreen {
 
     }
 
-    private ObservableList<RestOfElements> getElementsFromDatabase(ResultSet resultSet, String nameOfFirstColumn, String nameOfSecondColumn) throws SQLException {
-        ObservableList<RestOfElements> elements =  FXCollections.observableArrayList();
+    private ObservableList<Elements> getElementsFromDatabase(ResultSet resultSet, String nameOfFirstColumn, String nameOfSecondColumn) throws SQLException {
+        ObservableList<Elements> elements =  FXCollections.observableArrayList();
         while(resultSet.next()) {
-            RestOfElements singleElement = new RestOfElements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
+            Elements singleElement = new Elements(Integer.parseInt(resultSet.getString(nameOfFirstColumn)),
                     resultSet.getString(nameOfSecondColumn));
             elements.add(singleElement);
         }
@@ -617,10 +617,10 @@ public class ControllerOfModifyScreen {
         return ID;
     }
 
-    public int getIDofElement(String nameOfElement, ObservableList<RestOfElements> listsOfElements) {
+    public int getIDofElement(String nameOfElement, ObservableList<Elements> listsOfElements) {
 
         int ID = 0;
-        for(RestOfElements element : listsOfElements)
+        for(Elements element : listsOfElements)
         {
             if(element.toString().equals(nameOfElement))
             {

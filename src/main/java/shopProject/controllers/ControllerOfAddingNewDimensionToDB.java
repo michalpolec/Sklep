@@ -21,8 +21,7 @@ public class ControllerOfAddingNewDimensionToDB {
     public TextField lenghtField;
     public Button addButtom;
 
-
-    public void initialize(){ //Inicjalizacja klasy
+    public void initialize(){
 
         OnlyNumbersInTextField(widthField);
         OnlyNumbersInTextField(heightField);
@@ -30,14 +29,12 @@ public class ControllerOfAddingNewDimensionToDB {
 
     }
 
-    // Ustawienie zmiennych
     public void setOptionOfDimensionScreen(String textOfLabel) {
 
         this.titleOfScreen.setText(textOfLabel);
 
     }
 
-    //Dodawanie nowych wymiarów do bazy danych
     public void addToDatabase() throws ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -48,7 +45,7 @@ public class ControllerOfAddingNewDimensionToDB {
         String height = heightField.getText();
         String lenght = lenghtField.getText();
 
-        if (width.equals("") || height.equals("") || lenght.equals("") || width.equals(" ") || lenght.equals(" ") || height.equals(" ") )
+        if (width.equals("") || height.equals("") || lenght.equals(""))
         {
             Alert();
         }
